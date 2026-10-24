@@ -19,14 +19,14 @@ function CommuterLoginForm() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect');
 
-  const { login, currentUser } = useAppState();
+  const { login, currentUser, commuter } = useAppState();
 
   const [authMethod, setAuthMethod] = useState<'PHONE_OTP' | 'EMAIL'>('PHONE_OTP');
-  const [phoneNumber, setPhoneNumber] = useState('0918-234-5678');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [otpCode, setOtpCode] = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [email, setEmail] = useState('maria.santos@gmail.com');
-  const [password, setPassword] = useState('••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   // If already logged in as commuter, redirect to /commuter
@@ -53,25 +53,63 @@ function CommuterLoginForm() {
 
   const handleCustomLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    let matchedName = '';
+    let matchedId = 'comm-1';
+    let matchedUserId = 'user-comm-' + Date.now();
+    let matchedAvatar: string | undefined;
+
+    try {
+      const regUsersStr = localStorage.getItem('antiqueride_registered_users');
+      if (regUsersStr) {
+        const regUsers: AuthUser[] = JSON.parse(regUsersStr);
+        const match = regUsers.find(
+          (u) =>
+            u.role === 'COMMUTER' &&
+            ((phoneNumber && u.phone && u.phone.replace(/\D/g, '') === phoneNumber.replace(/\D/g, '')) ||
+              (email && u.email && u.email.toLowerCase() === email.toLowerCase()))
+        );
+        if (match) {
+          matchedName = match.fullName;
+          matchedUserId = match.id;
+          matchedId = match.commuterId || matchedId;
+          matchedAvatar = match.avatarUrl;
+        }
+      }
+
+      if (!matchedName && commuter) {
+        if (
+          (phoneNumber && commuter.phone && commuter.phone.replace(/\D/g, '') === phoneNumber.replace(/\D/g, '')) ||
+          (email && commuter.email && commuter.email.toLowerCase() === email.toLowerCase())
+        ) {
+          matchedName = commuter.fullName;
+          matchedUserId = commuter.userId;
+          matchedId = commuter.id;
+          matchedAvatar = commuter.avatarUrl;
+        }
+      }
+    } catch (err) {}
+
     const user: AuthUser = {
-      id: 'user-comm-1',
-      fullName: 'Maria Santos',
-      email: email || 'maria.santos@gmail.com',
+      id: matchedUserId,
+      fullName: matchedName || (email ? email.split('@')[0] : phoneNumber ? `Commuter (${phoneNumber})` : 'Antique Commuter'),
+      email: email || 'commuter@antiqueride.ph',
       phone: phoneNumber || '0918-234-5678',
       role: 'COMMUTER',
-      commuterId: 'comm-1',
+      commuterId: matchedId,
+      avatarUrl: matchedAvatar,
     };
     executeLogin(user);
   };
 
   const handleDemoCommuterLogin = () => {
     const user: AuthUser = {
-      id: 'user-comm-1',
-      fullName: 'Maria Santos',
-      email: 'maria.santos@gmail.com',
-      phone: '0918-234-5678',
+      id: commuter?.userId || 'user-comm-1',
+      fullName: commuter?.fullName || 'Antique Commuter',
+      email: commuter?.email || 'commuter@antiqueride.ph',
+      phone: commuter?.phone || '0918-234-5678',
       role: 'COMMUTER',
-      commuterId: 'comm-1',
+      commuterId: commuter?.id || 'comm-1',
+      avatarUrl: commuter?.avatarUrl,
     };
     executeLogin(user);
   };
@@ -106,7 +144,7 @@ function CommuterLoginForm() {
             className="w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs active:scale-[0.99]"
           >
             <CheckCircle className="w-3.5 h-3.5" />
-            <span>Sign In as Commuter (Maria Santos)</span>
+            <span>Quick Test as Commuter</span>
           </button>
         </div>
 
@@ -195,7 +233,7 @@ function CommuterLoginForm() {
                   type="email"
                   value={email}
                   onChange={(e) => setEmail(e.target.value)}
-                  placeholder="maria.santos@gmail.com"
+                  placeholder="e.g. commuter@antiqueride.ph"
                   className="w-full pl-9 pr-3.5 py-2.5 bg-white border border-slate-200 rounded-xl text-xs font-semibold text-slate-900 focus:outline-blue-600"
                 />
               </div>

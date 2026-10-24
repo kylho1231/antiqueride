@@ -159,7 +159,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [todas] = useState<TodaAssociation[]>(TODA_ASSOCIATIONS);
   const [farePolicy, setFarePolicyState] = useState<FarePolicy>(OFFICIAL_FARE_POLICY);
   
-  // Hydrate session from localStorage
+  // Hydrate session and stored community data from localStorage
   useEffect(() => {
     try {
       const savedSession = localStorage.getItem('antiqueride_session');
@@ -169,6 +169,30 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         setCurrentRole(user.role);
         if (user.driverId) {
           setActiveDriverId(user.driverId);
+        }
+      }
+
+      const savedDrivers = localStorage.getItem('antiqueride_drivers');
+      if (savedDrivers) {
+        const parsedDrivers = JSON.parse(savedDrivers);
+        if (Array.isArray(parsedDrivers) && parsedDrivers.length > 0) {
+          setDrivers(parsedDrivers);
+        }
+      }
+
+      const savedCommuter = localStorage.getItem('antiqueride_commuter');
+      if (savedCommuter) {
+        const parsedCommuter = JSON.parse(savedCommuter);
+        if (parsedCommuter && parsedCommuter.id) {
+          setCommuter(parsedCommuter);
+        }
+      }
+
+      const savedIncidents = localStorage.getItem('antiqueride_incidents');
+      if (savedIncidents) {
+        const parsedIncidents = JSON.parse(savedIncidents);
+        if (Array.isArray(parsedIncidents)) {
+          setIncidents(parsedIncidents);
         }
       }
     } catch (e) {
@@ -257,7 +281,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         lastGpsUpdate: null,
       };
 
-      setDrivers((prev) => [newDriverProfile, ...prev]);
+      setDrivers((prev) => {
+        const updated = [newDriverProfile, ...prev];
+        try {
+          localStorage.setItem('antiqueride_drivers', JSON.stringify(updated));
+        } catch (e) {}
+        return updated;
+      });
       setActiveDriverId(newDriverId);
 
       authUser = {
@@ -293,6 +323,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       };
 
       setCommuter(newCommuterProfile);
+      try {
+        localStorage.setItem('antiqueride_commuter', JSON.stringify(newCommuterProfile));
+      } catch (e) {}
 
       authUser = {
         id: newId,
@@ -305,6 +338,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         commuterId: newCommuterProfile.id,
       };
     }
+
+    try {
+      const existingStr = localStorage.getItem('antiqueride_registered_users');
+      const existing: AuthUser[] = existingStr ? JSON.parse(existingStr) : [];
+      const filtered = existing.filter((u) => u.email !== authUser.email && u.phone !== authUser.phone);
+      localStorage.setItem('antiqueride_registered_users', JSON.stringify([authUser, ...filtered]));
+    } catch (e) {}
 
     login(authUser);
     return authUser;
@@ -330,7 +370,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateCommuterProfile = (updates: Partial<CommuterProfile>) => {
-    setCommuter((prev) => ({ ...prev, ...updates }));
+    setCommuter((prev) => {
+      const updated = { ...prev, ...updates };
+      try {
+        localStorage.setItem('antiqueride_commuter', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     if (currentUser && (updates.fullName || updates.avatarUrl)) {
       const updatedUser = {
         ...currentUser,
@@ -347,9 +393,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   };
 
   const updateDriverProfile = (updates: Partial<DriverProfile>) => {
-    setDrivers((prev) =>
-      prev.map((d) => (d.id === activeDriverId ? { ...d, ...updates } : d))
-    );
+    setDrivers((prev) => {
+      const updated = prev.map((d) => (d.id === activeDriverId ? { ...d, ...updates } : d));
+      try {
+        localStorage.setItem('antiqueride_drivers', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     if (currentUser && (updates.fullName || updates.avatarUrl)) {
       const updatedUser = {
         ...currentUser,
@@ -478,22 +528,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       window.removeEventListener('storage', handleStorageChange);
     };
   }, []);
-  const [incidents, setIncidents] = useState<IncidentReport[]>([
-    {
-      id: 'inc-1',
-      reporterId: 'user-comm-1',
-      reporterName: 'Maria Santos',
-      reporterRole: 'COMMUTER',
-      reporterPhone: '0918-234-5678',
-      category: 'LOST_ITEM',
-      driverBodyNumber: 'SJB-042',
-      description: 'Left a blue umbrella in the sidecar during trip to Tradetown Dalipe.',
-      status: 'RESOLVED',
-      actionTakenNotes: 'Driver Nong Joe returned item to Tradetown TODA terminal outpost.',
-      createdAt: '2026-02-18T14:30:00Z',
-      resolvedAt: '2026-02-18T16:00:00Z',
-    },
-  ]);
+  const [incidents, setIncidents] = useState<IncidentReport[]>([]);
 
   const [auditLogs, setAuditLogs] = useState<AdminAuditLog[]>([
     {
@@ -809,9 +844,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   // Admin: Approve / Reject Driver
   const approveDriverVerification = (driverId: string) => {
-    setDrivers((prev) =>
-      prev.map((d) => (d.id === driverId ? { ...d, verificationStatus: 'VERIFIED' } : d))
-    );
+    setDrivers((prev) => {
+      const updated = prev.map((d) => (d.id === driverId ? { ...d, verificationStatus: 'VERIFIED' as const } : d));
+      try {
+        localStorage.setItem('antiqueride_drivers', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     const target = drivers.find((d) => d.id === driverId);
     setAuditLogs((prev) => [
       {
@@ -830,9 +869,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   };
 
   const rejectDriverVerification = (driverId: string, reason: string) => {
-    setDrivers((prev) =>
-      prev.map((d) => (d.id === driverId ? { ...d, verificationStatus: 'REJECTED' } : d))
-    );
+    setDrivers((prev) => {
+      const updated = prev.map((d) => (d.id === driverId ? { ...d, verificationStatus: 'REJECTED' as const } : d));
+      try {
+        localStorage.setItem('antiqueride_drivers', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     const target = drivers.find((d) => d.id === driverId);
     setAuditLogs((prev) => [
       {
@@ -852,7 +895,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   // Admin: Approve / Reject Commuter
   const approveCommuterVerification = (commuterId: string) => {
-    setCommuter((prev) => ({ ...prev, verificationStatus: 'VERIFIED' }));
+    setCommuter((prev) => {
+      const updated = { ...prev, verificationStatus: 'VERIFIED' as const };
+      try {
+        localStorage.setItem('antiqueride_commuter', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     setAuditLogs((prev) => [
       {
         id: 'log-' + Date.now(),
@@ -870,7 +919,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   };
 
   const rejectCommuterVerification = (commuterId: string, reason: string) => {
-    setCommuter((prev) => ({ ...prev, verificationStatus: 'REJECTED' }));
+    setCommuter((prev) => {
+      const updated = { ...prev, verificationStatus: 'REJECTED' as const };
+      try {
+        localStorage.setItem('antiqueride_commuter', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     setAuditLogs((prev) => [
       {
         id: 'log-' + Date.now(),
@@ -928,18 +983,22 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   // Admin: Resolve Incident
   const resolveIncident = (incidentId: string, notes: string) => {
-    setIncidents((prev) =>
-      prev.map((inc) =>
+    setIncidents((prev) => {
+      const updated = prev.map((inc) =>
         inc.id === incidentId
           ? {
               ...inc,
-              status: 'RESOLVED',
+              status: 'RESOLVED' as const,
               actionTakenNotes: notes,
               resolvedAt: new Date().toISOString(),
             }
           : inc
-      )
-    );
+      );
+      try {
+        localStorage.setItem('antiqueride_incidents', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     setAuditLogs((prev) => [
       {
         id: 'log-' + Date.now(),
@@ -976,7 +1035,13 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       createdAt: new Date().toISOString(),
     };
 
-    setIncidents((prev) => [newInc, ...prev]);
+    setIncidents((prev) => {
+      const updated = [newInc, ...prev];
+      try {
+        localStorage.setItem('antiqueride_incidents', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
     addNotification(
       'Report Received',
       'Your report has been submitted to the AntiqueRide Safety & Transport Board desk.',

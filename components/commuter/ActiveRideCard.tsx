@@ -142,7 +142,7 @@ export default function ActiveRideCard() {
                 Broadcasting to Online Drivers in San Jose de Buenavista...
               </p>
               <p className="text-[11px] text-blue-800 mt-0.5">
-                Dispatch offer broadcasted live across authorized drivers (e.g. <strong>Jose "Nong Joe" Mendoza #SJB-042</strong>).
+                Dispatch offer broadcasted live across authorized TODA drivers in San Jose (e.g. <strong>Unit #SJB-042</strong>).
               </p>
             </div>
 
@@ -153,7 +153,7 @@ export default function ActiveRideCard() {
                 onClick={simulateDriverAcceptance}
                 className="w-full sm:w-auto py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-transform active:scale-95"
               >
-                <span>⚡ Simulate Driver Accept (Nong Joe)</span>
+                <span>⚡ Simulate Driver Accept (Pilot Test)</span>
               </button>
             </div>
           </div>

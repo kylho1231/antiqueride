@@ -19,14 +19,14 @@ function DriverLoginForm() {
   const searchParams = useSearchParams();
   const redirectPath = searchParams.get('redirect');
 
-  const { login, currentUser } = useAppState();
+  const { login, currentUser, drivers } = useAppState();
 
   const [authMethod, setAuthMethod] = useState<'PHONE_OTP' | 'EMAIL'>('PHONE_OTP');
-  const [phoneNumber, setPhoneNumber] = useState('0917-882-9401');
+  const [phoneNumber, setPhoneNumber] = useState('');
   const [otpCode, setOtpCode] = useState('');
   const [otpSent, setOtpSent] = useState(false);
-  const [email, setEmail] = useState('jose.mendoza@antiqueride.ph');
-  const [password, setPassword] = useState('••••••••');
+  const [email, setEmail] = useState('');
+  const [password, setPassword] = useState('');
   const [isLoading, setIsLoading] = useState(false);
 
   // If already logged in as driver, redirect to /driver
@@ -53,29 +53,62 @@ function DriverLoginForm() {
 
   const handleCustomLogin = (e: React.FormEvent) => {
     e.preventDefault();
+    let matchedDriver = drivers.find(
+      (d) =>
+        (phoneNumber && d.phone.replace(/\D/g, '') === phoneNumber.replace(/\D/g, '')) ||
+        (phoneNumber && d.bodyNumber.toLowerCase() === phoneNumber.toLowerCase().trim()) ||
+        (email && d.email.toLowerCase() === email.toLowerCase().trim())
+    );
+
+    let matchedUser: AuthUser | undefined;
+    try {
+      const regUsersStr = localStorage.getItem('antiqueride_registered_users');
+      if (regUsersStr) {
+        const regUsers: AuthUser[] = JSON.parse(regUsersStr);
+        matchedUser = regUsers.find(
+          (u) =>
+            u.role === 'DRIVER' &&
+            ((phoneNumber && u.phone && u.phone.replace(/\D/g, '') === phoneNumber.replace(/\D/g, '')) ||
+              (phoneNumber && u.bodyNumber && u.bodyNumber.toLowerCase() === phoneNumber.toLowerCase().trim()) ||
+              (email && u.email && u.email.toLowerCase() === email.toLowerCase().trim()))
+        );
+      }
+    } catch (e) {}
+
+    const driverId = matchedDriver?.id || matchedUser?.driverId || 'drv-1';
+    const bodyNumber = matchedDriver?.bodyNumber || matchedUser?.bodyNumber || 'SJB-042';
+    const fullName = matchedDriver?.fullName || matchedUser?.fullName || (email ? email.split('@')[0] : phoneNumber ? `Driver (${phoneNumber})` : 'TODA Driver');
+    const userEmail = email || matchedDriver?.email || matchedUser?.email || 'driver@antiqueride.ph';
+    const userPhone = phoneNumber || matchedDriver?.phone || matchedUser?.phone || '0917-882-9401';
+    const todaName = matchedDriver?.todaName || matchedUser?.todaName || 'TTODA';
+    const avatarUrl = matchedDriver?.avatarUrl || matchedUser?.avatarUrl;
+
     const user: AuthUser = {
-      id: 'user-drv-1',
-      fullName: 'Jose "Nong Joe" Mendoza',
-      email: email || 'jose.mendoza@antiqueride.ph',
-      phone: phoneNumber || '0917-882-9401',
+      id: matchedUser?.id || 'user-' + driverId,
+      fullName,
+      email: userEmail,
+      phone: userPhone,
       role: 'DRIVER',
-      driverId: 'drv-1',
-      bodyNumber: 'SJB-042',
-      todaName: 'TTODA',
+      driverId,
+      bodyNumber,
+      todaName,
+      avatarUrl,
     };
     executeLogin(user);
   };
 
   const handleDemoDriverLogin = () => {
+    const defaultDriver = drivers[0];
     const user: AuthUser = {
-      id: 'user-drv-1',
-      fullName: 'Jose "Nong Joe" Mendoza',
-      email: 'jose.mendoza@antiqueride.ph',
-      phone: '0917-882-9401',
+      id: defaultDriver?.userId || 'user-drv-1',
+      fullName: defaultDriver?.fullName || 'Pilot Driver',
+      email: defaultDriver?.email || 'driver@antiqueride.ph',
+      phone: defaultDriver?.phone || '0917-882-9401',
       role: 'DRIVER',
-      driverId: 'drv-1',
-      bodyNumber: 'SJB-042',
-      todaName: 'TTODA',
+      driverId: defaultDriver?.id || 'drv-1',
+      bodyNumber: defaultDriver?.bodyNumber || 'SJB-042',
+      todaName: defaultDriver?.todaName || 'TTODA',
+      avatarUrl: defaultDriver?.avatarUrl,
     };
     executeLogin(user);
   };
@@ -110,7 +143,7 @@ function DriverLoginForm() {
             className="w-full py-2.5 px-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs active:scale-[0.99]"
           >
             <CheckCircle className="w-3.5 h-3.5" />
-            <span>Sign In as Driver (Nong Joe • Unit #SJB-042)</span>
+            <span>Quick Test as Pilot Driver (Unit #SJB-042)</span>
           </button>
         </div>
 

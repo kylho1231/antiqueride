@@ -34,7 +34,16 @@ export default function IncidentDesk() {
       </div>
 
       <div className="space-y-3">
-        {incidents.map((inc) => {
+        {incidents.length === 0 ? (
+          <div className="py-8 px-4 text-center bg-slate-50 border border-dashed border-slate-200 rounded-2xl">
+            <CheckCircle className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+            <p className="text-xs font-bold text-slate-800">No Incidents Reported</p>
+            <p className="text-[11px] text-slate-500 max-w-sm mx-auto mt-0.5">
+              San Jose de Buenavista tricycle operations are running safely without active lost-item or grievance reports.
+            </p>
+          </div>
+        ) : (
+          incidents.map((inc) => {
           const isResolved = inc.status === 'RESOLVED';
 
           return (
@@ -119,7 +128,8 @@ export default function IncidentDesk() {
               )}
             </div>
           );
-        })}
+        })
+      )}
       </div>
     </div>
   );
