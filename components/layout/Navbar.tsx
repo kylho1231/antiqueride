@@ -75,14 +75,14 @@ export default function Navbar() {
             {/* Logo and Tagline (Strictly routes within the active portal) */}
             <div className="flex items-center gap-3">
               <Link href={portalHome} className="flex items-center gap-2.5 group cursor-pointer">
-                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:bg-blue-700 transition-colors">
+                <div className="w-10 h-10 rounded-xl bg-gradient-to-br from-emerald-600 via-emerald-700 to-[#102A43] flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:scale-105 transition-transform">
                   <span className="text-white">A</span>
-                  <span className="text-blue-200">R</span>
+                  <span className="text-amber-300">R</span>
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-extrabold text-lg tracking-tight text-slate-900">AntiqueRide</span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                    <span className="font-extrabold text-lg tracking-tight text-[#102A43] dark:text-white">AntiqueRide</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border border-emerald-200 dark:border-emerald-800">
                       {portalBadge}
                     </span>
                   </div>

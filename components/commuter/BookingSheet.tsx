@@ -89,21 +89,21 @@ export default function BookingSheet({
     <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200/90 p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
       {/* Student Discount Highlight Banner */}
       {isStudent && (
-        <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-between text-xs text-blue-900 shadow-2xs gap-2">
+        <div className="p-2.5 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 rounded-2xl flex items-center justify-between text-xs text-emerald-900 dark:text-emerald-300 shadow-2xs gap-2">
           <div className="flex items-center gap-2 min-w-0">
-            <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
-              <Sparkles className="w-3.5 h-3.5 text-blue-100" />
+            <div className="w-6 h-6 rounded-lg bg-emerald-600 text-white flex items-center justify-center shrink-0">
+              <Sparkles className="w-3.5 h-3.5 text-amber-300" />
             </div>
             <div className="min-w-0">
-              <span className="font-extrabold text-[11px] block leading-tight text-blue-950 truncate">
+              <span className="font-extrabold text-[11px] block leading-tight text-emerald-950 dark:text-emerald-200 truncate">
                 Verified Student Account
               </span>
-              <span className="text-[10px] text-blue-700 font-medium truncate block">
+              <span className="text-[10px] text-emerald-700 dark:text-emerald-400 font-medium truncate block">
                 20% discount applied under RA 10642
               </span>
             </div>
           </div>
-          <span className="text-[10px] font-black uppercase tracking-wider text-blue-700 bg-white px-2 py-0.5 rounded-md border border-blue-200 shrink-0">
+          <span className="text-[10px] font-black uppercase tracking-wider text-emerald-800 bg-white dark:bg-slate-900 px-2 py-0.5 rounded-md border border-emerald-300 shrink-0">
             20% OFF
           </span>
         </div>
@@ -176,16 +176,16 @@ export default function BookingSheet({
             onClick={() => setRideType('REGULAR')}
             className={`p-3 rounded-2xl border text-left cursor-pointer transition-all ${
               rideType === 'REGULAR'
-                ? 'border-blue-600 bg-blue-50/70 shadow-xs'
-                : 'border-slate-200 hover:border-slate-300 bg-white'
+                ? 'border-emerald-600 bg-emerald-50/70 dark:bg-emerald-950/40 shadow-xs'
+                : 'border-slate-200 hover:border-slate-300 bg-white dark:bg-slate-900'
             }`}
           >
             <div className="flex items-center justify-between">
-              <span className="font-extrabold text-xs text-slate-900">Regular / Shared</span>
-              <Users className="w-3.5 h-3.5 text-blue-600" />
+              <span className="font-extrabold text-xs text-slate-900 dark:text-white">Regular / Shared</span>
+              <Users className="w-3.5 h-3.5 text-emerald-600" />
             </div>
             <p className="text-[10px] text-slate-500 mt-0.5">Municipal standard fare</p>
-            <div className="mt-1.5 text-sm font-black text-blue-700 font-mono">
+            <div className="mt-1.5 text-sm font-black text-emerald-700 dark:text-emerald-400 font-mono">
               {formatCurrency(
                 calculateFare(distanceKm, 'REGULAR', commuter.discountCategory, farePolicy).totalFare
               )}
@@ -198,14 +198,14 @@ export default function BookingSheet({
             onClick={() => setRideType('SPECIAL')}
             className={`p-3 rounded-2xl border text-left cursor-pointer transition-all ${
               rideType === 'SPECIAL'
-                ? 'border-blue-800 bg-slate-900 text-white shadow-xs'
-                : 'border-slate-200 hover:border-slate-300 bg-white'
+                ? 'border-[#102A43] bg-[#102A43] text-white shadow-xs'
+                : 'border-slate-200 hover:border-slate-300 bg-white dark:bg-slate-900'
             }`}
           >
             <div className="flex items-center justify-between">
               <span
                 className={`font-extrabold text-xs ${
-                  rideType === 'SPECIAL' ? 'text-white' : 'text-slate-900'
+                  rideType === 'SPECIAL' ? 'text-white' : 'text-slate-900 dark:text-white'
                 }`}
               >
                 Special (Pakyaw)
@@ -221,7 +221,7 @@ export default function BookingSheet({
             </p>
             <div
               className={`mt-1.5 text-sm font-black font-mono ${
-                rideType === 'SPECIAL' ? 'text-blue-300' : 'text-slate-900'
+                rideType === 'SPECIAL' ? 'text-amber-300' : 'text-slate-900 dark:text-white'
               }`}
             >
               {formatCurrency(
@@ -258,9 +258,9 @@ export default function BookingSheet({
 
           {/* Highlighted Student / Senior / PWD Discount Pill */}
           {hasStatutoryDiscount && (
-            <div className="p-2 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between text-[11px] text-blue-900 gap-2">
+            <div className="p-2 bg-emerald-50 dark:bg-emerald-950/60 border border-emerald-300 dark:border-emerald-700 rounded-xl flex items-center justify-between text-[11px] text-emerald-900 dark:text-emerald-300 gap-2">
               <div className="flex items-center gap-1.5 min-w-0">
-                <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+                <Sparkles className="w-3.5 h-3.5 text-amber-500 shrink-0" />
                 <span className="font-bold truncate">
                   {commuter.discountCategory === 'STUDENT'
                     ? 'Student 20% Discount (RA 10642)'
@@ -269,18 +269,18 @@ export default function BookingSheet({
                     : 'PWD 20% Discount (RA 9442)'}
                 </span>
               </div>
-              <span className="font-black text-xs font-mono bg-blue-600 text-white px-2 py-0.5 rounded-md shrink-0">
+              <span className="font-black text-xs font-mono bg-emerald-600 text-white px-2 py-0.5 rounded-md shrink-0">
                 -{formatCurrency(fareSnapshot.discountAmount)}
               </span>
             </div>
           )}
 
-          <div className="pt-2 border-t border-slate-200 flex items-center justify-between">
+          <div className="pt-2 border-t border-slate-200 dark:border-slate-800 flex items-center justify-between">
             <div>
-              <span className="font-extrabold text-xs text-slate-900 block">Total Passenger Fare:</span>
+              <span className="font-extrabold text-xs text-slate-900 dark:text-white block">Total Passenger Fare:</span>
               <span className="text-[10px] text-slate-400">Pay cash upon boarding</span>
             </div>
-            <div className="text-lg font-black text-blue-700 font-mono">
+            <div className="text-xl font-black text-emerald-700 dark:text-emerald-400 font-mono">
               {formatCurrency(fareSnapshot.totalFare)}
             </div>
           </div>
@@ -298,15 +298,15 @@ export default function BookingSheet({
         </div>
       )}
 
-      {/* Main Request CTA (Blue and White) */}
+      {/* Main Request CTA (Section 5 Spec) */}
       <button
         type="button"
         onClick={handleRequest}
         disabled={isSubmitting || !selectedDestination}
-        className={`w-full py-3.5 px-4 min-h-[48px] rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99] ${
+        className={`w-full py-3.5 px-4 min-h-[48px] rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all btn-spring ${
           !selectedDestination
             ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
-            : 'bg-blue-600 hover:bg-blue-700 text-white'
+            : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-700/30'
         }`}
       >
         <Car className="w-4 h-4" />

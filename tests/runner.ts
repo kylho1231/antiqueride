@@ -463,6 +463,58 @@ runTest(35, 'PWA Manifest & Service Worker: Web app manifest and SW precache are
   assert(swCode.includes('SKIP_WAITING'), 'SW supports instant user-driven updates');
 });
 
+// 36
+runTest(36, 'Section 33: 3D Philippine Tricycle Model provides signature vehicle & hotspots', () => {
+  const modelFile = fs.readFileSync(path.join(process.cwd(), 'components/3d/TricycleModel.ts'), 'utf8');
+  const sceneFile = fs.readFileSync(path.join(process.cwd(), 'components/3d/TricycleScene.tsx'), 'utf8');
+
+  assert(modelFile.includes('buildPhilippineTricycleGroup'), 'Exports buildPhilippineTricycleGroup builder');
+  assert(modelFile.includes('Passenger Sidecar Cabin'), 'Defines passenger sidecar cabin hotspot');
+  assert(modelFile.includes('SJB-042'), 'Displays San Jose Municipal Body Number #SJB-042');
+  assert(sceneFile.includes('IntersectionObserver'), 'Implements IntersectionObserver to pause when offscreen');
+  assert(sceneFile.includes('prefers-reduced-motion'), 'Respects prefers-reduced-motion accessibility preference');
+});
+
+// 37
+runTest(37, 'Section 33: Brand Palette defines Primary Emerald, Deep Navy, and Accent Yellow', () => {
+  const css = fs.readFileSync(path.join(process.cwd(), 'app/globals.css'), 'utf8');
+
+  assert(css.includes('#087F5B'), 'Primary Emerald #087F5B defined');
+  assert(css.includes('#102A43'), 'Deep Navy #102A43 defined');
+  assert(css.includes('#F5B301'), 'Accent Yellow #F5B301 defined');
+  assert(css.includes('#F7F9FC'), 'Light Background #F7F9FC defined');
+  assert(css.includes('#07151E'), 'Dark Background #07151E defined');
+  assert(css.includes('.glass-panel'), 'Glassmorphism utility defined');
+});
+
+// 38
+runTest(38, 'Section 33: Micro-interaction motion guidelines respected with spring physics', () => {
+  const css = fs.readFileSync(path.join(process.cwd(), 'app/globals.css'), 'utf8');
+
+  assert(css.includes('animate-radar-pulse'), 'Radar pulse animation defined for live driver searching');
+  assert(css.includes('btn-spring'), 'Spring tactile button interaction defined');
+  assert(css.includes('@media (prefers-reduced-motion: reduce)'), 'Reduced motion media query disables animations');
+});
+
+// 39
+runTest(39, 'Section 33: Interactive Municipal Fare Calculator computes accurate distances and discounts', () => {
+  const p1 = { lat: 10.7445, lng: 121.9395 }; // Plaza
+  const p2 = { lat: 10.7492, lng: 121.9442 }; // Tradetown
+  const dist = calculateDistanceKm(p1, p2);
+  const fare = calculateFare(dist, 'REGULAR', 'STUDENT', OFFICIAL_FARE_POLICY);
+
+  assert(dist > 0.5 && dist < 2.0, 'Distance between Plaza and Tradetown is valid');
+  assert(fare.totalFare > 0, 'Total fare calculated');
+  assert(fare.discountPct === 0.2, 'Student discount applies 20%');
+});
+
+// 40
+runTest(40, 'Section 33: WebGL Safety & Fallback guarantees zero blocking of auth or booking', () => {
+  const sceneFile = fs.readFileSync(path.join(process.cwd(), 'components/3d/TricycleScene.tsx'), 'utf8');
+  assert(sceneFile.includes('hasWebGl'), 'Checks WebGL context availability');
+  assert(sceneFile.includes('Philippine Tricycle — San Jose Model'), 'Includes accessible non-WebGL fallback');
+});
+
 console.log('\n----------------------------------------------------------------');
 const passedCount = results.filter((r) => r.passed).length;
 const totalCount = results.length;

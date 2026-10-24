@@ -1,6 +1,6 @@
 'use client';
 
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
 import { useAppState } from '@/lib/store/app-state';
 import { formatCurrency } from '@/lib/utils';
 import {
@@ -15,6 +15,7 @@ import {
   CheckCircle,
   Car,
   User,
+  Sparkles,
 } from 'lucide-react';
 import RatingModal from '@/components/commuter/RatingModal';
 
@@ -23,6 +24,23 @@ export default function ActiveRideCard() {
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('Found other ride');
   const [showRatingModal, setShowRatingModal] = useState(false);
+
+  // Trigger celebration confetti on Trip Completion (Section 6 Spec)
+  useEffect(() => {
+    if (activeRide && activeRide.status === 'TRIP_COMPLETED') {
+      try {
+        import('canvas-confetti').then((confettiModule) => {
+          const confetti = confettiModule.default || confettiModule;
+          confetti({
+            particleCount: 50,
+            spread: 60,
+            origin: { y: 0.6 },
+            colors: ['#087F5B', '#102A43', '#F5B301', '#FFFFFF'],
+          });
+        });
+      } catch (e) {}
+    }
+  }, [activeRide?.status]);
 
   if (!activeRide) return null;
 
@@ -34,18 +52,18 @@ export default function ActiveRideCard() {
   const getStatusBadge = () => {
     switch (activeRide.status) {
       case 'REQUESTED':
-        return { label: 'Finding Tricycle...', bg: 'bg-blue-50 text-blue-800 border-blue-200' };
+        return { label: 'Broadcasting to Drivers...', bg: 'bg-emerald-50 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 border-emerald-300 dark:border-emerald-700' };
       case 'ACCEPTED':
-        return { label: 'Driver Accepted', bg: 'bg-blue-100 text-blue-900 border-blue-300' };
+        return { label: 'Driver Assigned', bg: 'bg-blue-100 dark:bg-blue-950/60 text-blue-900 dark:text-blue-300 border-blue-300' };
       case 'HEADING_TO_PICKUP':
-        return { label: 'Tricycle En Route', bg: 'bg-indigo-50 text-indigo-900 border-indigo-200' };
+        return { label: 'Tricycle En Route', bg: 'bg-indigo-50 dark:bg-indigo-950/60 text-indigo-900 dark:text-indigo-300 border-indigo-200' };
       case 'ARRIVED':
-        return { label: 'Driver Arrived at Pickup', bg: 'bg-emerald-50 text-emerald-900 border-emerald-300' };
+        return { label: 'Driver Arrived at Pickup', bg: 'bg-amber-50 dark:bg-amber-950/60 text-amber-900 dark:text-amber-300 border-amber-300' };
       case 'PASSENGER_VERIFIED':
       case 'TRIP_STARTED':
-        return { label: 'Trip in Progress', bg: 'bg-blue-600 text-white border-blue-700' };
+        return { label: 'Trip in Progress', bg: 'bg-emerald-600 text-white border-emerald-700' };
       case 'TRIP_COMPLETED':
-        return { label: 'Trip Completed', bg: 'bg-slate-900 text-white border-slate-900' };
+        return { label: 'Trip Completed 🎉', bg: 'bg-[#102A43] text-white border-slate-900' };
       default:
         return { label: activeRide.status, bg: 'bg-slate-100 text-slate-800 border-slate-200' };
     }
@@ -133,25 +151,31 @@ export default function ActiveRideCard() {
             )}
           </div>
         ) : (
-          <div className="p-4 bg-blue-50/70 border border-blue-200 rounded-2xl text-center space-y-2.5">
-            <div className="w-10 h-10 rounded-2xl bg-blue-100 flex items-center justify-center text-blue-700 mx-auto animate-pulse">
-              <Car className="w-5 h-5" />
+          <div className="p-5 bg-gradient-to-b from-emerald-50/80 to-slate-50 dark:from-emerald-950/40 dark:to-slate-900 border border-emerald-200 dark:border-emerald-800 rounded-3xl text-center space-y-3">
+            {/* Cinematic Radar Expanding Location Rings (Section 6 Spec) */}
+            <div className="relative w-16 h-16 mx-auto flex items-center justify-center my-1">
+              <div className="absolute inset-0 rounded-full bg-emerald-500/20 animate-radar-pulse" />
+              <div className="absolute inset-2 rounded-full bg-emerald-500/30 animate-ping" />
+              <div className="relative w-12 h-12 rounded-2xl bg-emerald-600 text-white flex items-center justify-center shadow-lg shadow-emerald-700/30">
+                <Car className="w-6 h-6" />
+              </div>
             </div>
+
             <div>
-              <p className="text-xs font-bold text-blue-950">
-                Broadcasting to Online Drivers in San Jose de Buenavista...
+              <p className="text-sm font-black text-[#102A43] dark:text-white">
+                Searching for Available Tricycles...
               </p>
-              <p className="text-[11px] text-blue-800 mt-0.5">
-                Dispatch offer broadcasted live across authorized TODA drivers in San Jose (e.g. <strong>Unit #SJB-042</strong>).
+              <p className="text-xs text-emerald-800 dark:text-emerald-300 font-medium mt-0.5 max-w-sm mx-auto">
+                Broadcasting dispatch offer across authorized TODA drivers in San Jose de Buenavista.
               </p>
             </div>
 
             {/* Pilot Testing Helper: Simulate Driver Accept or Switch Window */}
-            <div className="pt-2 border-t border-blue-200/60 flex flex-col sm:flex-row items-center justify-center gap-2">
+            <div className="pt-2 border-t border-emerald-200/60 dark:border-emerald-800/60 flex flex-col sm:flex-row items-center justify-center gap-2">
               <button
                 type="button"
                 onClick={simulateDriverAcceptance}
-                className="w-full sm:w-auto py-2.5 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-transform active:scale-95"
+                className="w-full sm:w-auto py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
               >
                 <span>⚡ Simulate Driver Accept (Pilot Test)</span>
               </button>
@@ -178,15 +202,24 @@ export default function ActiveRideCard() {
           </div>
         </div>
 
-        {/* Completion Prompt */}
+        {/* Completion Prompt & Trip Summary (Section 6 Spec) */}
         {activeRide.status === 'TRIP_COMPLETED' && (
-          <div className="pt-2">
+          <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-3">
+            <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-center space-y-1">
+              <span className="text-xl">🎉</span>
+              <p className="text-xs font-black text-emerald-900 dark:text-emerald-300">
+                You have arrived safely at your destination!
+              </p>
+              <p className="text-[11px] text-emerald-700 dark:text-emerald-400">
+                Fare: <strong className="font-mono">{formatCurrency(activeRide.fareAmount)}</strong> • Cash payment completed to driver {activeRide.driverName}.
+              </p>
+            </div>
             <button
               onClick={() => setShowRatingModal(true)}
-              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-colors"
+              className="w-full py-3 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-1.5 shadow-md cursor-pointer transition-colors"
             >
               <CheckCircle className="w-4 h-4" />
-              <span>Rate Your Driver</span>
+              <span>Rate Your Driver & Finish</span>
             </button>
           </div>
         )}

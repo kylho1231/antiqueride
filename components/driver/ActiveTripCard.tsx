@@ -103,7 +103,7 @@ export default function ActiveTripCard() {
         <button
           type="button"
           onClick={() => driverStartHeading(activeRide.id)}
-          className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
+          className="w-full py-3.5 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md shadow-emerald-700/30 transition-all btn-spring"
         >
           <Car className="w-4 h-4" />
           <span>Start Heading to Pickup Point</span>
@@ -114,7 +114,7 @@ export default function ActiveTripCard() {
         <button
           type="button"
           onClick={() => driverMarkArrived(activeRide.id)}
-          className="w-full py-3.5 bg-amber-600 hover:bg-amber-700 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
+          className="w-full py-3.5 bg-amber-600 hover:bg-amber-500 text-white rounded-2xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all btn-spring"
         >
           <MapPin className="w-4 h-4" />
           <span>I Have Arrived at Pickup Location</span>
@@ -122,12 +122,12 @@ export default function ActiveTripCard() {
       )}
 
       {activeRide.status === 'ARRIVED' && (
-        <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-3">
-          <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
-            <KeyRound className="w-4 h-4 text-blue-600" />
+        <div className="p-4 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl space-y-3">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-900 dark:text-white">
+            <KeyRound className="w-4 h-4 text-emerald-600" />
             <span>Verify Passenger Pickup PIN</span>
           </div>
-          <p className="text-[11px] text-slate-600">
+          <p className="text-[11px] text-slate-600 dark:text-slate-300">
             Ask passenger for the 4-digit code shown on their AntiqueRide app to verify passenger match.
           </p>
 
@@ -138,11 +138,11 @@ export default function ActiveTripCard() {
               value={enteredPin}
               onChange={(e) => setEnteredPin(e.target.value)}
               placeholder="e.g. 4821"
-              className="w-32 text-center text-lg font-mono font-bold tracking-widest bg-white border border-blue-300 rounded-xl px-3 py-2 text-slate-800 focus:outline-blue-600"
+              className="w-32 text-center text-lg font-mono font-bold tracking-widest bg-white dark:bg-slate-900 border border-emerald-300 dark:border-emerald-700 rounded-xl px-3 py-2 text-slate-800 dark:text-white focus:outline-emerald-600"
             />
             <button
               type="submit"
-              className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-xs"
+              className="flex-1 py-2 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-xs btn-spring"
             >
               Verify & Start Trip
             </button>
@@ -159,15 +159,15 @@ export default function ActiveTripCard() {
 
       {(activeRide.status === 'PASSENGER_VERIFIED' || activeRide.status === 'TRIP_STARTED') && (
         <div className="space-y-3">
-          <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-xs text-blue-900 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
+          <div className="p-3 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-xs text-emerald-900 dark:text-emerald-300 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0" />
             <span>Passenger Verified. Driving to {activeRide.destinationName}...</span>
           </div>
 
           <button
             type="button"
             onClick={() => completeTrip(activeRide.id)}
-            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all active:scale-[0.99]"
+            className="w-full py-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-lg shadow-emerald-700/30 transition-all btn-spring"
           >
             <CheckCircle2 className="w-4 h-4 text-white" />
             <span>Complete Trip & Collect Cash ({formatCurrency(activeRide.fareAmount)})</span>

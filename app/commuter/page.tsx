@@ -79,7 +79,7 @@ export default function CommuterPage() {
               title="Click to update your photo and details"
               aria-label="Update profile photo and settings"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl overflow-hidden border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-blue-500 transition-all">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-emerald-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl overflow-hidden border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
                 {commuter.avatarUrl || currentUser?.avatarUrl ? (
                   <img
                     src={commuter.avatarUrl || currentUser?.avatarUrl}
@@ -90,7 +90,7 @@ export default function CommuterPage() {
                   <User className="w-6 h-6" />
                 )}
               </div>
-              <div className="absolute -bottom-1 -right-1 p-1 rounded-md bg-blue-600 text-white shadow-xs">
+              <div className="absolute -bottom-1 -right-1 p-1 rounded-md bg-emerald-600 text-white shadow-xs">
                 <Camera className="w-3 h-3" />
               </div>
             </button>
@@ -103,13 +103,13 @@ export default function CommuterPage() {
 
                 {/* Highlighted Student Discount Pill */}
                 {isStudent ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200 shrink-0">
-                    <Sparkles className="w-3 h-3 text-blue-600" />
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 shrink-0">
+                    <Sparkles className="w-3 h-3 text-amber-500" />
                     <span>Verified Student (20% Discount)</span>
                   </span>
                 ) : commuter.discountCategory === 'SENIOR' || commuter.discountCategory === 'PWD' ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200 shrink-0">
-                    <ShieldCheck className="w-3 h-3 text-blue-600" />
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-emerald-100 text-emerald-900 border border-emerald-300 shrink-0">
+                    <ShieldCheck className="w-3 h-3 text-emerald-600" />
                     <span>Verified {commuter.discountCategory} (20% Discount)</span>
                   </span>
                 ) : (
@@ -130,8 +130,8 @@ export default function CommuterPage() {
 
           {/* Quick Action Controls */}
           <div className="flex items-center gap-2 sm:gap-2.5 self-start sm:self-auto">
-            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs font-bold text-blue-900">
-              <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
+            <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-emerald-50 border border-emerald-200 text-xs font-bold text-emerald-900">
+              <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
               <span>{onlineDriversCount} Tricycles Available</span>
             </div>
 
@@ -141,7 +141,7 @@ export default function CommuterPage() {
               title="Account Settings & Photo"
               aria-label="Account Settings"
             >
-              <Settings className="w-4 h-4 text-blue-600" />
+              <Settings className="w-4 h-4 text-emerald-600" />
               <span className="hidden sm:inline">Settings</span>
             </button>
           </div>

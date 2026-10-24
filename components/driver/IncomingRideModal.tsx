@@ -77,10 +77,10 @@ export default function IncomingRideModal() {
           </div>
         </div>
 
-        {/* Fare & Service Type Card */}
-        <div className="p-4 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white rounded-2xl flex items-center justify-between">
+        {/* Fare & Service Type Card (Deep Navy & Gold) */}
+        <div className="p-4 bg-gradient-to-br from-[#102A43] via-[#0B1E30] to-[#07151E] text-white rounded-2xl flex items-center justify-between border border-white/10">
           <div>
-            <div className="flex items-center gap-1.5 text-xs text-blue-300 font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs text-amber-300 font-bold uppercase tracking-wider">
               {activeRide.rideType === 'SPECIAL' ? (
                 <>
                   <Sparkles className="w-3.5 h-3.5" />
@@ -93,11 +93,11 @@ export default function IncomingRideModal() {
                 </>
               )}
             </div>
-            <p className="text-xs text-blue-100 mt-1">Passenger: <span className="font-bold text-white">{activeRide.commuterName}</span></p>
+            <p className="text-xs text-slate-300 mt-1">Passenger: <span className="font-bold text-white">{activeRide.commuterName}</span></p>
           </div>
           <div className="text-right">
-            <span className="text-[11px] text-blue-200">Agreed Fare</span>
-            <div className="text-2xl font-black text-blue-300">
+            <span className="text-[11px] text-slate-400">Agreed Fare</span>
+            <div className="text-2xl font-black text-amber-300">
               {formatCurrency(activeRide.fareAmount)}
             </div>
           </div>
@@ -140,7 +140,7 @@ export default function IncomingRideModal() {
           <button
             type="button"
             onClick={handleAccept}
-            className="py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-colors"
+            className="py-3.5 px-4 rounded-xl bg-emerald-600 hover:bg-emerald-500 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-md shadow-emerald-700/30 transition-all btn-spring"
           >
             <Check className="w-4 h-4" />
             <span>Accept Ride</span>

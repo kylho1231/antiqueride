@@ -60,7 +60,7 @@ export default function DriverPage() {
               title="Click to update your driver photo and details"
               aria-label="Update driver photo and settings"
             >
-              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl overflow-hidden border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-blue-500 transition-all">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-gradient-to-br from-emerald-600 to-[#102A43] text-white flex items-center justify-center font-bold text-lg sm:text-xl overflow-hidden border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-emerald-500 transition-all">
                 {activeDriver.avatarUrl || currentUser?.avatarUrl ? (
                   <img
                     src={activeDriver.avatarUrl || currentUser?.avatarUrl}
@@ -71,7 +71,7 @@ export default function DriverPage() {
                   <Car className="w-6 h-6 text-white" />
                 )}
               </div>
-              <div className="absolute -bottom-1 -right-1 p-1 rounded-md bg-blue-600 text-white shadow-xs">
+              <div className="absolute -bottom-1 -right-1 p-1 rounded-md bg-emerald-600 text-white shadow-xs">
                 <Camera className="w-3 h-3" />
               </div>
             </button>
@@ -79,11 +79,11 @@ export default function DriverPage() {
             <div className="min-w-0">
               <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
                 <h1 className="font-extrabold text-base sm:text-lg text-slate-900 truncate">{activeDriver.fullName}</h1>
-                <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-blue-900 text-white font-mono shrink-0">
+                <span className="text-[10px] font-black px-2 py-0.5 rounded-md bg-[#102A43] text-white font-mono shrink-0">
                   Unit #{activeDriver.bodyNumber}
                 </span>
-                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 flex items-center gap-1 shrink-0">
-                  <ShieldCheck className="w-3 h-3 text-blue-600" />
+                <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-300 flex items-center gap-1 shrink-0">
+                  <ShieldCheck className="w-3 h-3 text-emerald-600" />
                   <span>San Jose LGU Verified</span>
                 </span>
               </div>
@@ -105,7 +105,7 @@ export default function DriverPage() {
 
             <div className="px-3 py-1.5 bg-slate-50 border border-slate-200 rounded-2xl text-center">
               <span className="text-[10px] text-slate-400 block font-bold uppercase">Trips</span>
-              <span className="text-xs font-extrabold text-blue-700 block font-mono">
+              <span className="text-xs font-extrabold text-emerald-700 block font-mono">
                 {activeDriver.totalTrips}
               </span>
             </div>
@@ -116,7 +116,7 @@ export default function DriverPage() {
               title="Driver Account Settings & Photo"
               aria-label="Driver Account Settings"
             >
-              <Settings className="w-4 h-4 text-blue-600" />
+              <Settings className="w-4 h-4 text-emerald-600" />
               <span className="hidden sm:inline">Settings</span>
             </button>
           </div>

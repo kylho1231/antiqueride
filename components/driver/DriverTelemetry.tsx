@@ -2,7 +2,7 @@
 
 import React, { useState, useEffect } from 'react';
 import { useAppState } from '@/lib/store/app-state';
-import { Power, Battery, Compass, Radio, MapPin, CheckCircle, AlertTriangle } from 'lucide-react';
+import { Power, Battery, Compass, Radio, MapPin, CheckCircle, AlertTriangle, ShieldCheck } from 'lucide-react';
 import { DEFAULT_MAP_CENTER } from '@/lib/data/antique-data';
 
 export default function DriverTelemetry() {
@@ -31,103 +31,125 @@ export default function DriverTelemetry() {
     }, 4000);
 
     return () => clearInterval(interval);
-  }, [isSimulatingMovement, activeDriver.isOnline]);
+  }, [isSimulatingMovement, activeDriver.isOnline, updateDriverGps]);
 
   return (
-    <div className="bg-white rounded-3xl p-5 shadow-xl border border-slate-200/90 space-y-4">
-      {/* Shift Toggle & Status */}
-      <div className="flex items-center justify-between">
+    <div className="bg-white dark:bg-[#102A43] rounded-3xl p-5 sm:p-6 shadow-xl border border-slate-200/90 dark:border-slate-800 space-y-4">
+      {/* Large High-Visibility Shift Status & Tactile Toggle (Section 7 Spec) */}
+      <div className="p-4 rounded-2xl bg-gradient-to-r from-slate-50 to-slate-100 dark:from-slate-900/60 dark:to-slate-900/40 border border-slate-200 dark:border-slate-800 flex items-center justify-between gap-4">
         <div>
-          <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider">Shift Status</span>
-          <div className="flex items-center gap-2 mt-0.5">
+          <span className="text-[10px] uppercase font-black text-slate-400 tracking-wider block">
+            Tricycle Shift Console
+          </span>
+          <div className="flex items-center gap-2 mt-1">
             <span
-              className={`w-3 h-3 rounded-full ${
-                activeDriver.isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'
+              className={`w-3.5 h-3.5 rounded-full transition-all duration-300 ${
+                activeDriver.isOnline
+                  ? 'bg-emerald-500 animate-pulse ring-4 ring-emerald-500/20'
+                  : 'bg-slate-400'
               }`}
-            ></span>
-            <span className="font-extrabold text-sm text-slate-900">
-              {activeDriver.isOnline ? 'Online • Ready for Rides' : 'Offline / Off-Duty'}
+            />
+            <span className="font-black text-base text-[#102A43] dark:text-white">
+              {activeDriver.isOnline ? 'ONLINE • Taking Rides' : 'OFFLINE • Off Shift'}
             </span>
           </div>
+          <span className="text-[11px] text-slate-500 dark:text-slate-400 mt-0.5 block">
+            {activeDriver.isOnline
+              ? 'Receiving passenger dispatch offers in San Jose'
+              : 'Tap switch to start accepting passenger rides'}
+          </span>
         </div>
 
+        {/* Large Tactile Spring Switch */}
         <button
           type="button"
           onClick={toggleDriverOnline}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-black flex items-center gap-2 cursor-pointer transition-all shadow-xs ${
+          className={`px-5 py-3.5 rounded-2xl text-xs font-black flex items-center gap-2 cursor-pointer transition-all duration-200 shadow-md btn-spring shrink-0 ${
             activeDriver.isOnline
-              ? 'bg-red-50 hover:bg-red-100 text-red-700 border border-red-200'
-              : 'bg-blue-600 hover:bg-blue-700 text-white'
+              ? 'bg-rose-50 hover:bg-rose-100 text-rose-700 border-2 border-rose-300 dark:bg-rose-950/40 dark:text-rose-300 dark:border-rose-800'
+              : 'bg-emerald-600 hover:bg-emerald-500 text-white shadow-emerald-700/30'
           }`}
+          aria-label={activeDriver.isOnline ? 'Go Offline' : 'Go Online'}
         >
           <Power className="w-4 h-4" />
-          <span>{activeDriver.isOnline ? 'Go Offline' : 'Go Online'}</span>
+          <span className="text-xs">{activeDriver.isOnline ? 'Go Offline' : 'Go Online'}</span>
         </button>
       </div>
 
       {/* Terminal & Station Queue Position (Key Antique Transport Requirement) */}
-      <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs">
+      <div className="p-3.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-2xl flex items-center justify-between text-xs">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
+          <div className="w-9 h-9 rounded-xl bg-emerald-100 dark:bg-emerald-950/60 text-emerald-800 dark:text-emerald-300 flex items-center justify-center font-bold">
             <MapPin className="w-4 h-4" />
           </div>
           <div>
-            <span className="text-[10px] uppercase font-bold text-slate-400">Station Assignment</span>
-            <p className="font-bold text-slate-800">{activeDriver.terminalName}</p>
-            <p className="text-[11px] text-slate-500">TODA: {activeDriver.todaName}</p>
+            <span className="text-[10px] uppercase font-bold text-slate-400">Terminal Station</span>
+            <p className="font-extrabold text-[#102A43] dark:text-white">{activeDriver.terminalName}</p>
+            <p className="text-[11px] text-slate-500">TODA: {activeDriver.todaName} • Mode: PILA</p>
           </div>
         </div>
 
         <div className="text-right">
-          <span className="text-[10px] text-slate-400 block">Queue / Pila</span>
-          <span className="font-mono font-black text-blue-900 text-sm bg-blue-100/70 px-2 py-0.5 rounded-lg border border-blue-200">
-            Position #{activeDriver.queuePosition || 1}
+          <span className="text-[10px] uppercase font-bold text-slate-400">Pila Position</span>
+          <p className="text-lg font-black text-emerald-600 dark:text-emerald-400 font-mono">
+            #{activeDriver.queuePosition || 1}
+          </p>
+        </div>
+      </div>
+
+      {/* Telemetry Sensor Metrics (Battery, GPS, Accuracy) */}
+      <div className="grid grid-cols-3 gap-2 text-xs">
+        <div className="p-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-center">
+          <div className="flex items-center justify-center gap-1 text-slate-400 text-[10px] uppercase font-bold">
+            <Battery className="w-3.5 h-3.5 text-emerald-600 dark:text-emerald-400" />
+            <span>Battery</span>
+          </div>
+          <span className="font-mono font-bold text-slate-900 dark:text-white text-xs mt-0.5 block">
+            {activeDriver.batteryLevel || 95}%
+          </span>
+        </div>
+
+        <div className="p-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-center">
+          <div className="flex items-center justify-center gap-1 text-slate-400 text-[10px] uppercase font-bold">
+            <Radio className="w-3.5 h-3.5 text-blue-600 dark:text-blue-400" />
+            <span>GPS Ping</span>
+          </div>
+          <span className="font-mono font-bold text-slate-900 dark:text-white text-xs mt-0.5 block">
+            {activeDriver.isOnline ? 'Active' : 'Offline'}
+          </span>
+        </div>
+
+        <div className="p-2.5 bg-slate-50 dark:bg-slate-900/60 border border-slate-200 dark:border-slate-800 rounded-xl text-center">
+          <div className="flex items-center justify-center gap-1 text-slate-400 text-[10px] uppercase font-bold">
+            <Compass className="w-3.5 h-3.5 text-amber-500" />
+            <span>Accuracy</span>
+          </div>
+          <span className="font-mono font-bold text-slate-900 dark:text-white text-xs mt-0.5 block">
+            ±{activeDriver.gpsAccuracyMeters || 3.8}m
           </span>
         </div>
       </div>
 
-      {/* Telemetry Readouts (Battery, GPS Accuracy, Movement) */}
-      <div className="grid grid-cols-2 gap-3 text-xs">
-        <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center gap-2.5">
-          <Battery className="w-4 h-4 text-emerald-600" />
-          <div>
-            <span className="text-[10px] text-slate-400 block font-medium">Battery</span>
-            <span className="font-bold text-slate-800">{activeDriver.batteryLevel || 85}% Charged</span>
-          </div>
-        </div>
-
-        <div className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center gap-2.5">
-          <Radio className="w-4 h-4 text-blue-600" />
-          <div>
-            <span className="text-[10px] text-slate-400 block font-medium">GPS Accuracy</span>
-            <span className="font-bold text-slate-800">
-              ±{activeDriver.gpsAccuracyMeters || 4.2}m (High)
-            </span>
-          </div>
-        </div>
+      {/* Live Simulation Helper for Testing without physical road driving */}
+      <div className="pt-2 border-t border-slate-100 dark:border-slate-800 flex items-center justify-between text-xs">
+        <span className="text-[11px] text-slate-500 dark:text-slate-400">
+          Field GPS Simulator:
+        </span>
+        <button
+          type="button"
+          onClick={() => setIsSimulatingMovement(!isSimulatingMovement)}
+          disabled={!activeDriver.isOnline}
+          className={`px-3 py-1.5 rounded-xl text-[11px] font-bold cursor-pointer transition-colors ${
+            !activeDriver.isOnline
+              ? 'opacity-40 cursor-not-allowed text-slate-400'
+              : isSimulatingMovement
+              ? 'bg-amber-100 text-amber-800 border border-amber-300'
+              : 'bg-slate-100 hover:bg-slate-200 text-slate-700 dark:bg-slate-800 dark:text-slate-300'
+          }`}
+        >
+          {isSimulatingMovement ? '■ Stop GPS Patrol' : '▶ Simulate Patrol GPS'}
+        </button>
       </div>
-
-      {/* GPS Movement Demo Toggle */}
-      {activeDriver.isOnline && (
-        <div className="pt-1">
-          <button
-            type="button"
-            onClick={() => setIsSimulatingMovement(!isSimulatingMovement)}
-            className={`w-full py-2.5 px-3 rounded-xl border text-xs font-bold flex items-center justify-center gap-2 cursor-pointer transition-colors ${
-              isSimulatingMovement
-                ? 'bg-blue-50 border-blue-300 text-blue-800'
-                : 'bg-slate-100 hover:bg-slate-200 border-slate-300 text-slate-700'
-            }`}
-          >
-            <Compass className={`w-4 h-4 ${isSimulatingMovement ? 'animate-spin' : ''}`} />
-            <span>
-              {isSimulatingMovement
-                ? 'Simulating Road Patrol in San Jose (Active)'
-                : 'Test Live GPS Telemetry Movement'}
-            </span>
-          </button>
-        </div>
-      )}
     </div>
   );
 }
