@@ -1,10 +1,23 @@
-# AntiqueRide — Smart Transportation and Ride Booking Platform
+# AntiqueRide — Smart Transportation and Tricycle Booking Platform
+
+[![Next.js](https://img.shields.io/badge/Framework-Next.js_16_Turbopack-black?style=flat&logo=next.js&logoColor=white)](https://nextjs.org)
+[![TypeScript](https://img.shields.io/badge/Language-TypeScript_5-3178C6?style=flat&logo=typescript&logoColor=white)](https://www.typescriptlang.org)
+[![Tailwind CSS](https://img.shields.io/badge/Styling-Tailwind_CSS_v4-38BDF8?style=flat&logo=tailwindcss&logoColor=white)](https://tailwindcss.com)
+[![PWA](https://img.shields.io/badge/PWA-WebAPK_Ready-2563EB?style=flat&logo=pwa&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/Progressive_web_apps)
+[![Tests](https://img.shields.io/badge/Tests-35%2F35_Passing-brightgreen?style=flat&logo=checkmarx&logoColor=white)](https://github.com/kylho1231/antiqueride)
 
 **Tagline:** Your Ride. Your Antique.  
 **Initial Operating Area:** San Jose de Buenavista, Antique, Philippines  
 **Phase 2 Expansion:** Sibalom and Hamtic, subject to inter-municipal authorizations  
-**Platform Architecture:** Progressive Web Application (PWA) + Next.js App Router + TypeScript + Tailwind CSS + Supabase / PostgreSQL / PostGIS + OpenStreetMap (MapLibre / Leaflet)  
+**Platform Architecture:** Progressive Web Application (PWA) + Next.js App Router + TypeScript + Tailwind CSS + OpenStreetMap (Leaflet GIS)  
 **Compliance Standard:** Philippine Data Privacy Act (RA 10173), Municipal Tricycle Franchise (MTOP), Statutory 20% Transport Discounts (RA 10642 / RA 9994 / RA 9442).
+
+---
+
+## 🚀 Live Web Application
+
+* 🌐 **Live Production Deployment:** [https://antiqueride.vercel.app](https://antiqueride.vercel.app) *(or your deployed Vercel URL)*  
+  *(Works directly on iPhone Safari, Android Chrome, and desktop browsers with full PWA home screen installation!)*
 
 ---
 
@@ -13,27 +26,28 @@
 AntiqueRide modernizes public transportation in the Province of Antique, starting with authorized tricycle services in San Jose de Buenavista:
 1. **Difficulty finding available tricycles:** Real-time driver presence and interactive GPS dispatch.
 2. **Terminal obscurity:** Verified terminal outposts with capacity, operating hours, and TODA queue (pila) tracking.
-3. **Fare uncertainty:** Version-controlled official fare rules engine audited against Sangguniang Bayan ordinances (e.g. Municipal Ordinance No. 2023-014).
+3. **Fare uncertainty:** Version-controlled official fare rules engine audited against Sangguniang Bayan ordinances (Municipal Ordinance No. 2023-014).
 4. **Prank bookings & safety risks:** 4-digit security pickup PIN matching, encrypted document verification, and direct hotlines to San Jose Police (PNP) and Antique PDRRMO 911.
-5. **TODA Queue Discipline:** Does not bypass local transport associations; supports both **Station Queue (Pila) Mode** and **Authorized On-Demand Mode**.
+5. **Strict Portal Separation:** Dedicated isolated portals for **Commuters**, **TODA Drivers**, and **Super Administrators** with separate registration and login.
+6. **TODA Queue Discipline:** Does not bypass local transport associations; supports both **Station Queue (Pila) Mode** and **Authorized On-Demand Mode**.
 
 ---
 
 ## 2. Key Portals & Role Structure
 
-### Commuter Portal (`/commuter`)
-- **Interactive OpenStreetMap Navigation:** Real-time terminal pins, nearby available tricycles, route polylines.
+### 🚶 Commuter Portal (`/commuter`)
+- **Interactive OpenStreetMap Navigation:** Real-time terminal pins, nearby available tricycles, route indicators.
 - **Service Tier Selector:**
   - *Regular / Shared Trip:* Official municipal tariff (₱15.00 base for first 2.0 km + ₱2.50 per succeeding km).
   - *Special Trip (Pakyaw):* Exclusive chartered tricycle (₱50.00 base).
-- **Mandatory 20% Discount Engine:** Instant discount computation for verified Students, Senior Citizens, and PWDs.
+- **Mandatory 20% Discount Engine:** Instant discount computation for verified Students (RA 10642), Senior Citizens (RA 9994), and PWDs (RA 9442).
 - **4-Digit Pickup PIN:** Generated upon booking; commuter presents PIN to driver before boarding.
 - **Passenger Safety Desk:** Share Trip live tracking link, emergency call triggers, and incident reporting.
 
-### Driver Portal (`/driver`)
+### 🛵 Driver Portal (`/driver`)
 - **Shift Status Toggle:** Seamless Online / Offline control with battery and GPS accuracy readouts.
 - **Terminal Queue Position:** Real-time queue number (e.g. *Tradetown Dalipe Terminal — Position #1*).
-- **Incoming Ride Radar:** 30-second countdown alert with route, agreed fare, and one-tap Accept/Decline.
+- **Incoming Ride Radar:** Real-time alert with route, agreed fare, and one-tap Accept/Decline.
 - **Step-by-Step Dispatch Workflow:**
   1. `ACCEPTED` → Start Heading to Pickup
   2. `HEADING_TO_PICKUP` → Mark as Arrived
@@ -41,7 +55,7 @@ AntiqueRide modernizes public transportation in the Province of Antique, startin
   4. `TRIP_STARTED` → Complete Trip & Collect Cash (₱XX.XX)
 - **Live GPS Telemetry:** Adaptive GPS update reporting with simulation mode for road testing.
 
-### Super Admin Workspace (`/admin`)
+### 🛡️ Super Admin Workspace (`/admin`)
 - **Executive Operations KPI Cards:** Live online drivers, active bookings, completed trips, pending applications, and safety grievances.
 - **Driver Verification Desk:** Inspect LTO driver licenses, OR/CR, MTOP franchise permits, and TODA memberships.
 - **Terminal & Queue Mode Manager:** Configure capacity, coordinates, and toggle between Queue (Pila) and On-Demand dispatch.
@@ -95,7 +109,7 @@ npm run dev
 Visit `http://localhost:3000` to launch the platform.
 
 ### Running Acceptance Tests
-The automated test suite verifies all 20 production acceptance criteria defined in the Master Development Prompt:
+The automated test suite verifies all 35 production acceptance criteria defined across portal isolation, PWA WebAPK compliance, fare transparency, and dispatch synchronization:
 ```bash
 npm test
 ```
@@ -126,8 +140,23 @@ Result:
   [PASS] Test 18: Duplicate active requests are rejected
   [PASS] Test 19: Phase 2 intermunicipal routes (Sibalom/Hamtic) require field verification
   [PASS] Test 20: PWA manifest parameters and service worker defined correctly
+  [PASS] Test 21: Authentication Guard: Unauthenticated user is barred from all protected portals
+  [PASS] Test 22: Strict Portal Isolation: Commuter role cannot access Driver or Admin portals
+  [PASS] Test 23: Strict Portal Isolation: Driver role cannot access Commuter or Admin portals
+  [PASS] Test 24: Super Admin Portal: Privileged access restricted exclusively to SUPER_ADMIN
+  [PASS] Test 25: Session Logout & Invalidation: Logging out clears session credentials and denies portal access
+  [PASS] Test 26: Find a Tricycle: Generates broadcast dispatch with 4-digit PIN and frozen fare snapshot
+  [PASS] Test 27: Driver Notification: Online verified driver receives dispatch offer and can accept
+  [PASS] Test 28: Commuter Registration: Validates Legal Name, Mobile Number, Email, and School / Gov ID
+  [PASS] Test 29: Driver Registration: Enforces Government ID, MTOP, LTO License, and Body Number
+  [PASS] Test 30: Profile Settings: Updates avatar photo and personal credentials
+  [PASS] Test 31: Commuter Portal Isolation: Dedicated commuter register and login prevent driver crossover
+  [PASS] Test 32: Driver Portal Isolation: Dedicated driver register and login prevent commuter crossover
+  [PASS] Test 33: Super Admin Isolation: Admin workspace is isolated from commuter and driver interfaces
+  [PASS] Test 34: PWA Icon & Asset Compliance: 192px/512px PNGs and maskables exist for WebAPK install
+  [PASS] Test 35: PWA Manifest & Service Worker: Web app manifest and SW precache are synchronized
 ----------------------------------------------------------------
-  SUMMARY: 20 / 20 TESTS PASSED (100% SUCCESS)
+  SUMMARY: 35 / 35 TESTS PASSED (100% SUCCESS)
 ----------------------------------------------------------------
 ```
 
@@ -135,10 +164,21 @@ Result:
 
 ## 6. Progressive Web App (PWA) Capabilities
 
-- **Manifest:** Configured at `/manifest.json` with standalone mode and Antique Emerald `#087F5B` branding.
-- **Service Worker (`/sw.js`):** Pre-caches essential app shell and provides seamless offline fallback at `/offline`.
-- **Install Prompt Banner:** Automatically prompts users on supported Android/iOS mobile browsers.
-- **Graceful GPS Handling:** Clear offline warnings when connectivity or GPS signals drop without falsifying simulated positions.
+- **Manifest:** Configured at `/manifest.json` with standalone mode and Royal Blue `#2563EB` branding.
+- **True WebAPK Icons:** 192×192px and 512×512px PNG icons, apple-touch-icon, and maskable assets.
+- **Service Worker (`/sw.js`):** Pre-caches essential app shell, OpenStreetMap tiles (up to 120 cached tiles), and provides offline fallback at `/offline`.
+- **Install Prompt Banner:** Automatically prompts users on Android Chrome, desktop browsers, and provides step-by-step "Add to Home Screen" instructions for iOS Safari.
+- **Live Online / Offline Detection:** Real-time toast alerts notifying users when network connectivity changes.
+
+---
+
+## 👨‍💻 Author
+
+**Jhon Kylho Estrabo**  
+*BS Information Technology · St. Anthony's College*  
+San Jose de Buenavista, Antique, Philippines  
+* **GitHub:** [@kylho1231](https://github.com/kylho1231)  
+* **Email:** [jhonkylhoestraboofficial@gmail.com](mailto:jhonkylhoestraboofficial@gmail.com)
 
 ---
 
