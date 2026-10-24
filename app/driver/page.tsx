@@ -39,7 +39,16 @@ const AntiqueMap = dynamic(() => import('@/components/map/AntiqueMap'), {
 });
 
 export default function DriverPage() {
-  const { activeDriver, currentUser, terminals, drivers, activeRide, farePolicy, toggleDriverOnline } = useAppState();
+  const {
+    activeDriver,
+    currentUser,
+    terminals,
+    drivers,
+    activeRide,
+    farePolicy,
+    toggleDriverOnline,
+    updateDriverGps,
+  } = useAppState();
   const [showProfileModal, setShowProfileModal] = useState(false);
 
   const isAssignedActiveRide =
@@ -205,6 +214,9 @@ export default function DriverPage() {
                   pickupCoords={activeRide?.pickupCoordinates || null}
                   destinationCoords={activeRide?.destinationCoordinates || null}
                   driverCoords={activeDriver.currentCoordinates}
+                  userLiveCoords={activeDriver.currentCoordinates}
+                  userLiveAccuracy={activeDriver.gpsAccuracyMeters || 3.8}
+                  onLocationFound={(coords, accuracy) => updateDriverGps(coords, accuracy)}
                   className="rounded-2xl border border-slate-200 overflow-hidden shadow-xs h-full w-full"
                 />
               </div>

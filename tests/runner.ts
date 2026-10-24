@@ -16,6 +16,7 @@ import {
   DEFAULT_MAP_CENTER,
 } from '../lib/data/antique-data';
 import { RideRequest, DriverProfile } from '../lib/types';
+import { calculateDistanceMeters, resolveLocationName, SAN_JOSE_LANDMARKS } from '../lib/hooks/useDeviceLocation';
 
 interface TestResult {
   num: number;
@@ -513,6 +514,41 @@ runTest(40, 'Section 33: WebGL Safety & Fallback guarantees zero blocking of aut
   const sceneFile = fs.readFileSync(path.join(process.cwd(), 'components/3d/TricycleScene.tsx'), 'utf8');
   assert(sceneFile.includes('hasWebGl'), 'Checks WebGL context availability');
   assert(sceneFile.includes('Philippine Tricycle — San Jose Model'), 'Includes accessible non-WebGL fallback');
+});
+
+// 41
+runTest(41, 'High-Accuracy Geolocation: Calculates exact meters and defines San Jose landmark boundaries', () => {
+  const p1 = { lat: 10.7445, lng: 121.9395 }; // Plaza
+  const p2 = { lat: 10.7483, lng: 121.9442 }; // Tradetown Dalipe
+  const meters = calculateDistanceMeters(p1, p2);
+  assert(meters > 500 && meters < 800, `Haversine distance in meters is within expected range (got ${meters}m)`);
+  assert(SAN_JOSE_LANDMARKS.length >= 10, 'San Jose landmark registry includes key TODA stations');
+
+  const hookFile = fs.readFileSync(path.join(process.cwd(), 'lib/hooks/useDeviceLocation.ts'), 'utf8');
+  assert(hookFile.includes('enableHighAccuracy'), 'Geolocation hook configures high accuracy GPS fix');
+  assert(hookFile.includes('watchPosition'), 'Hook supports continuous position tracking');
+  assert(hookFile.includes('resolveLocationName'), 'Hook exports reverse location resolver');
+});
+
+// 42
+runTest(42, 'Leaflet GIS Live Layer: AntiqueMap includes live user GPS pulsating marker and accuracy circle buffer', () => {
+  const mapFile = fs.readFileSync(path.join(process.cwd(), 'components/map/AntiqueMap.tsx'), 'utf8');
+  assert(mapFile.includes('userLiveCoords'), 'AntiqueMap supports userLiveCoords prop');
+  assert(mapFile.includes('userLiveAccuracy'), 'AntiqueMap supports userLiveAccuracy prop');
+  assert(mapFile.includes('custom-live-user-marker'), 'Renders custom pulsing radar live user marker');
+  assert(mapFile.includes('L.circle'), 'Renders Leaflet accuracy radius circle');
+  assert(mapFile.includes('handleLocateMe'), 'Includes high-accuracy Locate Me control handler');
+});
+
+// 43
+runTest(43, 'Real-time Driver Telemetry: Driver tracks hardware GPS and broadcasts across dispatch channel', () => {
+  const telemetryFile = fs.readFileSync(path.join(process.cwd(), 'components/driver/DriverTelemetry.tsx'), 'utf8');
+  assert(telemetryFile.includes('watchPosition'), 'Driver telemetry watches device GPS with high accuracy');
+  assert(telemetryFile.includes('HARDWARE'), 'Supports real hardware GPS mode');
+  assert(telemetryFile.includes('updateDriverGps'), 'Streams coordinates into dispatch store');
+
+  const storeFile = fs.readFileSync(path.join(process.cwd(), 'lib/store/app-state.tsx'), 'utf8');
+  assert(storeFile.includes('SYNC_DRIVER_GPS'), 'Store broadcasts live driver GPS across tabs');
 });
 
 console.log('\n----------------------------------------------------------------');

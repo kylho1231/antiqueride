@@ -485,6 +485,19 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
             } else if (!payload) {
               setActiveRide(null);
             }
+          } else if (type === 'SYNC_DRIVER_GPS' && payload) {
+            setDrivers((prev) =>
+              prev.map((d) =>
+                d.id === payload.driverId
+                  ? {
+                      ...d,
+                      currentCoordinates: payload.coords,
+                      lastGpsUpdate: payload.timestamp,
+                      gpsAccuracyMeters: payload.accuracy,
+                    }
+                  : d
+              )
+            );
           }
         };
       }
@@ -823,8 +836,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Update Driver GPS
   const updateDriverGps = (coords: Coordinates, accuracy = 4.0) => {
     const timestamp = new Date().toISOString();
-    setDrivers((prev) =>
-      prev.map((d) =>
+    setDrivers((prev) => {
+      const updated = prev.map((d) =>
         d.id === activeDriver.id
           ? {
               ...d,
@@ -833,12 +846,30 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
               gpsAccuracyMeters: accuracy,
             }
           : d
-      )
-    );
+      );
+      try {
+        localStorage.setItem('antiqueride_drivers', JSON.stringify(updated));
+      } catch (e) {}
+      return updated;
+    });
 
-    // If driver is in active ride, update ride driverCoordinates
+    // Broadcast driver live location across tabs
+    if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+      try {
+        const bc = new BroadcastChannel('antiqueride_dispatch_channel');
+        bc.postMessage({
+          type: 'SYNC_DRIVER_GPS',
+          payload: { driverId: activeDriver.id, coords, accuracy, timestamp },
+        });
+        bc.close();
+      } catch (e) {}
+    }
+
+    // If driver is in active ride, update ride driverCoordinates and broadcast
     if (activeRide && activeRide.driverId === activeDriver.id) {
-      setActiveRide((prev) => (prev ? { ...prev, driverCoordinates: coords } : null));
+      const updatedRide = { ...activeRide, driverCoordinates: coords };
+      setActiveRide(updatedRide);
+      broadcastRide(updatedRide);
     }
   };
 

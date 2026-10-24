@@ -15,6 +15,8 @@ import {
   ChevronRight,
   Info,
   Car,
+  Crosshair,
+  Loader2,
 } from 'lucide-react';
 
 interface BookingSheetProps {
@@ -22,6 +24,9 @@ interface BookingSheetProps {
   onDestinationSelect: (coords: Coordinates, name: string) => void;
   selectedPickup: { coords: Coordinates; name: string };
   selectedDestination: { coords: Coordinates; name: string } | null;
+  onUseLiveLocation?: () => void;
+  isLocatingLive?: boolean;
+  liveAccuracyMeters?: number | null;
 }
 
 export default function BookingSheet({
@@ -29,6 +34,9 @@ export default function BookingSheet({
   onDestinationSelect,
   selectedPickup,
   selectedDestination,
+  onUseLiveLocation,
+  isLocatingLive = false,
+  liveAccuracyMeters = null,
 }: BookingSheetProps) {
   const { commuter, farePolicy, requestRide, activeRide } = useAppState();
 
@@ -117,11 +125,36 @@ export default function BookingSheet({
             <Navigation className="w-4 h-4" />
           </div>
           <div className="flex-1 min-w-0">
-            <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
-              Pickup Point
-            </span>
-            <div className="text-xs font-bold text-slate-900 truncate">
-              {selectedPickup.name}
+            <div className="flex items-center justify-between gap-1">
+              <span className="text-[10px] uppercase font-bold text-slate-400 tracking-wider block">
+                Pickup Point
+              </span>
+              {onUseLiveLocation && (
+                <button
+                  type="button"
+                  onClick={onUseLiveLocation}
+                  disabled={isLocatingLive}
+                  className="px-2 py-0.5 text-[10px] font-bold rounded-lg bg-blue-50 hover:bg-blue-100 text-blue-700 border border-blue-200 flex items-center gap-1 cursor-pointer transition-colors"
+                  title="Fetch high-accuracy GPS coordinates for pickup"
+                >
+                  {isLocatingLive ? (
+                    <Loader2 className="w-2.5 h-2.5 animate-spin text-blue-600" />
+                  ) : (
+                    <Crosshair className="w-2.5 h-2.5 text-blue-600" />
+                  )}
+                  <span>{isLocatingLive ? 'Locating...' : 'Use Live GPS'}</span>
+                </button>
+              )}
+            </div>
+            <div className="flex items-center gap-1.5 mt-0.5">
+              <div className="text-xs font-bold text-slate-900 truncate">
+                {selectedPickup.name}
+              </div>
+              {liveAccuracyMeters !== null && liveAccuracyMeters !== undefined && (
+                <span className="text-[9px] font-mono font-bold px-1.5 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0">
+                  ±{liveAccuracyMeters}m
+                </span>
+              )}
             </div>
           </div>
         </div>

@@ -24,7 +24,10 @@ import {
   Settings,
   User,
   Camera,
+  Crosshair,
+  Loader2,
 } from 'lucide-react';
+import { useDeviceLocation, resolveLocationName } from '@/lib/hooks/useDeviceLocation';
 
 // Dynamic import for Leaflet map to ensure 100% client-side SSR safety
 const AntiqueMap = dynamic(() => import('@/components/map/AntiqueMap'), {
@@ -41,6 +44,13 @@ const AntiqueMap = dynamic(() => import('@/components/map/AntiqueMap'), {
 export default function CommuterPage() {
   const { commuter, currentUser, terminals, drivers, activeRide } = useAppState();
 
+  const {
+    coords: liveGpsCoords,
+    accuracy: liveGpsAccuracy,
+    isLoading: isLocatingGps,
+    fetchCurrentLocation,
+  } = useDeviceLocation({ enableHighAccuracy: true });
+
   const [selectedPickup, setSelectedPickup] = useState<{ coords: Coordinates; name: string }>({
     coords: DEFAULT_MAP_CENTER,
     name: 'San Jose Municipal Plaza (Current Location)',
@@ -54,6 +64,24 @@ export default function CommuterPage() {
   const [showVerificationModal, setShowVerificationModal] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
   const [activeTab, setActiveTab] = useState<'MAP' | 'TERMINALS' | 'HISTORY'>('MAP');
+
+  const handleUseLiveGps = async () => {
+    const result = await fetchCurrentLocation();
+    if (result) {
+      setSelectedPickup({
+        coords: result.coords,
+        name: result.name,
+      });
+    }
+  };
+
+  const handleLocationFoundOnMap = async (coords: Coordinates, accuracy: number) => {
+    const resolved = await resolveLocationName(coords);
+    setSelectedPickup({
+      coords,
+      name: resolved.name,
+    });
+  };
 
   const handleSelectTerminal = (term: Terminal) => {
     setSelectedDestination({
@@ -182,11 +210,14 @@ export default function CommuterPage() {
               {/* Leaflet Map with Responsive Container Height */}
               <div className="w-full h-[360px] sm:h-[480px]">
                 <AntiqueMap
-                  center={DEFAULT_MAP_CENTER}
+                  center={selectedPickup.coords || DEFAULT_MAP_CENTER}
                   terminals={terminals}
                   drivers={drivers}
                   pickupCoords={selectedPickup.coords}
                   destinationCoords={selectedDestination?.coords || null}
+                  userLiveCoords={selectedPickup.coords}
+                  userLiveAccuracy={liveGpsAccuracy}
+                  onLocationFound={handleLocationFoundOnMap}
                   className="rounded-2xl border border-slate-200 overflow-hidden shadow-xs h-full w-full"
                 />
               </div>
@@ -257,6 +288,9 @@ export default function CommuterPage() {
                 selectedDestination={selectedDestination}
                 onPickupSelect={(coords, name) => setSelectedPickup({ coords, name })}
                 onDestinationSelect={(coords, name) => setSelectedDestination({ coords, name })}
+                onUseLiveLocation={handleUseLiveGps}
+                isLocatingLive={isLocatingGps}
+                liveAccuracyMeters={liveGpsAccuracy}
               />
             )}
 
