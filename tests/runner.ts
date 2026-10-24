@@ -1,3 +1,5 @@
+import fs from 'fs';
+import path from 'path';
 import {
   calculateDistanceKm,
   calculateFare,
@@ -206,14 +208,16 @@ runTest(19, 'Phase 2 intermunicipal routes (Sibalom/Hamtic) require field verifi
 // 20
 runTest(20, 'PWA manifest parameters and service worker defined correctly', () => {
   const manifest = {
-    name: 'AntiqueRide - Smart Transport & Tricycle Booking',
+    name: 'AntiqueRide — Smart Transport & Tricycle Booking',
     short_name: 'AntiqueRide',
     start_url: '/',
     display: 'standalone',
-    theme_color: '#087F5B',
+    theme_color: '#2563EB',
+    background_color: '#F8FAFC',
   };
   assert(manifest.display === 'standalone', 'PWA is standalone display');
-  assert(manifest.theme_color === '#087F5B', 'Theme color is Antique Emerald #087F5B');
+  assert(manifest.theme_color === '#2563EB', 'Theme color is Royal Blue #2563EB');
+  assert(manifest.background_color === '#F8FAFC', 'Background color is Clean Slate #F8FAFC');
 });
 
 // 21
@@ -430,6 +434,33 @@ runTest(33, 'Super Admin Isolation: Admin workspace is isolated from commuter an
   assert(canAccessAdmin === true, 'Super Admin can access /admin');
   assert(isDriverBlocked === false, 'Driver cannot access /admin');
   assert(isCommuterBlocked === false, 'Commuter cannot access /admin');
+});
+
+// 34
+runTest(34, 'PWA Icon & Asset Compliance: 192px/512px PNGs and maskables exist for WebAPK install', () => {
+  const icon192 = fs.existsSync(path.join(process.cwd(), 'public/icons/icon-192.png'));
+  const icon512 = fs.existsSync(path.join(process.cwd(), 'public/icons/icon-512.png'));
+  const appleTouch = fs.existsSync(path.join(process.cwd(), 'public/icons/apple-touch-icon.png'));
+  const maskable512 = fs.existsSync(path.join(process.cwd(), 'public/icons/maskable-512.png'));
+
+  assert(icon192 === true, '192x192 PNG icon exists on disk');
+  assert(icon512 === true, '512x512 PNG icon exists on disk');
+  assert(appleTouch === true, 'Apple Touch Icon exists on disk');
+  assert(maskable512 === true, '512x512 Maskable PNG icon exists on disk');
+});
+
+// 35
+runTest(35, 'PWA Manifest & Service Worker: Web app manifest and SW precache are synchronized', () => {
+  const manifestRaw = fs.readFileSync(path.join(process.cwd(), 'public/manifest.json'), 'utf8');
+  const manifest = JSON.parse(manifestRaw);
+  const swCode = fs.readFileSync(path.join(process.cwd(), 'public/sw.js'), 'utf8');
+
+  assert(manifest.id === 'ph.antiqueride.pwa', 'Manifest ID defined');
+  assert(manifest.theme_color === '#2563EB', 'Manifest theme color matches blue theme');
+  assert(manifest.shortcuts.length >= 2, 'Manifest shortcuts configured for quick app launch');
+  assert(swCode.includes('/offline'), 'SW precaches offline fallback');
+  assert(swCode.includes('antiqueride-tiles-v1'), 'SW implements tile caching for OpenStreetMap');
+  assert(swCode.includes('SKIP_WAITING'), 'SW supports instant user-driven updates');
 });
 
 console.log('\n----------------------------------------------------------------');

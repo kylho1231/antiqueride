@@ -1,26 +1,93 @@
 {
-  "name": "AntiqueRide - Smart Transport & Tricycle Booking",
+  "id": "ph.antiqueride.pwa",
+  "name": "AntiqueRide — Smart Transport & Tricycle Booking",
   "short_name": "AntiqueRide",
-  "description": "Province-wide smart transportation and tricycle booking platform for Antique, Philippines.",
+  "description": "Province-wide smart transportation and tricycle booking platform for San Jose de Buenavista and Antique, Philippines.",
   "start_url": "/",
+  "scope": "/",
   "display": "standalone",
-  "orientation": "portrait",
-  "theme_color": "#087F5B",
-  "background_color": "#F7F9FC",
+  "display_override": ["window-controls-overlay", "standalone", "minimal-ui"],
+  "orientation": "portrait-primary",
+  "theme_color": "#2563EB",
+  "background_color": "#F8FAFC",
+  "lang": "en-PH",
+  "dir": "ltr",
+  "categories": ["travel", "navigation", "transportation"],
+  "prefer_related_applications": false,
   "icons": [
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
+    {
+      "src": "/icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any"
+    },
+    {
+      "src": "/icons/maskable-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "maskable"
+    },
     {
       "src": "/icons/icon-192.svg",
       "sizes": "192x192",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     },
     {
       "src": "/icons/icon-512.svg",
       "sizes": "512x512",
       "type": "image/svg+xml",
-      "purpose": "any maskable"
+      "purpose": "any"
     }
   ],
-  "categories": ["travel", "navigation", "transportation"],
-  "lang": "en-PH"
+  "shortcuts": [
+    {
+      "name": "Book a Tricycle",
+      "short_name": "Book Ride",
+      "description": "Open commuter portal to request an authorized tricycle",
+      "url": "/commuter",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "TODA Driver Console",
+      "short_name": "Driver Console",
+      "description": "Open TODA tricycle operator shift and dispatch console",
+      "url": "/driver",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    },
+    {
+      "name": "Emergency Safety Desk",
+      "short_name": "Safety Desk",
+      "description": "Direct emergency hotlines for San Jose PNP, PDRRMO 911, and TMPSO",
+      "url": "/offline",
+      "icons": [
+        {
+          "src": "/icons/icon-192.png",
+          "sizes": "192x192"
+        }
+      ]
+    }
+  ]
 }
