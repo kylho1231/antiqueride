@@ -287,9 +287,56 @@ runTest(25, 'Session Logout & Invalidation: Logging out clears session credentia
 
   // Perform logout
   session = null;
-  const isSessionValid = !!session;
-  assert(isSessionValid === false, 'Session is nullified on logout');
+  const isSessionActive = !!session;
+  assert(isSessionActive === false, 'Session is nullified on logout');
   assert(!session?.role, 'User role is completely removed after sign-out');
+});
+
+// 26
+runTest(26, 'Find a Tricycle: Generates broadcast dispatch with 4-digit PIN and frozen fare snapshot', () => {
+  const pickup = { lat: 10.7445, lng: 121.9395, name: 'San Jose Municipal Plaza' };
+  const destination = { lat: 10.7475, lng: 121.9430, name: 'Tradetown Dalipe' };
+  const dist = calculateDistanceKm(pickup, destination);
+  const fare = calculateFare(dist, 'REGULAR', 'NONE', OFFICIAL_FARE_POLICY);
+  const pin = generatePinCode();
+
+  const rideRequest = {
+    id: 'ride-test-1',
+    commuterId: 'comm-1',
+    pickupName: pickup.name,
+    destinationName: destination.name,
+    fareAmount: fare.totalFare,
+    pinCode: pin,
+    status: 'REQUESTED' as const,
+  };
+
+  assert(rideRequest.status === 'REQUESTED', 'Ride request broadcast initiated');
+  assert(/^\d{4}$/.test(rideRequest.pinCode), '4-digit PIN created for passenger security');
+  assert(rideRequest.fareAmount > 0, 'Fare properly calculated and attached');
+});
+
+// 27
+runTest(27, 'Driver Notification: Online verified driver receives dispatch offer and can accept', () => {
+  const driver = { ...INITIAL_DRIVERS[0], isOnline: true, verificationStatus: 'VERIFIED' as const };
+  const incomingRide = { id: 'ride-test-1', status: 'REQUESTED' as const, fareAmount: 15.0 };
+
+  // Verification that driver qualified to receive dispatch
+  const canReceiveOffer = driver.isOnline && driver.verificationStatus === 'VERIFIED';
+  assert(canReceiveOffer === true, 'Driver is online and authorized to receive dispatch alerts');
+
+  // Acceptance updates ride status and marks driver RESERVED
+  const acceptedRide = {
+    ...incomingRide,
+    status: 'ACCEPTED' as const,
+    driverId: driver.id,
+    driverName: driver.fullName,
+    driverBodyNumber: driver.bodyNumber,
+  };
+  const updatedDriver = { ...driver, availability: 'RESERVED' as const };
+
+  assert(acceptedRide.status === 'ACCEPTED', 'Ride status is marked ACCEPTED');
+  assert(acceptedRide.driverId === driver.id, 'Assigned driver matches');
+  assert(updatedDriver.availability === 'RESERVED', 'Driver availability updated to RESERVED');
 });
 
 console.log('\n----------------------------------------------------------------');

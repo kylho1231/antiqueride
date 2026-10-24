@@ -18,7 +18,7 @@ import {
 import RatingModal from '@/components/commuter/RatingModal';
 
 export default function ActiveRideCard() {
-  const { activeRide, cancelRide } = useAppState();
+  const { activeRide, cancelRide, simulateDriverAcceptance } = useAppState();
   const [showCancelModal, setShowCancelModal] = useState(false);
   const [cancelReason, setCancelReason] = useState('Found other ride');
   const [showRatingModal, setShowRatingModal] = useState(false);
@@ -129,12 +129,29 @@ export default function ActiveRideCard() {
             )}
           </div>
         ) : (
-          <div className="p-4 bg-amber-50/60 border border-amber-200 rounded-2xl text-center space-y-1">
-            <div className="w-8 h-8 rounded-full bg-amber-100 flex items-center justify-center text-amber-700 mx-auto animate-pulse">
-              <Car className="w-4 h-4" />
+          <div className="p-4 bg-amber-50/70 border border-amber-200 rounded-2xl text-center space-y-2.5">
+            <div className="w-10 h-10 rounded-2xl bg-amber-100 flex items-center justify-center text-amber-700 mx-auto animate-pulse">
+              <Car className="w-5 h-5" />
             </div>
-            <p className="text-xs font-bold text-amber-950">Matching with participating San Jose drivers...</p>
-            <p className="text-[11px] text-amber-800">You will be notified as soon as a driver accepts your trip request.</p>
+            <div>
+              <p className="text-xs font-bold text-amber-950">
+                Broadcasting to Online Drivers in San Jose de Buenavista...
+              </p>
+              <p className="text-[11px] text-amber-800 mt-0.5">
+                Dispatch offer broadcasted live across authorized drivers (e.g. <strong>Jose "Nong Joe" Mendoza #SJB-042</strong>).
+              </p>
+            </div>
+
+            {/* Pilot Testing Helper: Simulate Driver Accept or Switch Window */}
+            <div className="pt-2 border-t border-amber-200/60 flex flex-col sm:flex-row items-center justify-center gap-2">
+              <button
+                type="button"
+                onClick={simulateDriverAcceptance}
+                className="w-full sm:w-auto py-2.5 px-4 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-sm transition-transform active:scale-95"
+              >
+                <span>⚡ Simulate Driver Accept (Nong Joe)</span>
+              </button>
+            </div>
           </div>
         )}
 

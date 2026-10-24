@@ -87,6 +87,34 @@ export default function DriverPage() {
         </div>
       </div>
 
+      {/* Real-time Dispatch Alert Banner (When ride requested and driver is offline) */}
+      {activeRide && activeRide.status === 'REQUESTED' && !activeDriver.isOnline && (
+        <div className="p-4 bg-amber-500 text-slate-950 rounded-3xl font-bold text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg border border-amber-600 animate-pulse">
+          <div className="flex items-center gap-3">
+            <div className="w-10 h-10 rounded-2xl bg-slate-900 text-amber-400 flex items-center justify-center font-bold text-lg shrink-0">
+              ⚡
+            </div>
+            <div>
+              <span className="text-[10px] uppercase tracking-wider font-black text-slate-900 block">
+                Incoming Ride Alert Detected in San Jose!
+              </span>
+              <p className="text-sm font-extrabold text-slate-950">
+                {activeRide.commuterName} requested a tricycle at {activeRide.pickupName} ({formatCurrency(activeRide.fareAmount)})
+              </p>
+              <span className="text-[11px] text-slate-900 font-medium">
+                You are currently OFFLINE. Go ONLINE to accept this passenger request.
+              </span>
+            </div>
+          </div>
+          <button
+            onClick={useAppState().toggleDriverOnline}
+            className="px-5 py-3 bg-[#102A43] hover:bg-slate-900 text-[#F5B301] rounded-2xl text-xs font-black cursor-pointer shadow-md transition-transform active:scale-95 shrink-0"
+          >
+            Go Online Now & Accept
+          </button>
+        </div>
+      )}
+
       {/* Main Grid: Telemetry & Active Trips / Incoming Radar */}
       <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
         {/* Left Column: Driver Controls & Shift Telemetry (5 cols) */}

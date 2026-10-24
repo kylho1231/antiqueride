@@ -74,6 +74,7 @@ interface AppStateContextType {
   cancelRide: (rideId: string, reason: string, cancelledBy: 'COMMUTER' | 'DRIVER') => void;
   rateTrip: (rideId: string, rating: number, feedback: string) => void;
   submitCommuterVerification: (docType: 'STUDENT_ID' | 'GOVERNMENT_ID' | 'VOTERS_ID', docUrl: string) => void;
+  simulateDriverAcceptance: () => void;
 
   // Driver Actions
   toggleDriverOnline: () => void;
@@ -97,6 +98,53 @@ interface AppStateContextType {
 }
 
 const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
+
+// Web Audio API dual-chime synthesizer for driver alerts and dispatch notifications
+export function playDispatchChime(type: 'OFFER' | 'ACCEPTED' | 'COMPLETED' = 'OFFER') {
+  if (typeof window === 'undefined') return;
+  try {
+    const AudioCtx = window.AudioContext || (window as any).webkitAudioContext;
+    if (!AudioCtx) return;
+    const ctx = new AudioCtx();
+    const osc = ctx.createOscillator();
+    const gain = ctx.createGain();
+    osc.connect(gain);
+    gain.connect(ctx.destination);
+
+    if (type === 'OFFER') {
+      // Urgent, attention-grabbing dual-frequency ring tone for incoming dispatch
+      osc.type = 'triangle';
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime); // E5
+      osc.frequency.setValueAtTime(880.00, ctx.currentTime + 0.12); // A5
+      osc.frequency.setValueAtTime(1174.66, ctx.currentTime + 0.24); // D6
+      gain.gain.setValueAtTime(0.4, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.55);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.55);
+    } else if (type === 'ACCEPTED') {
+      // Pleasant rising confirmation tone
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(523.25, ctx.currentTime); // C5
+      osc.frequency.setValueAtTime(659.25, ctx.currentTime + 0.1); // E5
+      osc.frequency.setValueAtTime(783.99, ctx.currentTime + 0.2); // G5
+      osc.frequency.setValueAtTime(1046.50, ctx.currentTime + 0.3); // C6
+      gain.gain.setValueAtTime(0.3, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.6);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.6);
+    } else {
+      // Soft single tone
+      osc.type = 'sine';
+      osc.frequency.setValueAtTime(880, ctx.currentTime);
+      gain.gain.setValueAtTime(0.2, ctx.currentTime);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + 0.3);
+      osc.start(ctx.currentTime);
+      osc.stop(ctx.currentTime + 0.3);
+    }
+  } catch (e) {
+    // AudioContext blocked by autoplay policy until user gesture
+  }
+}
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
@@ -237,6 +285,117 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   
   const [activeRide, setActiveRide] = useState<RideRequest | null>(null);
   const [rideHistory, setRideHistory] = useState<RideRequest[]>([]);
+
+  // Broadcast active ride changes across tabs and local storage
+  const broadcastRide = (ride: RideRequest | null) => {
+    setActiveRide(ride);
+    if (typeof window !== 'undefined') {
+      try {
+        if (ride) {
+          localStorage.setItem('antiqueride_active_ride', JSON.stringify(ride));
+        } else {
+          localStorage.removeItem('antiqueride_active_ride');
+        }
+        if ('BroadcastChannel' in window) {
+          const bc = new BroadcastChannel('antiqueride_dispatch_channel');
+          bc.postMessage({ type: 'SYNC_RIDE', payload: ride });
+          bc.close();
+        }
+      } catch (e) {
+        console.warn('Dispatch broadcast notice:', e);
+      }
+    }
+  };
+
+  // Hydrate active ride from localStorage & listen for real-time dispatch events across tabs
+  useEffect(() => {
+    try {
+      const savedRide = localStorage.getItem('antiqueride_active_ride');
+      if (savedRide) {
+        const parsed = JSON.parse(savedRide) as RideRequest;
+        if (parsed && parsed.status !== 'CANCELLED' && parsed.status !== 'TRIP_COMPLETED') {
+          setActiveRide(parsed);
+        }
+      }
+    } catch (e) {
+      console.warn('Ride hydration notice:', e);
+    }
+
+    let channel: BroadcastChannel | null = null;
+    try {
+      if (typeof window !== 'undefined' && 'BroadcastChannel' in window) {
+        channel = new BroadcastChannel('antiqueride_dispatch_channel');
+        channel.onmessage = (event) => {
+          const { type, payload } = event.data || {};
+          if (type === 'SYNC_RIDE') {
+            setActiveRide(payload);
+            if (payload && payload.status === 'REQUESTED') {
+              playDispatchChime('OFFER');
+              addNotification(
+                '🚨 INCOMING RIDE REQUEST!',
+                `Commuter ${payload.commuterName} needs a tricycle at ${payload.pickupName} (₱${payload.fareAmount.toFixed(2)})`,
+                'warning'
+              );
+            } else if (payload && payload.status === 'ACCEPTED') {
+              playDispatchChime('ACCEPTED');
+              addNotification(
+                '🎉 Driver Found!',
+                `${payload.driverName} (#${payload.driverBodyNumber}) accepted the ride!`,
+                'success'
+              );
+            } else if (payload && payload.status === 'ARRIVED') {
+              playDispatchChime('OFFER');
+              addNotification(
+                '🛺 Tricycle Arrived!',
+                'Driver is waiting at your pickup location.',
+                'warning'
+              );
+            } else if (!payload) {
+              setActiveRide(null);
+            }
+          }
+        };
+      }
+    } catch (e) {
+      console.warn('BroadcastChannel notice:', e);
+    }
+
+    // Storage event listener fallback (for separate browser windows)
+    const handleStorageChange = (e: StorageEvent) => {
+      if (e.key === 'antiqueride_active_ride') {
+        if (e.newValue) {
+          try {
+            const parsed = JSON.parse(e.newValue) as RideRequest;
+            setActiveRide(parsed);
+            if (parsed.status === 'REQUESTED') {
+              playDispatchChime('OFFER');
+              addNotification(
+                '🚨 INCOMING RIDE REQUEST!',
+                `Commuter ${parsed.commuterName} at ${parsed.pickupName} (₱${parsed.fareAmount.toFixed(2)})`,
+                'warning'
+              );
+            } else if (parsed.status === 'ACCEPTED') {
+              playDispatchChime('ACCEPTED');
+              addNotification(
+                '🎉 Driver Found!',
+                `${parsed.driverName} (#${parsed.driverBodyNumber}) accepted your ride!`,
+                'success'
+              );
+            }
+          } catch (err) {}
+        } else {
+          setActiveRide(null);
+        }
+      }
+    };
+
+    window.addEventListener('storage', handleStorageChange);
+
+    return () => {
+      if (channel) channel.close();
+      window.removeEventListener('storage', handleStorageChange);
+    };
+  }, []);
   const [incidents, setIncidents] = useState<IncidentReport[]>([
     {
       id: 'inc-1',
@@ -330,14 +489,15 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       requestedAt: new Date().toISOString(),
     };
 
-    setActiveRide(newRequest);
+    broadcastRide(newRequest);
+    playDispatchChime('OFFER');
     addNotification('Ride Requested', `Searching for available tricycles in ${pickupName}...`, 'info');
 
     // Simulate dispatch offer to nearest online verified driver
     const eligibleDriver = drivers.find((d) => d.isOnline && d.availability === 'AVAILABLE' && d.verificationStatus === 'VERIFIED');
     if (eligibleDriver) {
       // Driver gets notified
-      addNotification('Driver Alert', `Incoming ride offer from ${commuter.fullName} for Driver ${eligibleDriver.fullName}`, 'info');
+      addNotification('Driver Alert', `Incoming ride offer from ${commuter.fullName} for Driver ${eligibleDriver.fullName} (#${eligibleDriver.bodyNumber})`, 'warning');
     }
 
     return { success: true, message: 'Ride request broadcasted to authorized drivers.', rideId: newRequest.id };
@@ -361,7 +521,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       acceptedAt: new Date().toISOString(),
     };
 
-    setActiveRide(updatedRide);
+    broadcastRide(updatedRide);
+    playDispatchChime('ACCEPTED');
+
     // Update driver state
     setDrivers((prev) =>
       prev.map((d) => (d.id === assignedDriver.id ? { ...d, availability: 'RESERVED' } : d))
@@ -373,7 +535,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Driver heading to pickup
   const driverStartHeading = (rideId: string) => {
     if (!activeRide || activeRide.id !== rideId) return;
-    setActiveRide((prev) => (prev ? { ...prev, status: 'HEADING_TO_PICKUP' } : null));
+    broadcastRide({ ...activeRide, status: 'HEADING_TO_PICKUP' });
     setDrivers((prev) =>
       prev.map((d) => (d.id === activeDriver.id ? { ...d, availability: 'ARRIVING' } : d))
     );
@@ -383,7 +545,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   // Driver arrived at pickup
   const driverMarkArrived = (rideId: string) => {
     if (!activeRide || activeRide.id !== rideId) return;
-    setActiveRide((prev) => (prev ? { ...prev, status: 'ARRIVED', arrivedAt: new Date().toISOString() } : null));
+    broadcastRide({ ...activeRide, status: 'ARRIVED', arrivedAt: new Date().toISOString() });
+    playDispatchChime('OFFER');
     addNotification('Tricycle Arrived', 'Your tricycle has arrived! Please give your 4-digit PIN to the driver.', 'warning');
   };
 
@@ -401,7 +564,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       status: 'TRIP_STARTED',
       startedAt: new Date().toISOString(),
     };
-    setActiveRide(updatedRide);
+    broadcastRide(updatedRide);
+    playDispatchChime('ACCEPTED');
+
     setDrivers((prev) =>
       prev.map((d) => (d.id === activeDriver.id ? { ...d, availability: 'ON_TRIP' } : d))
     );
@@ -421,7 +586,8 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     };
 
     setRideHistory((prev) => [completedRide, ...prev]);
-    setActiveRide(null);
+    broadcastRide(null);
+    playDispatchChime('COMPLETED');
 
     // Free up driver and add trip counter
     setDrivers((prev) =>
@@ -456,7 +622,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
     };
 
     setRideHistory((prev) => [cancelledRide, ...prev]);
-    setActiveRide(null);
+    broadcastRide(null);
 
     // Reset assigned driver availability
     if (cancelledRide.driverId) {
@@ -476,6 +642,35 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       )
     );
     addNotification('Rating Submitted', `Thank you for rating your driver ${rating} stars!`, 'success');
+  };
+
+  // Instant Driver Acceptance (Demo/Pilot Simulation Mode)
+  const simulateDriverAcceptance = () => {
+    if (!activeRide || activeRide.status !== 'REQUESTED') return;
+    const driver = drivers.find((d) => d.id === 'drv-1') || drivers[0];
+    const updatedRide: RideRequest = {
+      ...activeRide,
+      status: 'ACCEPTED',
+      driverId: driver.id,
+      driverName: driver.fullName,
+      driverPhone: driver.phone,
+      driverPlate: driver.vehiclePlate,
+      driverBodyNumber: driver.bodyNumber,
+      todaName: driver.todaName,
+      driverCoordinates: driver.currentCoordinates || DEFAULT_MAP_CENTER,
+      acceptedAt: new Date().toISOString(),
+    };
+
+    broadcastRide(updatedRide);
+    playDispatchChime('ACCEPTED');
+    setDrivers((prev) =>
+      prev.map((d) => (d.id === driver.id ? { ...d, availability: 'RESERVED' } : d))
+    );
+    addNotification(
+      'Ride Accepted',
+      `Driver ${driver.fullName} (#${driver.bodyNumber}) accepted your ride!`,
+      'success'
+    );
   };
 
   // Commuter ID upload simulation
@@ -732,6 +927,7 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         cancelRide,
         rateTrip,
         submitCommuterVerification,
+        simulateDriverAcceptance,
         toggleDriverOnline,
         acceptRide,
         driverStartHeading,

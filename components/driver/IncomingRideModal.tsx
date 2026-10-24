@@ -1,9 +1,9 @@
 'use client';
 
 import React, { useState, useEffect } from 'react';
-import { useAppState } from '@/lib/store/app-state';
+import { useAppState, playDispatchChime } from '@/lib/store/app-state';
 import { formatCurrency } from '@/lib/utils';
-import { MapPin, Navigation, Clock, Check, X, ShieldAlert, Sparkles, Users } from 'lucide-react';
+import { MapPin, Navigation, Clock, Check, X, ShieldAlert, Sparkles, Users, Volume2 } from 'lucide-react';
 
 export default function IncomingRideModal() {
   const { activeRide, activeDriver, acceptRide, cancelRide } = useAppState();
@@ -22,18 +22,34 @@ export default function IncomingRideModal() {
       return;
     }
 
+    // Play initial attention-grabbing chime
+    playDispatchChime('OFFER');
+    if (typeof window !== 'undefined' && 'vibrate' in navigator) {
+      try {
+        navigator.vibrate([300, 150, 300]);
+      } catch (e) {}
+    }
+
+    // Periodic reminder chime every 7 seconds
+    const chimeInterval = setInterval(() => {
+      playDispatchChime('OFFER');
+    }, 7000);
+
     const timer = setInterval(() => {
       setSecondsRemaining((prev) => {
         if (prev <= 1) {
           clearInterval(timer);
-          // Auto timeout declines or leaves open
+          clearInterval(chimeInterval);
           return 0;
         }
         return prev - 1;
       });
     }, 1000);
 
-    return () => clearInterval(timer);
+    return () => {
+      clearInterval(timer);
+      clearInterval(chimeInterval);
+    };
   }, [isIncomingForDriver]);
 
   if (!isIncomingForDriver) return null;
