@@ -10,7 +10,7 @@ import { Users, Car, Check, Shield } from 'lucide-react';
 
 export default function RegisterPage() {
   const router = useRouter();
-  const { setCurrentRole } = useAppState();
+  const { registerUser } = useAppState();
 
   const [registerRole, setRegisterRole] = useState<'COMMUTER' | 'DRIVER'>('COMMUTER');
   const [fullName, setFullName] = useState('');
@@ -33,14 +33,24 @@ export default function RegisterPage() {
     setIsLoading(true);
 
     setTimeout(() => {
-      setCurrentRole(registerRole);
+      registerUser({
+        fullName,
+        phone,
+        email,
+        role: registerRole,
+        licenseNumber,
+        vehiclePlate,
+        bodyNumber,
+        todaId,
+        franchiseMtop,
+      });
       setIsLoading(false);
       setRegisteredSuccess(true);
       setTimeout(() => {
         if (registerRole === 'COMMUTER') router.push('/commuter');
         else router.push('/driver');
-      }, 1200);
-    }, 1000);
+      }, 1000);
+    }, 800);
   };
 
   return (

@@ -7,6 +7,7 @@ import { DEFAULT_MAP_CENTER } from '@/lib/data/antique-data';
 import DriverTelemetry from '@/components/driver/DriverTelemetry';
 import IncomingRideModal from '@/components/driver/IncomingRideModal';
 import ActiveTripCard from '@/components/driver/ActiveTripCard';
+import AuthGuard from '@/components/auth/AuthGuard';
 import {
   Car,
   ShieldCheck,
@@ -42,7 +43,8 @@ export default function DriverPage() {
     (activeRide.driverId === activeDriver.id || activeRide.status === 'REQUESTED');
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <AuthGuard allowedRoles={['DRIVER']}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Driver Header Profile Card */}
       <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-xs flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div className="flex items-center gap-4">
@@ -170,5 +172,6 @@ export default function DriverPage() {
       {/* Incoming Ride Alert Modal (Displays when commuter requests ride) */}
       <IncomingRideModal />
     </div>
-  );
+  </AuthGuard>
+);
 }

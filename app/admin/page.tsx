@@ -9,6 +9,7 @@ import TerminalManager from '@/components/admin/TerminalManager';
 import FareOrdinanceManager from '@/components/admin/FareOrdinanceManager';
 import IncidentDesk from '@/components/admin/IncidentDesk';
 import AuditLogViewer from '@/components/admin/AuditLogViewer';
+import AuthGuard from '@/components/auth/AuthGuard';
 import {
   ShieldCheck,
   Users,
@@ -47,7 +48,8 @@ export default function AdminPage() {
   const activeIncidents = incidents.filter((i) => i.status !== 'RESOLVED').length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <AuthGuard allowedRoles={['SUPER_ADMIN']}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Admin Top Header */}
       <div className="bg-[#102A43] text-white p-6 rounded-3xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
@@ -238,5 +240,6 @@ export default function AdminPage() {
 
       {activeTab === 'AUDIT' && <AuditLogViewer />}
     </div>
-  );
+  </AuthGuard>
+);
 }

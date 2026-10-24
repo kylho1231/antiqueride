@@ -3,6 +3,7 @@
 import React, { createContext, useContext, useState, useEffect } from 'react';
 import {
   Role,
+  AuthUser,
   RideRequest,
   DriverProfile,
   CommuterProfile,
@@ -25,7 +26,24 @@ import {
 import { calculateDistanceKm, calculateFare, generatePinCode } from '@/lib/utils';
 
 interface AppStateContextType {
-  // Current user & role
+  // Authentication & Session
+  currentUser: AuthUser | null;
+  isAuthenticated: boolean;
+  login: (user: AuthUser) => void;
+  logout: () => void;
+  registerUser: (data: {
+    fullName: string;
+    phone: string;
+    email: string;
+    role: Role;
+    licenseNumber?: string;
+    vehiclePlate?: string;
+    bodyNumber?: string;
+    todaId?: string;
+    franchiseMtop?: string;
+  }) => AuthUser;
+
+  // Current role & profiles
   currentRole: Role;
   setCurrentRole: (role: Role) => void;
   commuter: CommuterProfile;
@@ -81,6 +99,7 @@ interface AppStateContextType {
 const AppStateContext = createContext<AppStateContextType | undefined>(undefined);
 
 export function AppStateProvider({ children }: { children: React.ReactNode }) {
+  const [currentUser, setCurrentUser] = useState<AuthUser | null>(null);
   const [currentRole, setCurrentRole] = useState<Role>('COMMUTER');
   const [commuter, setCommuter] = useState<CommuterProfile>(INITIAL_COMMUTER);
   const [drivers, setDrivers] = useState<DriverProfile[]>(INITIAL_DRIVERS);
@@ -88,6 +107,133 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   const [terminals, setTerminals] = useState<Terminal[]>(VERIFIED_TERMINALS);
   const [todas] = useState<TodaAssociation[]>(TODA_ASSOCIATIONS);
   const [farePolicy, setFarePolicyState] = useState<FarePolicy>(OFFICIAL_FARE_POLICY);
+  
+  // Hydrate session from localStorage
+  useEffect(() => {
+    try {
+      const savedSession = localStorage.getItem('antiqueride_session');
+      if (savedSession) {
+        const user = JSON.parse(savedSession) as AuthUser;
+        setCurrentUser(user);
+        setCurrentRole(user.role);
+        if (user.driverId) {
+          setActiveDriverId(user.driverId);
+        }
+      }
+    } catch (e) {
+      console.warn('Session hydration notice:', e);
+    }
+  }, []);
+
+  const login = (user: AuthUser) => {
+    setCurrentUser(user);
+    setCurrentRole(user.role);
+    if (user.driverId) {
+      setActiveDriverId(user.driverId);
+    }
+    try {
+      localStorage.setItem('antiqueride_session', JSON.stringify(user));
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+    addNotification('Welcome Back', `Logged in as ${user.fullName} (${user.role})`, 'success');
+  };
+
+  const logout = () => {
+    setCurrentUser(null);
+    try {
+      localStorage.removeItem('antiqueride_session');
+    } catch (e) {
+      console.warn('LocalStorage error:', e);
+    }
+    addNotification('Logged Out', 'You have been signed out safely.', 'info');
+  };
+
+  const registerUser = (data: {
+    fullName: string;
+    phone: string;
+    email: string;
+    role: Role;
+    licenseNumber?: string;
+    vehiclePlate?: string;
+    bodyNumber?: string;
+    todaId?: string;
+    franchiseMtop?: string;
+  }): AuthUser => {
+    const newId = 'user-' + Date.now();
+    let authUser: AuthUser;
+
+    if (data.role === 'DRIVER') {
+      const newDriverId = 'drv-' + Date.now();
+      const toda = todas.find((t) => t.id === data.todaId) || todas[0];
+      const newDriverProfile: DriverProfile = {
+        id: newDriverId,
+        userId: newId,
+        fullName: data.fullName,
+        phone: data.phone,
+        email: data.email,
+        licenseNumber: data.licenseNumber || 'F02-24-000123',
+        licenseClassification: 'Professional (Code 1, 2)',
+        licenseExpiry: '2028-12-31',
+        vehiclePlate: data.vehiclePlate || '0000-AQ',
+        bodyNumber: data.bodyNumber || 'SJB-999',
+        todaId: toda.id,
+        todaName: toda.name,
+        terminalId: 'term-1',
+        terminalName: 'Tradetown Dalipe Terminal',
+        franchiseMtopNumber: data.franchiseMtop || 'MTOP-SJB-2024-9999',
+        mtopExpiry: '2027-12-31',
+        operatingZone: 'San Jose de Buenavista',
+        verificationStatus: 'PENDING',
+        rating: 5.0,
+        totalTrips: 0,
+        isOnline: false,
+        availability: 'OFFLINE',
+        currentCoordinates: { lat: 10.7445, lng: 121.9395 },
+        lastGpsUpdate: null,
+      };
+
+      setDrivers((prev) => [newDriverProfile, ...prev]);
+      setActiveDriverId(newDriverId);
+
+      authUser = {
+        id: newId,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        role: 'DRIVER',
+        driverId: newDriverId,
+        bodyNumber: newDriverProfile.bodyNumber,
+        todaName: toda.acronym,
+      };
+    } else {
+      const newCommuterProfile: CommuterProfile = {
+        id: 'comm-' + Date.now(),
+        userId: newId,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        isPhoneVerified: true,
+        verificationStatus: 'UNVERIFIED',
+        discountCategory: 'NONE',
+        createdAt: new Date().toISOString(),
+      };
+
+      setCommuter(newCommuterProfile);
+
+      authUser = {
+        id: newId,
+        fullName: data.fullName,
+        email: data.email,
+        phone: data.phone,
+        role: 'COMMUTER',
+        commuterId: newCommuterProfile.id,
+      };
+    }
+
+    login(authUser);
+    return authUser;
+  };
   
   const [activeRide, setActiveRide] = useState<RideRequest | null>(null);
   const [rideHistory, setRideHistory] = useState<RideRequest[]>([]);
@@ -564,6 +710,11 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
   return (
     <AppStateContext.Provider
       value={{
+        currentUser,
+        isAuthenticated: !!currentUser,
+        login,
+        logout,
+        registerUser,
         currentRole,
         setCurrentRole,
         commuter,

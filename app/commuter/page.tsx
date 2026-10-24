@@ -8,6 +8,7 @@ import { DEFAULT_MAP_CENTER, POPULAR_DESTINATIONS } from '@/lib/data/antique-dat
 import BookingSheet from '@/components/commuter/BookingSheet';
 import ActiveRideCard from '@/components/commuter/ActiveRideCard';
 import VerificationModal from '@/components/commuter/VerificationModal';
+import AuthGuard from '@/components/auth/AuthGuard';
 import {
   MapPin,
   ShieldCheck,
@@ -60,7 +61,8 @@ export default function CommuterPage() {
   const onlineDriversCount = drivers.filter((d) => d.isOnline).length;
 
   return (
-    <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+    <AuthGuard allowedRoles={['COMMUTER']}>
+      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Top Greeting & Verification Badge */}
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">
         <div>
@@ -226,5 +228,6 @@ export default function CommuterPage() {
         onClose={() => setShowVerificationModal(false)}
       />
     </div>
-  );
+  </AuthGuard>
+);
 }

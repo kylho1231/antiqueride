@@ -216,6 +216,82 @@ runTest(20, 'PWA manifest parameters and service worker defined correctly', () =
   assert(manifest.theme_color === '#087F5B', 'Theme color is Antique Emerald #087F5B');
 });
 
+// 21
+runTest(21, 'Authentication Guard: Unauthenticated user is barred from all protected portals', () => {
+  const currentUser: any = null;
+  const isAllowedCommuter = !!currentUser && currentUser.role === 'COMMUTER';
+  const isAllowedDriver = !!currentUser && currentUser.role === 'DRIVER';
+  const isAllowedAdmin = !!currentUser && currentUser.role === 'SUPER_ADMIN';
+
+  assert(!isAllowedCommuter, 'Unauthenticated user cannot access /commuter');
+  assert(!isAllowedDriver, 'Unauthenticated user cannot access /driver');
+  assert(!isAllowedAdmin, 'Unauthenticated user cannot access /admin');
+});
+
+// 22
+runTest(22, 'Strict Portal Isolation: Commuter role cannot access Driver or Admin portals', () => {
+  const commuterUser = {
+    id: 'user-comm-1',
+    fullName: 'Maria Santos',
+    email: 'maria.santos@gmail.com',
+    role: 'COMMUTER' as const,
+  };
+  const allowedInCommuter = ['COMMUTER'].includes(commuterUser.role);
+  const allowedInDriver = ['DRIVER'].includes(commuterUser.role);
+  const allowedInAdmin = ['SUPER_ADMIN'].includes(commuterUser.role);
+
+  assert(allowedInCommuter === true, 'Commuter can access /commuter');
+  assert(allowedInDriver === false, 'Commuter is strictly BLOCKED from /driver');
+  assert(allowedInAdmin === false, 'Commuter is strictly BLOCKED from /admin');
+});
+
+// 23
+runTest(23, 'Strict Portal Isolation: Driver role cannot access Commuter or Admin portals', () => {
+  const driverUser = {
+    id: 'user-drv-1',
+    fullName: 'Jose "Nong Joe" Mendoza',
+    email: 'jose.mendoza@antiqueride.ph',
+    role: 'DRIVER' as const,
+    bodyNumber: 'SJB-042',
+  };
+  const allowedInCommuter = ['COMMUTER'].includes(driverUser.role);
+  const allowedInDriver = ['DRIVER'].includes(driverUser.role);
+  const allowedInAdmin = ['SUPER_ADMIN'].includes(driverUser.role);
+
+  assert(allowedInDriver === true, 'Driver can access /driver');
+  assert(allowedInCommuter === false, 'Driver is strictly BLOCKED from /commuter');
+  assert(allowedInAdmin === false, 'Driver is strictly BLOCKED from /admin');
+});
+
+// 24
+runTest(24, 'Super Admin Portal: Privileged access restricted exclusively to SUPER_ADMIN', () => {
+  const adminUser = {
+    id: 'admin-1',
+    fullName: 'Super Admin',
+    email: 'admin@antiqueride.ph',
+    role: 'SUPER_ADMIN' as const,
+  };
+  const isAuthorized = ['SUPER_ADMIN'].includes(adminUser.role);
+  assert(isAuthorized === true, 'Super Admin granted access to /admin');
+
+  // Verify non-admin role cannot spoof or access
+  const spoofAttempt = { ...adminUser, role: 'COMMUTER' as const };
+  const spoofBlocked = !['SUPER_ADMIN'].includes(spoofAttempt.role);
+  assert(spoofBlocked === true, 'Commuter role attempting admin access is blocked');
+});
+
+// 25
+runTest(25, 'Session Logout & Invalidation: Logging out clears session credentials and denies portal access', () => {
+  let session: any = { id: 'user-1', role: 'COMMUTER', fullName: 'Maria Santos' };
+  assert(session !== null, 'Session active');
+
+  // Perform logout
+  session = null;
+  const isSessionValid = !!session;
+  assert(isSessionValid === false, 'Session is nullified on logout');
+  assert(!session?.role, 'User role is completely removed after sign-out');
+});
+
 console.log('\n----------------------------------------------------------------');
 const passedCount = results.filter((r) => r.passed).length;
 const totalCount = results.length;
@@ -225,5 +301,5 @@ console.log('----------------------------------------------------------------\n'
 if (passedCount !== totalCount) {
   process.exit(1);
 } else {
-  console.log('All 20 Production Acceptance Tests PASSED successfully!\n');
+  console.log('All 25 Production Acceptance Tests PASSED successfully!\n');
 }

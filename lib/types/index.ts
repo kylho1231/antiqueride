@@ -1,5 +1,18 @@
 export type Role = 'COMMUTER' | 'DRIVER' | 'SUPER_ADMIN';
 
+export interface AuthUser {
+  id: string;
+  email: string;
+  phone?: string;
+  fullName: string;
+  role: Role;
+  avatarUrl?: string;
+  driverId?: string;
+  commuterId?: string;
+  bodyNumber?: string;
+  todaName?: string;
+}
+
 export type VerificationStatus = 'UNVERIFIED' | 'PENDING' | 'VERIFIED' | 'REJECTED';
 
 export type DriverAvailability = 

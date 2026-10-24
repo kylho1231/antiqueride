@@ -2,32 +2,35 @@
 
 import React, { useState } from 'react';
 import Link from 'next/link';
-import { usePathname } from 'next/navigation';
+import { usePathname, useRouter } from 'next/navigation';
 import { useAppState } from '@/lib/store/app-state';
-import { Role } from '@/lib/types';
 import {
   ShieldAlert,
   Bell,
   Users,
-  Compass,
   Car,
   ShieldCheck,
   CheckCircle2,
   X,
-  Smartphone,
+  LogOut,
+  LogIn,
+  UserPlus,
+  User,
 } from 'lucide-react';
 import SafetyModal from '@/components/safety/SafetyModal';
 
 export default function Navbar() {
   const pathname = usePathname();
-  const { currentRole, setCurrentRole, drivers, notifications, clearNotification } = useAppState();
+  const router = useRouter();
+  const { currentUser, logout, drivers, notifications, clearNotification } = useAppState();
   const [showSafetyModal, setShowSafetyModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
 
   const onlineDriversCount = drivers.filter((d) => d.isOnline).length;
 
-  const handleRoleChange = (newRole: Role) => {
-    setCurrentRole(newRole);
+  const handleLogout = () => {
+    logout();
+    router.push('/auth/login');
   };
 
   return (
@@ -53,56 +56,59 @@ export default function Navbar() {
               </Link>
             </div>
 
-            {/* Role Switcher Pill (Quick Demonstration & Seamless Testing) */}
-            <div className="flex items-center bg-slate-100 p-1 rounded-xl border border-slate-200">
-              <Link
-                href="/commuter"
-                onClick={() => handleRoleChange('COMMUTER')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
-                  pathname.startsWith('/commuter') || (pathname === '/' && currentRole === 'COMMUTER')
-                    ? 'bg-[#087F5B] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Users className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Commuter</span>
-              </Link>
-
-              <Link
-                href="/driver"
-                onClick={() => handleRoleChange('DRIVER')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
-                  pathname.startsWith('/driver')
-                    ? 'bg-[#102A43] text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <Car className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Driver Portal</span>
-                <span className="w-2 h-2 rounded-full bg-emerald-400"></span>
-              </Link>
-
-              <Link
-                href="/admin"
-                onClick={() => handleRoleChange('SUPER_ADMIN')}
-                className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-semibold cursor-pointer transition-all ${
-                  pathname.startsWith('/admin')
-                    ? 'bg-amber-600 text-white shadow-xs'
-                    : 'text-slate-600 hover:text-slate-900'
-                }`}
-              >
-                <ShieldCheck className="w-3.5 h-3.5" />
-                <span className="hidden sm:inline">Super Admin</span>
-              </Link>
-            </div>
-
-            {/* Quick Actions (Safety hotline, Notifications, Driver indicator) */}
+            {/* Authenticated Account Profile vs Sign In CTA (NO public role-switcher) */}
             <div className="flex items-center gap-2 sm:gap-3">
-              {/* Online Drivers Indicator */}
-              <div className="hidden md:flex items-center gap-1.5 px-2.5 py-1 rounded-full bg-emerald-50 border border-emerald-200 text-xs font-semibold text-emerald-800">
-                <span className="w-2 h-2 rounded-full bg-emerald-500 animate-pulse"></span>
-                <span>{onlineDriversCount} Drivers Online</span>
-              </div>
+              {currentUser ? (
+                /* Authenticated User Banner */
+                <div className="flex items-center gap-2 sm:gap-3">
+                  <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-2xl border border-slate-200 text-xs">
+                    <div className="w-6 h-6 rounded-full bg-[#102A43] text-white flex items-center justify-center font-bold text-[10px]">
+                      {currentUser.role === 'DRIVER' ? '🛺' : currentUser.role === 'SUPER_ADMIN' ? '⚡' : '👤'}
+                    </div>
+                    <div className="hidden sm:block text-left">
+                      <span className="font-bold text-slate-900 block leading-tight truncate max-w-[120px]">
+                        {currentUser.fullName}
+                      </span>
+                      <span className="text-[10px] font-semibold text-emerald-800">
+                        {currentUser.role === 'COMMUTER'
+                          ? 'Commuter Account'
+                          : currentUser.role === 'DRIVER'
+                          ? `Unit #${currentUser.bodyNumber || '042'}`
+                          : 'Super Admin'}
+                      </span>
+                    </div>
+                  </div>
+
+                  {/* Sign Out Button */}
+                  <button
+                    onClick={handleLogout}
+                    className="p-2 bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-600 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                    title="Sign Out of AntiqueRide"
+                  >
+                    <LogOut className="w-4 h-4" />
+                    <span className="hidden md:inline">Sign Out</span>
+                  </button>
+                </div>
+              ) : (
+                /* Unauthenticated Guest CTAs */
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/auth/login"
+                    className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <LogIn className="w-3.5 h-3.5" />
+                    <span>Sign In</span>
+                  </Link>
+
+                  <Link
+                    href="/auth/register"
+                    className="px-3.5 py-2 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" />
+                    <span>Register</span>
+                  </Link>
+                </div>
+              )}
 
               {/* Safety Action Button */}
               <button
