@@ -47,62 +47,49 @@ export default function HomePage() {
               audited municipal fare matrices, and authenticated safety controls.
             </p>
 
-            {/* Role Action Cards */}
-            <div className="grid grid-cols-1 sm:grid-cols-3 gap-4 pt-4">
+            {/* Dedicated Two-Portal Entry Gateway */}
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
               <Link
                 href="/commuter"
-                className="group p-5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
+                className="group p-6 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
-                    <Users className="w-5 h-5" />
+                  <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
+                    <Users className="w-6 h-6" />
                   </div>
-                  <h3 className="font-extrabold text-base text-white">Commuter App</h3>
-                  <p className="text-xs text-blue-200 mt-1">
-                    Book tricycles, calculate official fares, and track your ride live.
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-300 block mb-1">
+                    For Passengers & Students
+                  </span>
+                  <h3 className="font-extrabold text-lg text-white">Commuter Portal</h3>
+                  <p className="text-xs text-blue-100 mt-1 leading-relaxed">
+                    Book authorized tricycles, check official municipal fares, validate 20% student discounts, and track rides live.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
-                  <span>Open Commuter</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
+                  <span>Enter Commuter Portal</span>
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
 
               <Link
                 href="/driver"
-                className="group p-5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
+                className="group p-6 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md">
-                    <Car className="w-5 h-5" />
+                  <div className="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md">
+                    <Car className="w-6 h-6" />
                   </div>
-                  <h3 className="font-extrabold text-base text-white">Driver Portal</h3>
-                  <p className="text-xs text-blue-200 mt-1">
-                    Shift controls, TODA terminal queue position, and incoming ride requests.
+                  <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-300 block mb-1">
+                    For Franchised Tricycle Operators
+                  </span>
+                  <h3 className="font-extrabold text-lg text-white">TODA Driver Portal</h3>
+                  <p className="text-xs text-blue-100 mt-1 leading-relaxed">
+                    Shift controls, TODA terminal queue management, real-time dispatch alerts, and verified trip earnings.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
-                  <span>Open Driver Portal</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
-                </div>
-              </Link>
-
-              <Link
-                href="/admin"
-                className="group p-5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
-              >
-                <div>
-                  <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
-                    <ShieldCheck className="w-5 h-5" />
-                  </div>
-                  <h3 className="font-extrabold text-base text-white">Super Admin</h3>
-                  <p className="text-xs text-blue-200 mt-1">
-                    Verify drivers, configure fare ordinances, and manage terminals.
-                  </p>
-                </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
-                  <span>Open Admin Desk</span>
-                  <ArrowRight className="w-3.5 h-3.5" />
+                <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
+                  <span>Enter Driver Portal</span>
+                  <ArrowRight className="w-4 h-4" />
                 </div>
               </Link>
             </div>
@@ -275,6 +262,18 @@ export default function HomePage() {
           </div>
         </div>
       </section>
+
+      {/* Discreet Platform Footer & LGU Administrative Link */}
+      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <p>© 2026 AntiqueRide. Municipal Transport Technology for Antique, Philippines.</p>
+        <Link
+          href="/admin/login"
+          className="text-slate-400 hover:text-slate-700 text-[11px] font-semibold flex items-center gap-1.5 transition-colors"
+        >
+          <ShieldCheck className="w-3.5 h-3.5" />
+          <span>LGU Administrator Gateway</span>
+        </Link>
+      </footer>
     </div>
   );
 }

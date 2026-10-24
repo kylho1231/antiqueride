@@ -4,7 +4,7 @@ import React, { useEffect, useState } from 'react';
 import { useRouter, usePathname } from 'next/navigation';
 import { useAppState } from '@/lib/store/app-state';
 import { Role } from '@/lib/types';
-import { ShieldAlert, Lock, ArrowRight, LogOut, CheckCircle2 } from 'lucide-react';
+import { ShieldAlert, Lock, ArrowRight, LogOut, Users, Car, ShieldCheck } from 'lucide-react';
 import Link from 'next/link';
 
 interface AuthGuardProps {
@@ -15,7 +15,7 @@ interface AuthGuardProps {
 export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
   const router = useRouter();
   const pathname = usePathname();
-  const { currentUser, isAuthenticated, logout } = useAppState();
+  const { currentUser, logout } = useAppState();
   const [isClient, setIsClient] = useState(false);
 
   useEffect(() => {
@@ -26,51 +26,122 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
     return (
       <div className="min-h-[60vh] flex items-center justify-center p-4">
         <div className="text-center space-y-2">
-          <div className="w-8 h-8 rounded-full border-2 border-emerald-600 border-t-transparent animate-spin mx-auto"></div>
-          <p className="text-xs text-slate-500 font-semibold">Verifying AntiqueRide credentials...</p>
+          <div className="w-8 h-8 rounded-full border-2 border-blue-600 border-t-transparent animate-spin mx-auto"></div>
+          <p className="text-xs text-slate-500 font-semibold">Verifying credentials...</p>
         </div>
       </div>
     );
   }
 
-  // 1. Not Authenticated: Prompt Login
+  const isCommuterPortal = allowedRoles.includes('COMMUTER');
+  const isDriverPortal = allowedRoles.includes('DRIVER');
+  const isAdminPortal = allowedRoles.includes('SUPER_ADMIN');
+
+  // 1. Not Authenticated: Show Portal-Specific Login Screen
   if (!currentUser) {
+    if (isCommuterPortal) {
+      return (
+        <div className="min-h-[75vh] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-5 animate-in fade-in">
+            <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-600 flex items-center justify-center mx-auto shadow-xs border border-blue-100">
+              <Users className="w-8 h-8" />
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
+                Commuter Portal
+              </span>
+              <h2 className="text-xl font-extrabold text-slate-900">Sign In to Book Tricycles</h2>
+              <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                Please log in to your verified commuter account to request rides, calculate official fares, and track tricycles in San Jose.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-2">
+              <Link
+                href={`/commuter/login?redirect=${encodeURIComponent(pathname)}`}
+                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
+              >
+                <span>Sign In as Commuter</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <Link
+                href="/commuter/register"
+                className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
+              >
+                <span>Register Commuter Account</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    if (isDriverPortal) {
+      return (
+        <div className="min-h-[75vh] flex items-center justify-center p-4">
+          <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-5 animate-in fade-in">
+            <div className="w-16 h-16 rounded-3xl bg-blue-50 text-blue-700 flex items-center justify-center mx-auto shadow-xs border border-blue-100">
+              <Car className="w-8 h-8" />
+            </div>
+
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-50 text-blue-800 border border-blue-200">
+                TODA Driver Operator Portal
+              </span>
+              <h2 className="text-xl font-extrabold text-slate-900">Driver Sign In Required</h2>
+              <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
+                Please sign in with your registered TODA mobile number and unit body number to access the dispatch console.
+              </p>
+            </div>
+
+            <div className="space-y-2 pt-2">
+              <Link
+                href={`/driver/login?redirect=${encodeURIComponent(pathname)}`}
+                className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
+              >
+                <span>Sign In as TODA Driver</span>
+                <ArrowRight className="w-4 h-4" />
+              </Link>
+
+              <Link
+                href="/driver/register"
+                className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
+              >
+                <span>Register Tricycle Unit</span>
+              </Link>
+            </div>
+          </div>
+        </div>
+      );
+    }
+
+    // Admin Portal
     return (
       <div className="min-h-[75vh] flex items-center justify-center p-4">
         <div className="max-w-md w-full bg-white rounded-3xl p-8 border border-slate-200 shadow-xl text-center space-y-5 animate-in fade-in">
-          <div className="w-16 h-16 rounded-3xl bg-amber-100 text-amber-700 flex items-center justify-center mx-auto shadow-xs">
-            <Lock className="w-8 h-8" />
+          <div className="w-16 h-16 rounded-3xl bg-blue-900 text-white flex items-center justify-center mx-auto shadow-xs">
+            <ShieldCheck className="w-8 h-8 text-blue-300" />
           </div>
 
           <div className="space-y-1.5">
-            <h2 className="text-xl font-extrabold text-[#102A43]">Authentication Required</h2>
+            <span className="text-[10px] font-extrabold uppercase tracking-wider px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200">
+              Administrative Console
+            </span>
+            <h2 className="text-xl font-extrabold text-slate-900">Super Admin Access Required</h2>
             <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-              To use AntiqueRide, you must sign in to your verified account or register a new one. 
-              Guest or unauthenticated access to live transit dispatch is not permitted.
+              This console is restricted to authorized municipal transport officials and system administrators.
             </p>
           </div>
 
-          <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl text-xs text-slate-500 text-left space-y-1">
-            <div className="font-bold text-slate-700">Account Access Required:</div>
-            <div>• <strong className="text-emerald-800">Commuters:</strong> Sign in with Google, Phone OTP, or Email</div>
-            <div>• <strong className="text-[#102A43]">Drivers:</strong> Sign in with registered mobile & MTOP unit</div>
-            <div>• <strong className="text-amber-800">Super Admin:</strong> Platform administrative key</div>
-          </div>
-
-          <div className="space-y-2 pt-2">
+          <div className="pt-2">
             <Link
-              href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}
-              className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
+              href={`/admin/login?redirect=${encodeURIComponent(pathname)}`}
+              className="w-full py-3.5 bg-blue-900 hover:bg-slate-900 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all"
             >
-              <span>Sign In to Your Account</span>
+              <span>Sign In to Admin Gateway</span>
               <ArrowRight className="w-4 h-4" />
-            </Link>
-
-            <Link
-              href="/auth/register"
-              className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
-            >
-              <span>Register New Account</span>
             </Link>
           </div>
         </div>
@@ -78,21 +149,14 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
     );
   }
 
-  // 2. Authenticated but Unauthorized Role (Separation of Portals)
+  // 2. Authenticated but Unauthorized Role (Strict Separation of Portals)
   if (!allowedRoles.includes(currentUser.role)) {
     const userRoleLabel =
       currentUser.role === 'COMMUTER'
         ? 'Commuter'
         : currentUser.role === 'DRIVER'
-        ? 'Driver'
+        ? 'TODA Driver'
         : 'Super Admin';
-
-    const requiredPortalName =
-      allowedRoles.includes('DRIVER')
-        ? 'Driver Operational Portal'
-        : allowedRoles.includes('SUPER_ADMIN')
-        ? 'Super Admin Workspace'
-        : 'Commuter Portal';
 
     const targetHome =
       currentUser.role === 'COMMUTER'
@@ -100,6 +164,12 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
         : currentUser.role === 'DRIVER'
         ? '/driver'
         : '/admin';
+
+    const attemptedPortal = isCommuterPortal
+      ? 'Commuter Portal'
+      : isDriverPortal
+      ? 'Driver Operational Console'
+      : 'Super Admin Workspace';
 
     return (
       <div className="min-h-[75vh] flex items-center justify-center p-4">
@@ -109,18 +179,17 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
           </div>
 
           <div className="space-y-1.5">
-            <h2 className="text-xl font-extrabold text-[#102A43]">Portal Access Restricted</h2>
+            <h2 className="text-xl font-extrabold text-slate-900">Portal Access Restricted</h2>
             <p className="text-xs text-slate-600 max-w-sm mx-auto leading-relaxed">
-              You are signed in as <strong className="text-slate-900">{currentUser.fullName} ({userRoleLabel})</strong>. 
-              This portal is strictly reserved for <strong className="text-slate-900">{requiredPortalName}</strong> users.
+              You are signed in with a <strong className="text-slate-900">{userRoleLabel}</strong> account. 
+              You cannot access the <strong className="text-red-700">{attemptedPortal}</strong> from this session.
             </p>
           </div>
 
           <div className="p-3 bg-red-50 border border-red-200 rounded-2xl text-xs text-red-900 text-left space-y-1">
-            <span className="font-bold">Strict Role Isolation Enforced:</span>
+            <span className="font-bold">Strict Portal Separation Policy:</span>
             <p className="text-[11px] leading-relaxed text-red-800">
-              Under municipal transport and data isolation rules, commuters cannot access driver dispatch consoles, 
-              and drivers cannot access commuter booking interfaces without a separate registered account.
+              Commuters and Drivers operate in separate portals to prevent unauthorized dispatch access and protect private user records.
             </p>
           </div>
 
@@ -129,7 +198,7 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               href={targetHome}
               className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all"
             >
-              <span>Return to My Authorized Portal ({userRoleLabel})</span>
+              <span>Return to My {userRoleLabel} Portal</span>
               <ArrowRight className="w-4 h-4" />
             </Link>
 
@@ -138,7 +207,7 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
               className="w-full py-3 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-colors"
             >
               <LogOut className="w-3.5 h-3.5 text-slate-500" />
-              <span>Switch Account / Sign Out</span>
+              <span>Sign Out / Switch Portal</span>
             </button>
           </div>
         </div>

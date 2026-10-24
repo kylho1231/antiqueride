@@ -15,6 +15,7 @@ import {
   Settings,
   Car,
   User,
+  ShieldCheck,
 } from 'lucide-react';
 import SafetyModal from '@/components/safety/SafetyModal';
 import ProfileSettingsModal from '@/components/profile/ProfileSettingsModal';
@@ -27,25 +28,51 @@ export default function Navbar() {
   const [showNotifications, setShowNotifications] = useState(false);
   const [showProfileModal, setShowProfileModal] = useState(false);
 
+  const isCommuterPath = pathname.startsWith('/commuter');
+  const isDriverPath = pathname.startsWith('/driver');
+  const isAdminPath = pathname.startsWith('/admin');
+
   const handleLogout = () => {
     logout();
-    router.push('/auth/login');
+    if (isDriverPath) {
+      router.push('/driver/login');
+    } else if (isAdminPath) {
+      router.push('/admin/login');
+    } else {
+      router.push('/commuter/login');
+    }
   };
 
+  // Strictly route logo click to the current portal's home
   const portalHome = currentUser
     ? currentUser.role === 'COMMUTER'
       ? '/commuter'
       : currentUser.role === 'DRIVER'
       ? '/driver'
       : '/admin'
+    : isDriverPath
+    ? '/driver'
+    : isAdminPath
+    ? '/admin'
+    : isCommuterPath
+    ? '/commuter'
     : '/';
+
+  // Badge text for current portal
+  const portalBadge = isDriverPath
+    ? 'TODA Driver'
+    : isAdminPath
+    ? 'Super Admin'
+    : isCommuterPath
+    ? 'Commuter'
+    : 'San Jose';
 
   return (
     <>
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo and Tagline (Strictly routes to authorized portal) */}
+            {/* Logo and Tagline (Strictly routes within the active portal) */}
             <div className="flex items-center gap-3">
               <Link href={portalHome} className="flex items-center gap-2.5 group cursor-pointer">
                 <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:bg-blue-700 transition-colors">
@@ -56,17 +83,21 @@ export default function Navbar() {
                   <div className="flex items-center gap-1.5">
                     <span className="font-extrabold text-lg tracking-tight text-slate-900">AntiqueRide</span>
                     <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
-                      San Jose
+                      {portalBadge}
                     </span>
                   </div>
                   <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
-                    Your Ride. Your Antique.
+                    {isDriverPath
+                      ? 'TODA Tricycle Operator Console'
+                      : isAdminPath
+                      ? 'Regulatory Governance Monitor'
+                      : 'Your Ride. Your Antique.'}
                   </p>
                 </div>
               </Link>
             </div>
 
-            {/* Authenticated Account Profile vs Sign In CTA (NO cross-role switcher) */}
+            {/* Authenticated Account Profile vs Portal-Specific Guest CTAs */}
             <div className="flex items-center gap-2 sm:gap-3">
               {currentUser ? (
                 /* Authenticated User Banner with Photo Avatar */
@@ -112,17 +143,47 @@ export default function Navbar() {
                   <button
                     onClick={handleLogout}
                     className="p-2 bg-slate-100 hover:bg-red-50 hover:text-red-700 text-slate-600 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
-                    title="Sign Out of AntiqueRide"
+                    title="Sign Out"
                   >
                     <LogOut className="w-4 h-4" />
                     <span className="hidden md:inline">Sign Out</span>
                   </button>
                 </div>
-              ) : (
-                /* Unauthenticated Guest CTAs */
+              ) : isDriverPath ? (
+                /* Driver Portal Guest CTAs (Only Driver Links) */
                 <div className="flex items-center gap-2">
                   <Link
-                    href="/auth/login"
+                    href="/driver/login"
+                    className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <LogIn className="w-3.5 h-3.5 text-blue-600" />
+                    <span>Driver Sign In</span>
+                  </Link>
+
+                  <Link
+                    href="/driver/register"
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <UserPlus className="w-3.5 h-3.5" />
+                    <span>Register Unit</span>
+                  </Link>
+                </div>
+              ) : isAdminPath ? (
+                /* Admin Portal Guest CTAs */
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/admin/login"
+                    className="px-3.5 py-2 bg-blue-900 text-white hover:bg-slate-900 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <ShieldCheck className="w-3.5 h-3.5 text-blue-300" />
+                    <span>Admin Login</span>
+                  </Link>
+                </div>
+              ) : isCommuterPath ? (
+                /* Commuter Portal Guest CTAs (Only Commuter Links) */
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/commuter/login"
                     className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
                   >
                     <LogIn className="w-3.5 h-3.5 text-blue-600" />
@@ -130,11 +191,28 @@ export default function Navbar() {
                   </Link>
 
                   <Link
-                    href="/auth/register"
+                    href="/commuter/register"
                     className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
                   >
                     <UserPlus className="w-3.5 h-3.5" />
                     <span>Register</span>
+                  </Link>
+                </div>
+              ) : (
+                /* Home Gateway CTAs */
+                <div className="flex items-center gap-2">
+                  <Link
+                    href="/commuter"
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                  >
+                    <span>Commuter</span>
+                  </Link>
+
+                  <Link
+                    href="/driver"
+                    className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                  >
+                    <span>TODA Driver</span>
                   </Link>
                 </div>
               )}

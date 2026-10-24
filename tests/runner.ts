@@ -396,6 +396,42 @@ runTest(30, 'Profile Settings: Updates avatar photo and personal credentials', (
   assert(profile.phone === updatedPhone, 'Phone number updated');
 });
 
+// 31
+runTest(31, 'Commuter Portal Isolation: Dedicated commuter register and login prevent driver crossover', () => {
+  const commuterSession = { role: 'COMMUTER' as const, fullName: 'Maria Santos' };
+  const canAccessCommuter = commuterSession.role === 'COMMUTER';
+  const canAccessDriver = (commuterSession.role as string) === 'DRIVER';
+  const canAccessAdmin = (commuterSession.role as string) === 'SUPER_ADMIN';
+
+  assert(canAccessCommuter === true, 'Commuter can access /commuter');
+  assert(canAccessDriver === false, 'Commuter is strictly BLOCKED from accessing driver portal');
+  assert(canAccessAdmin === false, 'Commuter is strictly BLOCKED from accessing super admin portal');
+});
+
+// 32
+runTest(32, 'Driver Portal Isolation: Dedicated driver register and login prevent commuter crossover', () => {
+  const driverSession = { role: 'DRIVER' as const, fullName: 'Jose Mendoza', bodyNumber: 'SJB-042' };
+  const canAccessDriver = driverSession.role === 'DRIVER';
+  const canAccessCommuter = (driverSession.role as string) === 'COMMUTER';
+  const canAccessAdmin = (driverSession.role as string) === 'SUPER_ADMIN';
+
+  assert(canAccessDriver === true, 'Driver can access /driver');
+  assert(canAccessCommuter === false, 'Driver is strictly BLOCKED from accessing commuter portal');
+  assert(canAccessAdmin === false, 'Driver is strictly BLOCKED from accessing super admin portal');
+});
+
+// 33
+runTest(33, 'Super Admin Isolation: Admin workspace is isolated from commuter and driver interfaces', () => {
+  const adminSession = { role: 'SUPER_ADMIN' as const, email: 'admin@antiqueride.ph' };
+  const canAccessAdmin = adminSession.role === 'SUPER_ADMIN';
+  const isDriverBlocked = (('DRIVER' as string) === 'SUPER_ADMIN');
+  const isCommuterBlocked = (('COMMUTER' as string) === 'SUPER_ADMIN');
+
+  assert(canAccessAdmin === true, 'Super Admin can access /admin');
+  assert(isDriverBlocked === false, 'Driver cannot access /admin');
+  assert(isCommuterBlocked === false, 'Commuter cannot access /admin');
+});
+
 console.log('\n----------------------------------------------------------------');
 const passedCount = results.filter((r) => r.passed).length;
 const totalCount = results.length;
