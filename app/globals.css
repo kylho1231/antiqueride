@@ -32,10 +32,21 @@ body {
 
 /* Custom Leaflet Map styling */
 .leaflet-container {
-  width: 100%;
-  height: 100%;
+  width: 100% !important;
+  height: 100% !important;
+  min-height: 480px !important;
   font-family: inherit;
   z-index: 10;
+  display: block !important;
+}
+
+.antique-gis-map-container {
+  width: 100% !important;
+  height: 480px !important;
+  min-height: 480px !important;
+  position: relative !important;
+  display: block !important;
+  background-color: #e2e8f0;
 }
 
 .custom-driver-marker, .custom-terminal-marker, .custom-pin-marker {

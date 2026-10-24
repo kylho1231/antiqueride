@@ -35,6 +35,14 @@ export default function RootLayout({
 }) {
   return (
     <html lang="en" className="h-full">
+      <head>
+        <link
+          rel="stylesheet"
+          href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+          integrity="sha256-p4NxAoJBhIIN+hmNHrzRCf9tD/miZyoHS5obTRR9BMY="
+          crossOrigin=""
+        />
+      </head>
       <body className="h-full flex flex-col bg-[#F7F9FC] text-slate-900 antialiased selection:bg-emerald-200">
         <AppStateProvider>
           <Navbar />

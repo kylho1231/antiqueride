@@ -1,9 +1,10 @@
 'use client';
 
-import React, { useEffect, useRef } from 'react';
+import React, { useEffect, useRef, useState } from 'react';
 import { Coordinates, Terminal, DriverProfile } from '@/lib/types';
 import { DEFAULT_MAP_CENTER } from '@/lib/data/antique-data';
 import { isGpsStale } from '@/lib/utils';
+import { Compass, Layers, Radio, Navigation2 } from 'lucide-react';
 
 interface AntiqueMapProps {
   center?: Coordinates;
@@ -30,7 +31,7 @@ export default function AntiqueMap({
   driverCoords = null,
   onSelectTerminal,
   onMapClick,
-  className = 'h-[450px] w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200',
+  className = 'h-[460px] min-h-[460px] w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200',
   showTerminals = true,
   showDrivers = true,
 }: AntiqueMapProps) {
@@ -38,6 +39,7 @@ export default function AntiqueMap({
   const mapInstanceRef = useRef<any>(null);
   const markersLayerRef = useRef<any>(null);
   const routeLayerRef = useRef<any>(null);
+  const [mapReady, setMapReady] = useState(false);
 
   useEffect(() => {
     let isMounted = true;
@@ -46,19 +48,23 @@ export default function AntiqueMap({
     import('leaflet').then((L) => {
       if (!isMounted || !mapContainerRef.current) return;
 
-      // Prevent re-initialization if map already exists
+      // Ensure container has no dangling leaflet ID from strict mode
       if (!mapInstanceRef.current) {
+        if ((mapContainerRef.current as any)._leaflet_id) {
+          delete (mapContainerRef.current as any)._leaflet_id;
+        }
+
         const map = L.map(mapContainerRef.current, {
           center: [center.lat, center.lng],
           zoom: zoom,
           zoomControl: false,
         });
 
-        // Add standard OSM tile layer with proper OpenStreetMap attribution
+        // Add standard OpenStreetMap tile layer with attribution
         L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
           maxZoom: 19,
           attribution:
-            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors | AntiqueRide',
+            '&copy; <a href="https://www.openstreetmap.org/copyright" target="_blank" rel="noopener">OpenStreetMap</a> contributors | AntiqueRide GIS',
         }).addTo(map);
 
         L.control.zoom({ position: 'bottomright' }).addTo(map);
@@ -75,6 +81,19 @@ export default function AntiqueMap({
         mapInstanceRef.current = map;
         markersLayerRef.current = markersLayer;
         routeLayerRef.current = routeLayer;
+        setMapReady(true);
+
+        // Force Leaflet to recalculate container bounds and paint OSM tiles
+        setTimeout(() => {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.invalidateSize();
+          }
+        }, 100);
+        setTimeout(() => {
+          if (mapInstanceRef.current) {
+            mapInstanceRef.current.invalidateSize();
+          }
+        }, 400);
       }
 
       const map = mapInstanceRef.current;
@@ -89,7 +108,7 @@ export default function AntiqueMap({
         terminals.forEach((t) => {
           const isPhase2 = t.status === 'FIELD_VERIFICATION_PENDING';
           const iconHtml = `
-            <div style="background-color: ${isPhase2 ? '#94A3B8' : '#087F5B'}; color: white; padding: 4px 8px; border-radius: 9999px; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.2); white-space: nowrap; display: flex; align-items: center; gap: 4px;">
+            <div style="background-color: ${isPhase2 ? '#64748B' : '#087F5B'}; color: white; padding: 4px 8px; border-radius: 9999px; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.25); white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer;">
               <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#F5B301;"></span>
               ${t.todaName}
             </div>
@@ -138,7 +157,7 @@ export default function AntiqueMap({
           else if (d.availability === 'RESERVED' || d.availability === 'ARRIVING') badgeColor = '#3B82F6';
 
           const driverHtml = `
-            <div style="position: relative; display: flex; flex-direction: column; align-items: center;">
+            <div style="position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer;">
               <div style="background-color: ${badgeColor}; color: white; border: 2px solid white; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 16px;">
                 🛺
               </div>
@@ -165,7 +184,7 @@ export default function AntiqueMap({
               <div style="font-size: 11px; color: #087F5B; font-weight:600;">Unit: ${d.bodyNumber} (${d.todaName})</div>
               <div style="font-size: 11px; color: #64748B;">Plate: ${d.vehiclePlate} • Rating: ⭐ ${d.rating}</div>
               <div style="margin-top: 4px; font-size: 10px; color: ${stale ? '#D92D20' : '#10B981'}; font-weight:bold;">
-                ${stale ? '⚠️ Stale GPS (>45s inactive)' : '● Active Live GPS'}
+                ${stale ? '⚠️ Stale GPS (>45s inactive)' : '● Active Live GPS Telemetry'}
               </div>
             </div>
           `);
@@ -231,6 +250,10 @@ export default function AntiqueMap({
 
     return () => {
       isMounted = false;
+      if (mapInstanceRef.current) {
+        mapInstanceRef.current.remove();
+        mapInstanceRef.current = null;
+      }
     };
   }, [center, zoom, terminals, drivers, pickupCoords, destinationCoords, driverCoords, showTerminals, showDrivers]);
 
@@ -240,18 +263,48 @@ export default function AntiqueMap({
     }
   };
 
+  const onlineDriversCount = drivers.filter((d) => d.isOnline).length;
+
   return (
-    <div className="relative w-full">
-      <div ref={mapContainerRef} className={className} />
+    <div
+      className="relative w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200"
+      style={{ height: '480px', minHeight: '480px', width: '100%', position: 'relative', display: 'block' }}
+    >
+      {/* Top Floating GIS Telemetry Badge */}
+      <div className="absolute top-3 left-3 z-20 flex flex-wrap items-center gap-2 pointer-events-none">
+        <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200 flex items-center gap-2 pointer-events-auto">
+          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
+          <span className="text-[11px] font-black text-[#102A43] tracking-wide">
+            LIVE GIS MAP
+          </span>
+          <span className="text-[10px] font-mono text-slate-500 hidden sm:inline">
+            San Jose de Buenavista (10.7445° N, 121.9395° E)
+          </span>
+        </div>
+
+        <div className="bg-[#102A43]/90 text-white px-2.5 py-1.5 rounded-xl shadow-md text-[10px] font-bold flex items-center gap-1.5 pointer-events-auto hidden sm:flex">
+          <Radio className="w-3 h-3 text-[#F5B301]" />
+          <span>{onlineDriversCount} Tricycles Active</span>
+        </div>
+      </div>
+
       {/* Floating Center Control */}
       <button
+        type="button"
         onClick={handleCenterSanJose}
-        className="absolute top-3 right-3 z-20 bg-white/95 hover:bg-white text-slate-800 text-xs font-semibold px-3 py-1.5 rounded-lg shadow-md border border-slate-200 cursor-pointer flex items-center gap-1.5 transition-colors"
-        title="Center on San Jose de Buenavista Plaza"
+        className="absolute top-3 right-3 z-20 bg-white/95 hover:bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-xl shadow-md border border-slate-200 cursor-pointer flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
+        title="Re-center on San Jose Plaza & Municipal Hall"
       >
-        <span className="w-2 h-2 rounded-full bg-emerald-600 animate-pulse"></span>
-        San Jose Plaza
+        <Navigation2 className="w-3.5 h-3.5 text-emerald-700" />
+        <span>Center Plaza</span>
       </button>
+
+      {/* Actual Map Container with Explicit Height */}
+      <div
+        ref={mapContainerRef}
+        className="antique-gis-map-container"
+        style={{ height: '480px', minHeight: '480px', width: '100%', position: 'relative', display: 'block' }}
+      />
     </div>
   );
 }

@@ -25,8 +25,11 @@ import { formatCurrency } from '@/lib/utils';
 const AntiqueMap = dynamic(() => import('@/components/map/AntiqueMap'), {
   ssr: false,
   loading: () => (
-    <div className="h-[360px] w-full rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold animate-pulse border border-slate-200">
-      Loading Driver Navigation Map...
+    <div
+      style={{ height: '480px', minHeight: '480px', width: '100%' }}
+      className="rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold animate-pulse border border-slate-200"
+    >
+      Loading Driver Operational Patrol GIS Map...
     </div>
   ),
 });
