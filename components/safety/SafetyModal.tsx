@@ -57,49 +57,50 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
-      <div className="bg-white rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs animate-in fade-in">
+      <div className="bg-white rounded-2xl sm:rounded-3xl shadow-2xl max-w-lg w-full overflow-hidden border border-slate-100 flex flex-col max-h-[90vh]">
         {/* Header */}
-        <div className="bg-[#102A43] text-white p-5 flex items-center justify-between">
+        <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-950 text-white p-4 sm:p-5 flex items-center justify-between">
           <div className="flex items-center gap-3">
-            <div className="w-10 h-10 rounded-xl bg-red-600/20 border border-red-500/30 flex items-center justify-center text-red-400">
+            <div className="w-10 h-10 rounded-xl bg-red-500/20 border border-red-400/40 flex items-center justify-center text-red-300">
               <Shield className="w-5 h-5 text-red-400" />
             </div>
             <div>
-              <h3 className="font-bold text-base">AntiqueRide Passenger Safety Desk</h3>
-              <p className="text-xs text-slate-300">San Jose de Buenavista Emergency & Support</p>
+              <h3 className="font-black text-sm sm:text-base">AntiqueRide Passenger Safety Desk</h3>
+              <p className="text-[11px] sm:text-xs text-blue-200">San Jose de Buenavista Emergency & Support</p>
             </div>
           </div>
           <button
             onClick={onClose}
-            className="w-8 h-8 rounded-full bg-slate-800/60 hover:bg-slate-800 flex items-center justify-center text-slate-300 hover:text-white cursor-pointer transition-colors"
+            className="w-9 h-9 rounded-full bg-white/10 hover:bg-white/20 flex items-center justify-center text-white cursor-pointer transition-colors"
+            aria-label="Close safety desk"
           >
             <X className="w-5 h-5" />
           </button>
         </div>
 
         {/* Tab switcher */}
-        <div className="flex border-b border-slate-200 bg-slate-50 p-1">
+        <div className="flex border-b border-slate-200 bg-slate-50 p-1 sm:p-1.5 gap-1">
           <button
             onClick={() => setTab('HOTLINES')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg cursor-pointer transition-colors ${
-              tab === 'HOTLINES' ? 'bg-white text-[#102A43] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`flex-1 py-2.5 min-h-[44px] text-xs font-bold rounded-xl cursor-pointer transition-all ${
+              tab === 'HOTLINES' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Hotlines
           </button>
           <button
             onClick={() => setTab('SHARE')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg cursor-pointer transition-colors ${
-              tab === 'SHARE' ? 'bg-white text-[#102A43] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`flex-1 py-2.5 min-h-[44px] text-xs font-bold rounded-xl cursor-pointer transition-all ${
+              tab === 'SHARE' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Share My Trip
           </button>
           <button
             onClick={() => setTab('REPORT')}
-            className={`flex-1 py-2 text-xs font-bold rounded-lg cursor-pointer transition-colors ${
-              tab === 'REPORT' ? 'bg-white text-[#102A43] shadow-xs' : 'text-slate-600 hover:text-slate-900'
+            className={`flex-1 py-2.5 min-h-[44px] text-xs font-bold rounded-xl cursor-pointer transition-all ${
+              tab === 'REPORT' ? 'bg-white text-blue-700 shadow-sm' : 'text-slate-600 hover:text-slate-900'
             }`}
           >
             Report Incident
@@ -107,7 +108,7 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
         </div>
 
         {/* Body content */}
-        <div className="p-5 overflow-y-auto space-y-4">
+        <div className="p-4 sm:p-5 overflow-y-auto space-y-4">
           {tab === 'HOTLINES' && (
             <div className="space-y-3">
               <div className="p-3 bg-red-50 border border-red-200 rounded-xl text-xs text-red-900">
@@ -118,22 +119,22 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 {EMERGENCY_CONTACTS.map((item, idx) => (
                   <div
                     key={idx}
-                    className="p-3.5 rounded-xl border border-slate-200 hover:border-slate-300 bg-slate-50/50 flex items-center justify-between transition-colors"
+                    className="p-3 sm:p-3.5 rounded-xl border border-slate-200 hover:border-blue-200 bg-slate-50/70 flex items-center justify-between gap-2 transition-colors"
                   >
-                    <div>
-                      <div className="flex items-center gap-2">
-                        <h4 className="font-bold text-xs text-slate-900">{item.name}</h4>
+                    <div className="min-w-0 pr-2">
+                      <div className="flex items-center gap-2 flex-wrap">
+                        <h4 className="font-bold text-xs text-slate-900 truncate">{item.name}</h4>
                         <span className="text-[10px] font-semibold px-2 py-0.5 rounded-full bg-slate-200 text-slate-700">
                           {item.type}
                         </span>
                       </div>
-                      <p className="text-xs font-bold text-emerald-800 mt-0.5 font-mono">{item.number}</p>
-                      <p className="text-[11px] text-slate-500">{item.badge}</p>
+                      <p className="text-xs font-bold text-blue-700 mt-0.5 font-mono">{item.number}</p>
+                      <p className="text-[11px] text-slate-500 truncate">{item.badge}</p>
                     </div>
 
                     <a
                       href={`tel:${item.number.split('/')[0].trim()}`}
-                      className="px-3 py-2 rounded-xl bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                      className="px-3.5 py-2.5 min-h-[44px] rounded-xl bg-blue-600 hover:bg-blue-700 active:bg-blue-800 text-white text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors shrink-0"
                     >
                       <PhoneCall className="w-3.5 h-3.5" />
                       <span>Call</span>
@@ -146,10 +147,10 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
 
           {tab === 'SHARE' && (
             <div className="space-y-4">
-              <div className="text-center p-4 bg-emerald-50 rounded-2xl border border-emerald-100">
-                <Share2 className="w-8 h-8 text-emerald-700 mx-auto mb-2" />
-                <h4 className="font-bold text-sm text-emerald-950">Share Active Ride Details</h4>
-                <p className="text-xs text-emerald-800 mt-1 max-w-sm mx-auto">
+              <div className="text-center p-4 bg-blue-50/80 rounded-2xl border border-blue-100">
+                <Share2 className="w-8 h-8 text-blue-600 mx-auto mb-2" />
+                <h4 className="font-black text-sm text-blue-950">Share Active Ride Details</h4>
+                <p className="text-xs text-blue-800 mt-1 max-w-sm mx-auto">
                   Send a live tracking link to your family, guardian, or friends. They can see your driver body number, plate, and pickup status.
                 </p>
               </div>
@@ -175,7 +176,7 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 </p>
               )}
 
-              <div className="flex items-center gap-2">
+              <div className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2">
                 <input
                   type="text"
                   readOnly
@@ -184,9 +185,9 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
                 />
                 <button
                   onClick={handleCopyShare}
-                  className="px-4 py-2.5 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+                  className="px-4 py-2.5 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer transition-colors shadow-sm"
                 >
-                  {copied ? <Check className="w-4 h-4 text-emerald-300" /> : <Share2 className="w-4 h-4" />}
+                  {copied ? <Check className="w-4 h-4 text-blue-200" /> : <Share2 className="w-4 h-4" />}
                   <span>{copied ? 'Copied!' : 'Copy'}</span>
                 </button>
               </div>
@@ -196,10 +197,10 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
           {tab === 'REPORT' && (
             <div>
               {submittedMessage ? (
-                <div className="p-6 text-center bg-emerald-50 border border-emerald-200 rounded-2xl text-emerald-900 space-y-2">
-                  <Check className="w-8 h-8 text-emerald-600 mx-auto" />
-                  <h4 className="font-bold text-sm">Report Successfully Filed</h4>
-                  <p className="text-xs text-emerald-800">
+                <div className="p-6 text-center bg-blue-50 border border-blue-200 rounded-2xl text-blue-900 space-y-2">
+                  <Check className="w-8 h-8 text-blue-600 mx-auto" />
+                  <h4 className="font-black text-sm">Report Successfully Filed</h4>
+                  <p className="text-xs text-blue-800">
                     Your report has been logged and forwarded to the San Jose de Buenavista Transport Grievance Board.
                   </p>
                 </div>
@@ -212,7 +213,7 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
                     <select
                       value={reportCategory}
                       onChange={(e) => setReportCategory(e.target.value as any)}
-                      className="w-full text-xs bg-white border border-slate-300 rounded-xl px-3 py-2 font-medium text-slate-800 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600"
+                      className="w-full text-xs bg-white border border-slate-300 rounded-xl px-3 py-2.5 font-medium text-slate-800 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 min-h-[44px]"
                     >
                       <option value="SAFETY_CONCERN">Safety Concern / Reckless Driving</option>
                       <option value="OVERCHARGING">Fare Overcharging / Ordinance Violation</option>
@@ -232,7 +233,7 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
                       value={reportDescription}
                       onChange={(e) => setReportDescription(e.target.value)}
                       placeholder="Please specify location, tricycle body number, time, and circumstances..."
-                      className="w-full text-xs bg-white border border-slate-300 rounded-xl p-3 text-slate-800 placeholder-slate-400 focus:border-emerald-600 focus:ring-1 focus:ring-emerald-600 resize-none"
+                      className="w-full text-xs bg-white border border-slate-300 rounded-xl p-3 text-slate-800 placeholder-slate-400 focus:border-blue-600 focus:ring-1 focus:ring-blue-600 resize-none"
                       required
                     />
                   </div>
@@ -243,7 +244,7 @@ export default function SafetyModal({ isOpen, onClose }: { isOpen: boolean; onCl
 
                   <button
                     type="submit"
-                    className="w-full py-2.5 bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors"
+                    className="w-full py-3 min-h-[44px] bg-red-600 hover:bg-red-700 text-white rounded-xl text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors active:scale-[0.99]"
                   >
                     <AlertTriangle className="w-4 h-4" />
                     <span>Submit Incident Report</span>

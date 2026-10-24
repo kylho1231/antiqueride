@@ -68,19 +68,19 @@ export default function IncomingRideModal() {
         {/* Header with Countdown Bar */}
         <div className="flex items-center justify-between">
           <div className="flex items-center gap-2">
-            <span className="w-3 h-3 rounded-full bg-emerald-500 animate-ping"></span>
-            <h4 className="font-extrabold text-sm text-[#102A43]">New Ride Request!</h4>
+            <span className="w-3 h-3 rounded-full bg-blue-600 animate-ping"></span>
+            <h4 className="font-extrabold text-sm text-slate-900">New Ride Request!</h4>
           </div>
-          <div className="flex items-center gap-1 text-xs font-mono font-bold text-amber-700 bg-amber-100 px-2.5 py-1 rounded-full">
-            <Clock className="w-3.5 h-3.5" />
+          <div className="flex items-center gap-1 text-xs font-mono font-bold text-blue-900 bg-blue-100 px-2.5 py-1 rounded-full">
+            <Clock className="w-3.5 h-3.5 text-blue-600" />
             <span>{secondsRemaining}s</span>
           </div>
         </div>
 
         {/* Fare & Service Type Card */}
-        <div className="p-4 bg-gradient-to-br from-slate-900 to-[#102A43] text-white rounded-2xl flex items-center justify-between">
+        <div className="p-4 bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white rounded-2xl flex items-center justify-between">
           <div>
-            <div className="flex items-center gap-1.5 text-xs text-amber-400 font-bold uppercase tracking-wider">
+            <div className="flex items-center gap-1.5 text-xs text-blue-300 font-bold uppercase tracking-wider">
               {activeRide.rideType === 'SPECIAL' ? (
                 <>
                   <Sparkles className="w-3.5 h-3.5" />
@@ -93,11 +93,11 @@ export default function IncomingRideModal() {
                 </>
               )}
             </div>
-            <p className="text-xs text-slate-300 mt-1">Passenger: <span className="font-bold text-white">{activeRide.commuterName}</span></p>
+            <p className="text-xs text-blue-100 mt-1">Passenger: <span className="font-bold text-white">{activeRide.commuterName}</span></p>
           </div>
           <div className="text-right">
-            <span className="text-[11px] text-slate-300">Agreed Fare</span>
-            <div className="text-2xl font-black text-[#F5B301]">
+            <span className="text-[11px] text-blue-200">Agreed Fare</span>
+            <div className="text-2xl font-black text-blue-300">
               {formatCurrency(activeRide.fareAmount)}
             </div>
           </div>
@@ -106,7 +106,7 @@ export default function IncomingRideModal() {
         {/* Route Details */}
         <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl space-y-2 text-xs">
           <div className="flex items-start gap-2.5">
-            <div className="w-2.5 h-2.5 rounded-full bg-emerald-600 mt-1 shrink-0"></div>
+            <div className="w-2.5 h-2.5 rounded-full bg-blue-600 mt-1 shrink-0"></div>
             <div>
               <span className="text-[10px] uppercase font-bold text-slate-400">Pickup</span>
               <p className="font-bold text-slate-800">{activeRide.pickupName}</p>
@@ -140,7 +140,7 @@ export default function IncomingRideModal() {
           <button
             type="button"
             onClick={handleAccept}
-            className="py-3.5 px-4 rounded-xl bg-[#087F5B] hover:bg-emerald-700 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-colors"
+            className="py-3.5 px-4 rounded-xl bg-blue-600 hover:bg-blue-700 text-white font-extrabold text-xs flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-colors"
           >
             <Check className="w-4 h-4" />
             <span>Accept Ride</span>

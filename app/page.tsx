@@ -23,49 +23,49 @@ export default function HomePage() {
   const onlineCount = drivers.filter((d) => d.isOnline).length;
 
   return (
-    <div className="space-y-16 py-6 sm:py-10">
+    <div className="space-y-10 sm:space-y-16 py-4 sm:py-10">
       {/* Hero Section */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="relative overflow-hidden rounded-2xl sm:rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white p-5 sm:p-10 lg:p-16 shadow-2xl">
           {/* Subtle geometric pattern overlay */}
           <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.25),transparent_50%)] pointer-events-none" />
 
-          <div className="relative z-10 max-w-3xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-bold backdrop-blur-xs">
+          <div className="relative z-10 max-w-3xl space-y-4 sm:space-y-6">
+            <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-bold backdrop-blur-xs">
               <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
-              <span>San Jose de Buenavista Pilot Active • {onlineCount} Drivers Online</span>
+              <span className="truncate">San Jose Pilot Active • {onlineCount} Drivers Online</span>
             </div>
 
-            <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
+            <h1 className="text-2xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
               Your Ride. <br />
               <span className="text-blue-300">Your Antique.</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-blue-100 font-medium leading-relaxed max-w-2xl">
+            <p className="text-sm sm:text-base lg:text-lg text-blue-100 font-medium leading-relaxed max-w-2xl">
               The first province-wide smart transportation technology platform for Antique, Philippines. 
               Connecting daily commuters with verified local TODA tricycle drivers through real-time booking, 
               audited municipal fare matrices, and authenticated safety controls.
             </p>
 
             {/* Dedicated Two-Portal Entry Gateway */}
-            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-4">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-3.5 sm:gap-4 pt-2 sm:pt-4">
               <Link
                 href="/commuter"
-                className="group p-6 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
+                className="group p-4 sm:p-6 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
-                    <Users className="w-6 h-6" />
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
+                    <Users className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-300 block mb-1">
                     For Passengers & Students
                   </span>
-                  <h3 className="font-extrabold text-lg text-white">Commuter Portal</h3>
+                  <h3 className="font-extrabold text-base sm:text-lg text-white">Commuter Portal</h3>
                   <p className="text-xs text-blue-100 mt-1 leading-relaxed">
                     Book authorized tricycles, check official municipal fares, validate 20% student discounts, and track rides live.
                   </p>
                 </div>
-                <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
+                <div className="mt-4 sm:mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
                   <span>Enter Commuter Portal</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -73,21 +73,21 @@ export default function HomePage() {
 
               <Link
                 href="/driver"
-                className="group p-6 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
+                className="group p-4 sm:p-6 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-12 h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md">
-                    <Car className="w-6 h-6" />
+                  <div className="w-11 h-11 sm:w-12 sm:h-12 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md">
+                    <Car className="w-5 h-5 sm:w-6 sm:h-6" />
                   </div>
                   <span className="text-[10px] font-extrabold uppercase tracking-wider text-blue-300 block mb-1">
                     For Franchised Tricycle Operators
                   </span>
-                  <h3 className="font-extrabold text-lg text-white">TODA Driver Portal</h3>
+                  <h3 className="font-extrabold text-base sm:text-lg text-white">TODA Driver Portal</h3>
                   <p className="text-xs text-blue-100 mt-1 leading-relaxed">
                     Shift controls, TODA terminal queue management, real-time dispatch alerts, and verified trip earnings.
                   </p>
                 </div>
-                <div className="mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
+                <div className="mt-4 sm:mt-5 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
                   <span>Enter Driver Portal</span>
                   <ArrowRight className="w-4 h-4" />
                 </div>
@@ -206,14 +206,14 @@ export default function HomePage() {
       </section>
 
       {/* Official Fare Ordinance Snapshot */}
-      <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 bg-blue-950 text-white rounded-3xl shadow-xl space-y-6">
+      <section className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8">
+        <div className="p-5 sm:p-8 bg-blue-950 text-white rounded-2xl sm:rounded-3xl shadow-xl space-y-4 sm:space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
               <span className="text-xs font-bold uppercase tracking-wider text-blue-300">
                 San Jose de Buenavista Public Tariff
               </span>
-              <h3 className="text-xl sm:text-2xl font-black mt-1">
+              <h3 className="text-lg sm:text-2xl font-black mt-1">
                 Official Tricycle Passenger & Special Fare Table
               </h3>
               <p className="text-xs text-blue-200 mt-1">
@@ -222,53 +222,53 @@ export default function HomePage() {
             </div>
             <Link
               href="/commuter"
-              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 w-fit cursor-pointer transition-colors shadow-md"
+              className="px-5 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 w-full sm:w-fit cursor-pointer transition-colors shadow-md shrink-0"
             >
               <span>Test Booking Calculator</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-blue-900 text-xs">
-            <div className="p-4 bg-blue-900/60 rounded-2xl">
-              <span className="text-[10px] text-blue-200 block font-bold uppercase">Base Regular Fare</span>
-              <span className="text-2xl font-black text-white mt-1 block">
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2.5 sm:gap-4 pt-4 border-t border-blue-900 text-xs">
+            <div className="p-3 sm:p-4 bg-blue-900/60 rounded-xl sm:rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase truncate">Base Regular Fare</span>
+              <span className="text-xl sm:text-2xl font-black text-white mt-1 block">
                 {formatCurrency(farePolicy.baseFareRegular)}
               </span>
-              <span className="text-[11px] text-blue-300">First {farePolicy.baseKmRegular} km / passenger</span>
+              <span className="text-[10px] sm:text-[11px] text-blue-300 truncate block">First {farePolicy.baseKmRegular} km / passenger</span>
             </div>
 
-            <div className="p-4 bg-blue-900/60 rounded-2xl">
-              <span className="text-[10px] text-blue-200 block font-bold uppercase">Succeeding Rate</span>
-              <span className="text-2xl font-black text-white mt-1 block">
+            <div className="p-3 sm:p-4 bg-blue-900/60 rounded-xl sm:rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase truncate">Succeeding Rate</span>
+              <span className="text-xl sm:text-2xl font-black text-white mt-1 block">
                 {formatCurrency(farePolicy.succeedingPerKmRegular)}
               </span>
-              <span className="text-[11px] text-blue-300">Per succeeding kilometer</span>
+              <span className="text-[10px] sm:text-[11px] text-blue-300 truncate block">Per succeeding kilometer</span>
             </div>
 
-            <div className="p-4 bg-blue-900/60 rounded-2xl">
-              <span className="text-[10px] text-blue-200 block font-bold uppercase">Special Trip (Pakyaw)</span>
-              <span className="text-2xl font-black text-blue-300 mt-1 block">
+            <div className="p-3 sm:p-4 bg-blue-900/60 rounded-xl sm:rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase truncate">Special Trip (Pakyaw)</span>
+              <span className="text-xl sm:text-2xl font-black text-blue-300 mt-1 block">
                 {formatCurrency(farePolicy.specialTripBaseFare)}
               </span>
-              <span className="text-[11px] text-blue-300">Exclusive private charter</span>
+              <span className="text-[10px] sm:text-[11px] text-blue-300 truncate block">Exclusive private charter</span>
             </div>
 
-            <div className="p-4 bg-blue-900/60 rounded-2xl">
-              <span className="text-[10px] text-blue-200 block font-bold uppercase">Mandatory Discount</span>
-              <span className="text-2xl font-black text-blue-400 mt-1 block">20% OFF</span>
-              <span className="text-[11px] text-blue-300">Students, Seniors, PWDs</span>
+            <div className="p-3 sm:p-4 bg-blue-900/60 rounded-xl sm:rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase truncate">Mandatory Discount</span>
+              <span className="text-xl sm:text-2xl font-black text-blue-400 mt-1 block">20% OFF</span>
+              <span className="text-[10px] sm:text-[11px] text-blue-300 truncate block">Students, Seniors, PWDs</span>
             </div>
           </div>
         </div>
       </section>
 
       {/* Discreet Platform Footer & LGU Administrative Link */}
-      <footer className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 pt-8 pb-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
-        <p>© 2026 AntiqueRide. Municipal Transport Technology for Antique, Philippines.</p>
+      <footer className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 pt-8 pb-4 border-t border-slate-200 flex flex-col sm:flex-row items-center justify-between text-xs text-slate-500 gap-3">
+        <p className="text-center sm:text-left">© 2026 AntiqueRide. Municipal Transport Technology for Antique, Philippines.</p>
         <Link
           href="/admin/login"
-          className="text-slate-400 hover:text-slate-700 text-[11px] font-semibold flex items-center gap-1.5 transition-colors"
+          className="text-slate-400 hover:text-slate-700 text-[11px] font-semibold flex items-center gap-1.5 transition-colors p-2"
         >
           <ShieldCheck className="w-3.5 h-3.5" />
           <span>LGU Administrator Gateway</span>

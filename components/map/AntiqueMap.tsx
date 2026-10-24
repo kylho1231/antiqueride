@@ -267,18 +267,18 @@ export default function AntiqueMap({
 
   return (
     <div
-      className="relative w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200"
-      style={{ height: '480px', minHeight: '480px', width: '100%', position: 'relative', display: 'block' }}
+      className="relative w-full rounded-2xl overflow-hidden shadow-sm border border-slate-200 h-[380px] sm:h-[480px] min-h-[360px]"
+      style={{ position: 'relative', display: 'block' }}
     >
       {/* Top Floating GIS Telemetry Badge */}
-      <div className="absolute top-3 left-3 z-20 flex flex-wrap items-center gap-2 pointer-events-none">
-        <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200 flex items-center gap-2 pointer-events-auto">
+      <div className="absolute top-2.5 left-2.5 sm:top-3 sm:left-3 z-20 flex flex-wrap items-center gap-1.5 sm:gap-2 pointer-events-none max-w-[calc(100%-125px)] sm:max-w-none">
+        <div className="bg-white/95 backdrop-blur-md px-2.5 sm:px-3 py-1.5 rounded-xl shadow-md border border-slate-200 flex items-center gap-1.5 sm:gap-2 pointer-events-auto shrink-0">
           <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
-          <span className="text-[11px] font-black text-slate-900 tracking-wide">
+          <span className="text-[10px] sm:text-[11px] font-black text-slate-900 tracking-wide">
             LIVE GIS MAP
           </span>
-          <span className="text-[10px] font-mono text-slate-500 hidden sm:inline">
-            San Jose de Buenavista (10.7445° N, 121.9395° E)
+          <span className="text-[10px] font-mono text-slate-500 hidden md:inline">
+            San Jose (10.7445° N, 121.9395° E)
           </span>
         </div>
 
@@ -292,18 +292,18 @@ export default function AntiqueMap({
       <button
         type="button"
         onClick={handleCenterSanJose}
-        className="absolute top-3 right-3 z-20 bg-white/95 hover:bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-xl shadow-md border border-slate-200 cursor-pointer flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
+        className="absolute top-2.5 right-2.5 sm:top-3 sm:right-3 z-20 bg-white/95 hover:bg-white text-slate-800 text-[11px] sm:text-xs font-bold px-2.5 sm:px-3 py-1.5 min-h-[38px] rounded-xl shadow-md border border-slate-200 cursor-pointer flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
         title="Re-center on San Jose Plaza & Municipal Hall"
       >
-        <Navigation2 className="w-3.5 h-3.5 text-blue-600" />
-        <span>Center Plaza</span>
+        <Navigation2 className="w-3.5 h-3.5 text-blue-600 shrink-0" />
+        <span className="whitespace-nowrap">Center Plaza</span>
       </button>
 
-      {/* Actual Map Container with Explicit Height */}
+      {/* Actual Map Container with Responsive Height */}
       <div
         ref={mapContainerRef}
-        className="antique-gis-map-container"
-        style={{ height: '480px', minHeight: '480px', width: '100%', position: 'relative', display: 'block' }}
+        className="antique-gis-map-container h-full w-full min-h-[360px]"
+        style={{ position: 'relative', display: 'block' }}
       />
     </div>
   );

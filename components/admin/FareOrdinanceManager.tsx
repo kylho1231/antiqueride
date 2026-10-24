@@ -32,10 +32,10 @@ export default function FareOrdinanceManager() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-5">
+    <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-4 sm:space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-extrabold text-[#102A43]">
+          <h3 className="text-base font-black text-slate-900">
             Municipal Fare Matrix & Ordinance Engine
           </h3>
           <p className="text-xs text-slate-500">
@@ -48,17 +48,17 @@ export default function FareOrdinanceManager() {
       </div>
 
       {savedSuccess && (
-        <div className="p-3 bg-emerald-50 border border-emerald-200 rounded-2xl text-xs text-emerald-900 flex items-center gap-2 font-medium">
-          <Check className="w-4 h-4 text-emerald-600" />
+        <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-xs text-blue-900 flex items-center gap-2 font-medium">
+          <Check className="w-4 h-4 text-blue-600 shrink-0" />
           <span>Fare matrix successfully updated and logged to platform audit trail.</span>
         </div>
       )}
 
       <form onSubmit={handleSave} className="space-y-4">
         {/* Legal Ordinance Metadata */}
-        <div className="p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-xs">
+        <div className="p-3.5 sm:p-4 bg-slate-50 border border-slate-200 rounded-2xl space-y-3 text-xs">
           <div className="flex items-center gap-2 font-bold text-slate-800">
-            <Scale className="w-4 h-4 text-emerald-700" />
+            <Scale className="w-4 h-4 text-blue-600 shrink-0" />
             <span>Official Sangguniang Bayan Legal Authority</span>
           </div>
 
@@ -69,7 +69,7 @@ export default function FareOrdinanceManager() {
                 type="text"
                 value={sourceOrdinance}
                 onChange={(e) => setSourceOrdinance(e.target.value)}
-                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-semibold"
+                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-semibold focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 required
               />
             </div>
@@ -79,7 +79,7 @@ export default function FareOrdinanceManager() {
                 type="text"
                 value={approvalReference}
                 onChange={(e) => setApprovalReference(e.target.value)}
-                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium"
+                className="w-full bg-white border border-slate-300 rounded-xl px-3 py-2 text-slate-800 font-medium focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 required
               />
             </div>
@@ -97,7 +97,7 @@ export default function FareOrdinanceManager() {
                 step="0.5"
                 value={baseFareRegular}
                 onChange={(e) => setBaseFareRegular(Number(e.target.value))}
-                className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900"
+                className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 required
               />
             </div>
@@ -111,7 +111,7 @@ export default function FareOrdinanceManager() {
               step="0.5"
               value={baseKmRegular}
               onChange={(e) => setBaseKmRegular(Number(e.target.value))}
-              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900"
+              className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
               required
             />
             <span className="text-[10px] text-slate-400">Initial bracket</span>
@@ -125,8 +125,8 @@ export default function FareOrdinanceManager() {
                 type="number"
                 step="0.5"
                 value={succeedingPerKmRegular}
-                onChange={(e) => setSucceedingPerKmRegular(Number(e.target.value))}
-                className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900"
+                onChange={(e) => setBaseFareRegular(Number(e.target.value))}
+                className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 required
               />
             </div>
@@ -142,7 +142,7 @@ export default function FareOrdinanceManager() {
                 step="5"
                 value={specialTripBaseFare}
                 onChange={(e) => setSpecialTripBaseFare(Number(e.target.value))}
-                className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900"
+                className="w-full bg-white border border-slate-300 rounded-lg px-2.5 py-1.5 font-bold text-slate-900 focus:border-blue-600 focus:ring-1 focus:ring-blue-600"
                 required
               />
             </div>
@@ -151,21 +151,21 @@ export default function FareOrdinanceManager() {
         </div>
 
         {/* Mandatory Discounts Banner (Philippine Laws) */}
-        <div className="p-3 bg-emerald-50/70 border border-emerald-200 rounded-2xl flex items-center justify-between text-xs">
+        <div className="p-3 bg-blue-50/70 border border-blue-200 rounded-2xl flex items-center justify-between text-xs gap-2">
           <div>
-            <span className="font-bold text-emerald-950">Statutory 20% Mandatory Fare Discount</span>
-            <p className="text-[11px] text-emerald-800">
+            <span className="font-bold text-blue-950">Statutory 20% Mandatory Fare Discount</span>
+            <p className="text-[11px] text-blue-800">
               Enforced for verified Students (RA 10642), Senior Citizens (RA 9994), and PWDs (RA 9442).
             </p>
           </div>
-          <span className="font-mono font-bold text-emerald-800 bg-emerald-100 px-2 py-1 rounded-lg">
+          <span className="font-mono font-bold text-blue-800 bg-blue-100 px-2 py-1 rounded-lg shrink-0">
             20.0% Off
           </span>
         </div>
 
         <button
           type="submit"
-          className="px-5 py-3 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 cursor-pointer shadow-sm transition-colors"
+          className="w-full sm:w-auto px-6 py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-2 cursor-pointer shadow-sm transition-colors active:scale-95"
         >
           <Save className="w-4 h-4" />
           <span>Save & Enforce Fare Changes</span>

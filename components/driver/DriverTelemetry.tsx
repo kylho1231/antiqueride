@@ -45,7 +45,7 @@ export default function DriverTelemetry() {
                 activeDriver.isOnline ? 'bg-emerald-500 animate-pulse' : 'bg-slate-300'
               }`}
             ></span>
-            <span className="font-extrabold text-sm text-[#102A43]">
+            <span className="font-extrabold text-sm text-slate-900">
               {activeDriver.isOnline ? 'Online • Ready for Rides' : 'Offline / Off-Duty'}
             </span>
           </div>
@@ -68,7 +68,7 @@ export default function DriverTelemetry() {
       {/* Terminal & Station Queue Position (Key Antique Transport Requirement) */}
       <div className="p-3.5 bg-slate-50 border border-slate-200 rounded-2xl flex items-center justify-between text-xs">
         <div className="flex items-center gap-2.5">
-          <div className="w-8 h-8 rounded-xl bg-amber-100 text-amber-800 flex items-center justify-center font-bold">
+          <div className="w-8 h-8 rounded-xl bg-blue-100 text-blue-800 flex items-center justify-center font-bold">
             <MapPin className="w-4 h-4" />
           </div>
           <div>
@@ -80,7 +80,7 @@ export default function DriverTelemetry() {
 
         <div className="text-right">
           <span className="text-[10px] text-slate-400 block">Queue / Pila</span>
-          <span className="font-mono font-black text-emerald-800 text-sm bg-emerald-100/70 px-2 py-0.5 rounded-lg border border-emerald-200">
+          <span className="font-mono font-black text-blue-900 text-sm bg-blue-100/70 px-2 py-0.5 rounded-lg border border-blue-200">
             Position #{activeDriver.queuePosition || 1}
           </span>
         </div>

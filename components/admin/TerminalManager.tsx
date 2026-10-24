@@ -14,17 +14,17 @@ export default function TerminalManager() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-5">
+    <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-4 sm:space-y-5">
       <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-extrabold text-[#102A43]">
+          <h3 className="text-base font-black text-slate-900">
             TODA Terminals & Station Dispatch Controls
           </h3>
           <p className="text-xs text-slate-500">
             Regulate queue pila policies and dispatch rules by terminal in San Jose de Buenavista
           </p>
         </div>
-        <span className="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-900 rounded-full border border-emerald-200 w-fit">
+        <span className="text-xs font-bold px-3 py-1 bg-blue-50 text-blue-800 rounded-full border border-blue-200 w-fit">
           {terminals.length} Registered Stations
         </span>
       </div>
@@ -39,24 +39,24 @@ export default function TerminalManager() {
               className={`p-4 rounded-2xl border transition-all ${
                 isPhase2
                   ? 'bg-slate-50/80 border-slate-200'
-                  : 'bg-white border-slate-200 hover:border-emerald-300 shadow-xs'
+                  : 'bg-white border-slate-200 hover:border-blue-300 shadow-xs'
               }`}
             >
-              <div className="flex items-start justify-between gap-2">
-                <div>
-                  <div className="flex items-center gap-1.5">
-                    <span className="font-extrabold text-sm text-[#102A43]">{t.name}</span>
+              <div className="flex items-start justify-between gap-2 flex-wrap sm:flex-nowrap">
+                <div className="min-w-0 pr-2">
+                  <div className="flex items-center gap-1.5 flex-wrap">
+                    <span className="font-extrabold text-sm text-slate-900 truncate">{t.name}</span>
                     {isPhase2 ? (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-100 text-amber-800 border border-amber-200 shrink-0">
                         Phase 2 Pending
                       </span>
                     ) : (
-                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                      <span className="text-[10px] font-bold px-2 py-0.5 rounded-full bg-blue-100 text-blue-800 border border-blue-200 shrink-0">
                         Active
                       </span>
                     )}
                   </div>
-                  <p className="text-xs text-slate-500 mt-0.5">
+                  <p className="text-xs text-slate-500 mt-0.5 truncate">
                     {t.barangay}, {t.municipality} • TODA: <span className="font-semibold text-slate-800">{t.todaName}</span>
                   </p>
                 </div>
@@ -65,10 +65,10 @@ export default function TerminalManager() {
                 <button
                   type="button"
                   onClick={() => handleToggleMode(t)}
-                  className={`px-3 py-1.5 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs ${
+                  className={`px-3 py-2 min-h-[38px] rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors shadow-xs shrink-0 ${
                     t.queueMode === 'PILA'
-                      ? 'bg-[#102A43] text-white hover:bg-slate-900'
-                      : 'bg-[#087F5B] text-white hover:bg-emerald-700'
+                      ? 'bg-slate-800 text-white hover:bg-slate-900'
+                      : 'bg-blue-600 text-white hover:bg-blue-700'
                   }`}
                   title="Toggle Queue Mode"
                 >
@@ -83,7 +83,7 @@ export default function TerminalManager() {
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 block font-medium">GPS Coordinates</span>
-                  <span className="font-mono text-[11px] text-slate-600">
+                  <span className="font-mono text-[11px] text-slate-600 truncate block">
                     {t.coordinates.lat.toFixed(4)}° N, {t.coordinates.lng.toFixed(4)}° E
                   </span>
                 </div>

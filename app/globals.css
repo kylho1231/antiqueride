@@ -21,6 +21,17 @@
   --color-brand-error: #DC2626;
 }
 
+html, body {
+  overflow-x: hidden;
+  width: 100%;
+  max-width: 100vw;
+  box-sizing: border-box;
+}
+
+*, *::before, *::after {
+  box-sizing: border-box;
+}
+
 body {
   background-color: var(--background);
   color: #1E293B;
@@ -34,7 +45,7 @@ body {
 .leaflet-container {
   width: 100% !important;
   height: 100% !important;
-  min-height: 480px !important;
+  min-height: 360px !important;
   font-family: inherit;
   z-index: 10;
   display: block !important;
@@ -42,8 +53,8 @@ body {
 
 .antique-gis-map-container {
   width: 100% !important;
-  height: 480px !important;
-  min-height: 480px !important;
+  height: 100% !important;
+  min-height: 360px !important;
   position: relative !important;
   display: block !important;
   background-color: #e2e8f0;

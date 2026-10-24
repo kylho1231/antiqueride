@@ -29,7 +29,7 @@ const AntiqueMap = dynamic(() => import('@/components/map/AntiqueMap'), {
   ssr: false,
   loading: () => (
     <div
-      style={{ height: '480px', minHeight: '480px', width: '100%' }}
+      style={{ height: '380px', minHeight: '360px', width: '100%' }}
       className="rounded-2xl bg-slate-100 flex items-center justify-center text-slate-400 text-xs font-semibold animate-pulse border border-slate-200"
     >
       Loading Administrative Dispatch GIS Map...
@@ -49,9 +49,9 @@ export default function AdminPage() {
 
   return (
     <AuthGuard allowedRoles={['SUPER_ADMIN']}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
       {/* Admin Top Header */}
-      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white p-6 rounded-3xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white p-4 sm:p-6 rounded-2xl sm:rounded-3xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
             <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse"></span>
@@ -59,68 +59,68 @@ export default function AdminPage() {
               Platform Operations & Governance
             </span>
           </div>
-          <h1 className="text-2xl font-black mt-1">AntiqueRide Super Admin Workspace</h1>
+          <h1 className="text-xl sm:text-2xl font-black mt-1">AntiqueRide Super Admin Workspace</h1>
           <p className="text-xs text-blue-100 mt-0.5">
             San Jose de Buenavista Municipal Tricycle Dispatch & Regulatory Monitor
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-blue-950/60 px-4 py-2 rounded-2xl border border-blue-700/50 text-xs">
-          <ShieldCheck className="w-4 h-4 text-blue-400" />
-          <span className="font-mono">Super Admin: admin@antiqueride.ph</span>
+        <div className="flex items-center gap-2 bg-blue-950/60 px-3.5 py-2 rounded-2xl border border-blue-700/50 text-xs self-start sm:self-auto">
+          <ShieldCheck className="w-4 h-4 text-blue-400 shrink-0" />
+          <span className="font-mono truncate">admin@antiqueride.ph</span>
         </div>
       </div>
 
       {/* KPI Overview Statistics */}
-      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-3">
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase block">Verified Drivers</span>
-          <span className="text-xl font-black text-slate-900 mt-1 block">
+      <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2.5 sm:gap-3">
+        <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase block truncate">Verified Drivers</span>
+          <span className="text-lg sm:text-xl font-black text-slate-900 mt-0.5 sm:mt-1 block">
             {drivers.filter((d) => d.verificationStatus === 'VERIFIED').length}
           </span>
-          <span className="text-[10px] text-emerald-700 font-medium">Authorized by LGU</span>
+          <span className="text-[10px] text-blue-700 font-medium truncate block">Authorized LGU</span>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase block">Online Drivers</span>
-          <span className="text-xl font-black text-emerald-700 mt-1 block">{onlineDrivers}</span>
-          <span className="text-[10px] text-slate-500 font-medium">Active on GPS</span>
+        <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase block truncate">Online Drivers</span>
+          <span className="text-lg sm:text-xl font-black text-blue-700 mt-0.5 sm:mt-1 block">{onlineDrivers}</span>
+          <span className="text-[10px] text-slate-500 font-medium truncate block">Active on GPS</span>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase block">Pending Review</span>
-          <span className="text-xl font-black text-amber-600 mt-1 block">{pendingDrivers}</span>
-          <span className="text-[10px] text-amber-800 font-medium">Driver applications</span>
+        <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase block truncate">Pending Review</span>
+          <span className="text-lg sm:text-xl font-black text-amber-600 mt-0.5 sm:mt-1 block">{pendingDrivers}</span>
+          <span className="text-[10px] text-amber-800 font-medium truncate block">Applications</span>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase block">Active Bookings</span>
-          <span className="text-xl font-black text-blue-600 mt-1 block">
+        <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase block truncate">Active Bookings</span>
+          <span className="text-lg sm:text-xl font-black text-blue-600 mt-0.5 sm:mt-1 block">
             {activeRide && activeRide.status !== 'CANCELLED' && activeRide.status !== 'TRIP_COMPLETED'
               ? '1'
               : '0'}
           </span>
-          <span className="text-[10px] text-slate-500 font-medium">Dispatches en route</span>
+          <span className="text-[10px] text-slate-500 font-medium truncate block">Dispatches en route</span>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase block">TODA Stations</span>
-          <span className="text-xl font-black text-slate-900 mt-1 block">{terminals.length}</span>
-          <span className="text-[10px] text-slate-500 font-medium">San Jose + Phase 2</span>
+        <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase block truncate">TODA Stations</span>
+          <span className="text-lg sm:text-xl font-black text-slate-900 mt-0.5 sm:mt-1 block">{terminals.length}</span>
+          <span className="text-[10px] text-slate-500 font-medium truncate block">San Jose + Phase 2</span>
         </div>
 
-        <div className="p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
-          <span className="text-[10px] text-slate-400 font-bold uppercase block">Safety Incidents</span>
-          <span className="text-xl font-black text-red-600 mt-1 block">{activeIncidents}</span>
-          <span className="text-[10px] text-slate-500 font-medium">Grievance desk</span>
+        <div className="p-3 sm:p-4 bg-white rounded-2xl border border-slate-200 shadow-xs">
+          <span className="text-[10px] text-slate-400 font-bold uppercase block truncate">Safety Incidents</span>
+          <span className="text-lg sm:text-xl font-black text-red-600 mt-0.5 sm:mt-1 block">{activeIncidents}</span>
+          <span className="text-[10px] text-slate-500 font-medium truncate block">Grievance desk</span>
         </div>
       </div>
 
-      {/* Workspace Tabs Navigation */}
-      <div className="flex border-b border-slate-200 overflow-x-auto gap-2 pb-1">
+      {/* Workspace Tabs Navigation with Touch-Friendly Overflow */}
+      <div className="flex border-b border-slate-200 overflow-x-auto gap-2 pb-2 scrollbar-none" style={{ WebkitOverflowScrolling: 'touch' }}>
         <button
           onClick={() => setActiveTab('DRIVERS')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
+          className={`px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl sm:rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 shrink-0 ${
             activeTab === 'DRIVERS'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -137,7 +137,7 @@ export default function AdminPage() {
 
         <button
           onClick={() => setActiveTab('LIVE_MAP')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
+          className={`px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl sm:rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 shrink-0 ${
             activeTab === 'LIVE_MAP'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -149,7 +149,7 @@ export default function AdminPage() {
 
         <button
           onClick={() => setActiveTab('TERMINALS')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
+          className={`px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl sm:rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 shrink-0 ${
             activeTab === 'TERMINALS'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -161,7 +161,7 @@ export default function AdminPage() {
 
         <button
           onClick={() => setActiveTab('FARES')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
+          className={`px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl sm:rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 shrink-0 ${
             activeTab === 'FARES'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -173,7 +173,7 @@ export default function AdminPage() {
 
         <button
           onClick={() => setActiveTab('INCIDENTS')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
+          className={`px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl sm:rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 shrink-0 ${
             activeTab === 'INCIDENTS'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -190,7 +190,7 @@ export default function AdminPage() {
 
         <button
           onClick={() => setActiveTab('AUDIT')}
-          className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
+          className={`px-3.5 sm:px-4 py-2.5 min-h-[44px] rounded-xl sm:rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 shrink-0 ${
             activeTab === 'AUDIT'
               ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
@@ -205,17 +205,17 @@ export default function AdminPage() {
       {activeTab === 'DRIVERS' && <DriverVerificationQueue />}
 
       {activeTab === 'LIVE_MAP' && (
-        <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
-          <div className="flex items-center justify-between">
+        <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-4">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
             <div>
-              <h3 className="text-base font-extrabold text-slate-900">
+              <h3 className="text-base font-black text-slate-900">
                 Live Dispatch & Driver Telemetry Monitor
               </h3>
               <p className="text-xs text-slate-500">
                 Real-time tracking of authenticated tricycles across San Jose de Buenavista municipal grid
               </p>
             </div>
-            <span className="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-900 rounded-full">
+            <span className="self-start sm:self-auto text-xs font-bold px-3 py-1 bg-blue-100 text-blue-900 rounded-full">
               {onlineDrivers} GPS Feeds Active
             </span>
           </div>
@@ -227,7 +227,7 @@ export default function AdminPage() {
             pickupCoords={activeRide?.pickupCoordinates || null}
             destinationCoords={activeRide?.destinationCoordinates || null}
             driverCoords={activeRide?.driverCoordinates || null}
-            className="h-[520px] w-full rounded-2xl border border-slate-200 overflow-hidden"
+            className="h-[380px] sm:h-[520px] w-full rounded-2xl border border-slate-200 overflow-hidden"
           />
         </div>
       )}

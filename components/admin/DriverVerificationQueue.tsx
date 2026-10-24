@@ -19,17 +19,17 @@ export default function DriverVerificationQueue() {
   };
 
   return (
-    <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-5">
-      <div className="flex items-center justify-between">
+    <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 shadow-sm border border-slate-200 space-y-4 sm:space-y-5">
+      <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
         <div>
-          <h3 className="text-base font-extrabold text-[#102A43]">
+          <h3 className="text-base font-black text-slate-900">
             Driver & Franchise Verification Desk
           </h3>
           <p className="text-xs text-slate-500">
             San Jose de Buenavista Tricycle Franchising & Regulatory Board (MTOP / LGU TMPSO)
           </p>
         </div>
-        <span className="text-xs font-bold px-3 py-1 bg-amber-100 text-amber-900 rounded-full border border-amber-200">
+        <span className="self-start sm:self-auto text-xs font-bold px-3 py-1 bg-blue-50 text-blue-800 rounded-full border border-blue-200">
           {pendingDrivers.length} Pending Approval
         </span>
       </div>
@@ -43,13 +43,13 @@ export default function DriverVerificationQueue() {
           {pendingDrivers.map((driver) => (
             <div
               key={driver.id}
-              className="p-4 bg-slate-50 border border-amber-200 rounded-2xl space-y-3 transition-all"
+              className="p-3.5 sm:p-4 bg-slate-50 border border-blue-200 rounded-2xl space-y-3 transition-all"
             >
-              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+              <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
                 <div>
-                  <div className="flex items-center gap-2">
+                  <div className="flex items-center gap-2 flex-wrap">
                     <h4 className="font-bold text-sm text-slate-900">{driver.fullName}</h4>
-                    <span className="text-[10px] font-extrabold bg-[#102A43] text-white px-2 py-0.5 rounded-md">
+                    <span className="text-[10px] font-extrabold bg-blue-700 text-white px-2 py-0.5 rounded-md">
                       Unit #{driver.bodyNumber}
                     </span>
                     <span className="text-[10px] font-bold bg-amber-100 text-amber-800 px-2 py-0.5 rounded-md border border-amber-300">
@@ -61,10 +61,10 @@ export default function DriverVerificationQueue() {
                   </p>
                 </div>
 
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 flex-wrap">
                   <button
                     onClick={() => setSelectedDriverForDoc(driver)}
-                    className="px-3 py-1.5 bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                    className="px-3 py-2 min-h-[38px] bg-slate-200 hover:bg-slate-300 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <Eye className="w-3.5 h-3.5" />
                     <span>View Docs</span>
@@ -72,7 +72,7 @@ export default function DriverVerificationQueue() {
 
                   <button
                     onClick={() => approveDriverVerification(driver.id)}
-                    className="px-3 py-1.5 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-xs"
+                    className="px-3.5 py-2 min-h-[38px] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors shadow-xs"
                   >
                     <Check className="w-3.5 h-3.5" />
                     <span>Approve</span>
@@ -80,7 +80,7 @@ export default function DriverVerificationQueue() {
 
                   <button
                     onClick={() => setRejectingId(driver.id)}
-                    className="px-3 py-1.5 bg-red-100 hover:bg-red-200 text-red-800 rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
+                    className="px-3 py-2 min-h-[38px] bg-red-100 hover:bg-red-200 text-red-800 rounded-xl text-xs font-bold flex items-center gap-1 cursor-pointer transition-colors"
                   >
                     <X className="w-3.5 h-3.5" />
                     <span>Reject</span>
@@ -105,7 +105,7 @@ export default function DriverVerificationQueue() {
                 </div>
                 <div>
                   <span className="text-[10px] text-slate-400 block font-medium">TODA Membership</span>
-                  <span className="font-bold text-slate-800">{driver.todaName}</span>
+                  <span className="font-bold text-slate-800 truncate block">{driver.todaName}</span>
                 </div>
               </div>
 
@@ -116,23 +116,23 @@ export default function DriverVerificationQueue() {
                   <select
                     value={rejectReason}
                     onChange={(e) => setRejectReason(e.target.value)}
-                    className="w-full bg-white border border-red-300 rounded-lg p-2 text-slate-800"
+                    className="w-full bg-white border border-red-300 rounded-lg p-2.5 text-slate-800 min-h-[44px]"
                   >
                     <option value="Expired MTOP franchise permit">Expired MTOP franchise permit</option>
                     <option value="Unregistered vehicle plate on LTO database">Unregistered vehicle plate on LTO database</option>
                     <option value="Non-professional license without tricycle endorsement">Non-professional license without tricycle endorsement</option>
                     <option value="Unverified TODA membership credentials">Unverified TODA membership credentials</option>
                   </select>
-                  <div className="flex gap-2 justify-end">
+                  <div className="flex gap-2 justify-end pt-1">
                     <button
                       onClick={() => setRejectingId(null)}
-                      className="px-3 py-1 rounded-lg text-slate-600 hover:bg-slate-200 cursor-pointer"
+                      className="px-3.5 py-2 min-h-[38px] rounded-lg text-slate-600 hover:bg-slate-200 cursor-pointer font-bold"
                     >
                       Cancel
                     </button>
                     <button
                       onClick={() => handleConfirmReject(driver.id)}
-                      className="px-3 py-1 bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg cursor-pointer"
+                      className="px-3.5 py-2 min-h-[38px] bg-red-600 hover:bg-red-700 text-white font-bold rounded-lg cursor-pointer"
                     >
                       Confirm Rejection
                     </button>
@@ -149,23 +149,23 @@ export default function DriverVerificationQueue() {
         <h4 className="text-xs font-bold text-slate-500 uppercase tracking-wider mb-3">
           Currently Authorized & Active Drivers ({verifiedDrivers.length})
         </h4>
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+        <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
           {verifiedDrivers.map((vd) => (
             <div
               key={vd.id}
               className="p-3 bg-slate-50 rounded-2xl border border-slate-200 flex items-center justify-between text-xs"
             >
-              <div>
+              <div className="min-w-0 pr-2">
                 <div className="flex items-center gap-1.5">
-                  <span className="font-bold text-slate-900">{vd.fullName}</span>
-                  <span className="text-[10px] bg-emerald-100 text-emerald-800 font-bold px-1.5 py-0.5 rounded">
+                  <span className="font-bold text-slate-900 truncate">{vd.fullName}</span>
+                  <span className="text-[10px] bg-blue-100 text-blue-800 font-bold px-1.5 py-0.5 rounded shrink-0">
                     #{vd.bodyNumber}
                   </span>
                 </div>
-                <p className="text-[11px] text-slate-500 mt-0.5">{vd.todaName}</p>
+                <p className="text-[11px] text-slate-500 mt-0.5 truncate">{vd.todaName}</p>
                 <p className="text-[10px] text-slate-400">Plate: {vd.vehiclePlate} • {vd.totalTrips} trips</p>
               </div>
-              <span className="w-2.5 h-2.5 rounded-full bg-emerald-500" title="Active"></span>
+              <span className="w-2.5 h-2.5 rounded-full bg-blue-600 shrink-0" title="Active"></span>
             </div>
           ))}
         </div>
@@ -173,15 +173,16 @@ export default function DriverVerificationQueue() {
 
       {/* Document Review Modal */}
       {selectedDriverForDoc && (
-        <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-black/60 backdrop-blur-xs">
-          <div className="bg-white rounded-3xl p-6 max-w-md w-full space-y-4 border border-slate-200 shadow-2xl">
+        <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-black/60 backdrop-blur-xs">
+          <div className="bg-white rounded-2xl sm:rounded-3xl p-4 sm:p-6 max-w-md w-full space-y-4 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
             <div className="flex justify-between items-center">
-              <h4 className="font-bold text-base text-[#102A43]">
+              <h4 className="font-black text-base text-slate-900">
                 Credentials: {selectedDriverForDoc.fullName}
               </h4>
               <button
                 onClick={() => setSelectedDriverForDoc(null)}
-                className="text-slate-400 hover:text-slate-600 cursor-pointer"
+                className="p-2 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
+                aria-label="Close document modal"
               >
                 <X className="w-5 h-5" />
               </button>
@@ -209,7 +210,7 @@ export default function DriverVerificationQueue() {
 
             <button
               onClick={() => setSelectedDriverForDoc(null)}
-              className="w-full py-2.5 bg-[#102A43] text-white rounded-xl text-xs font-bold cursor-pointer"
+              className="w-full py-3 min-h-[44px] bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-sm"
             >
               Close Document Review
             </button>

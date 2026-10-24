@@ -86,19 +86,19 @@ export default function BookingSheet({
   const hasStatutoryDiscount = commuter.discountCategory !== 'NONE';
 
   return (
-    <div className="bg-white rounded-3xl shadow-xl border border-slate-200/90 p-5 space-y-4">
+    <div className="bg-white rounded-2xl sm:rounded-3xl shadow-xl border border-slate-200/90 p-3.5 sm:p-5 space-y-3.5 sm:space-y-4">
       {/* Student Discount Highlight Banner */}
       {isStudent && (
-        <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-between text-xs text-blue-900 shadow-2xs">
+        <div className="p-2.5 bg-blue-50 border border-blue-200 rounded-2xl flex items-center justify-between text-xs text-blue-900 shadow-2xs gap-2">
           <div className="flex items-center gap-2 min-w-0">
             <div className="w-6 h-6 rounded-lg bg-blue-600 text-white flex items-center justify-center shrink-0">
               <Sparkles className="w-3.5 h-3.5 text-blue-100" />
             </div>
-            <div className="truncate">
-              <span className="font-extrabold text-[11px] block leading-tight text-blue-950">
+            <div className="min-w-0">
+              <span className="font-extrabold text-[11px] block leading-tight text-blue-950 truncate">
                 Verified Student Account
               </span>
-              <span className="text-[10px] text-blue-700 font-medium">
+              <span className="text-[10px] text-blue-700 font-medium truncate block">
                 20% discount applied under RA 10642
               </span>
             </div>
@@ -258,8 +258,8 @@ export default function BookingSheet({
 
           {/* Highlighted Student / Senior / PWD Discount Pill */}
           {hasStatutoryDiscount && (
-            <div className="p-2 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between text-[11px] text-blue-900">
-              <div className="flex items-center gap-1.5 truncate">
+            <div className="p-2 bg-blue-50 border border-blue-200 rounded-xl flex items-center justify-between text-[11px] text-blue-900 gap-2">
+              <div className="flex items-center gap-1.5 min-w-0">
                 <Sparkles className="w-3.5 h-3.5 text-blue-600 shrink-0" />
                 <span className="font-bold truncate">
                   {commuter.discountCategory === 'STUDENT'
@@ -287,7 +287,7 @@ export default function BookingSheet({
 
           <div className="flex items-center gap-1.5 text-[10px] text-slate-400 pt-1">
             <Info className="w-3 h-3 text-slate-400 shrink-0" />
-            <span>Audited under {farePolicy.sourceOrdinance} (San Jose de Buenavista)</span>
+            <span className="truncate">Audited under {farePolicy.sourceOrdinance} (San Jose de Buenavista)</span>
           </div>
         </div>
       )}
@@ -303,7 +303,7 @@ export default function BookingSheet({
         type="button"
         onClick={handleRequest}
         disabled={isSubmitting || !selectedDestination}
-        className={`w-full py-3.5 px-4 rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99] ${
+        className={`w-full py-3.5 px-4 min-h-[48px] rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99] ${
           !selectedDestination
             ? 'bg-slate-200 text-slate-400 cursor-not-allowed'
             : 'bg-blue-600 hover:bg-blue-700 text-white'

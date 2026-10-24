@@ -110,15 +110,15 @@ export default function ProfileSettingsModal({ isOpen, onClose }: ProfileSetting
   };
 
   return (
-    <div className="fixed inset-0 z-50 flex items-center justify-center p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
-      <div className="bg-white rounded-3xl p-6 max-w-lg w-full space-y-5 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
+    <div className="fixed inset-0 z-50 flex items-center justify-center p-3 sm:p-4 bg-slate-900/60 backdrop-blur-xs animate-in fade-in">
+      <div className="bg-white rounded-3xl p-4 sm:p-6 max-w-lg w-full space-y-4 sm:space-y-5 border border-slate-200 shadow-2xl max-h-[90vh] overflow-y-auto">
         {/* Header */}
         <div className="flex items-center justify-between pb-3 border-b border-slate-100">
           <div>
             <span className="text-[10px] font-black uppercase tracking-wider text-blue-600 block">
               AntiqueRide Profile
             </span>
-            <h3 className="font-extrabold text-lg text-slate-900">
+            <h3 className="font-extrabold text-base sm:text-lg text-slate-900">
               Account Settings & Identity
             </h3>
           </div>
@@ -132,7 +132,7 @@ export default function ProfileSettingsModal({ isOpen, onClose }: ProfileSetting
 
         {/* Profile Photo Upload Section */}
         <div className="flex flex-col sm:flex-row items-center gap-4 p-4 bg-blue-50/70 border border-blue-100 rounded-2xl">
-          <div className="relative group">
+          <div className="relative group shrink-0">
             <div className="w-20 h-20 rounded-2xl bg-blue-600 text-white flex items-center justify-center text-2xl font-bold shadow-md overflow-hidden border-2 border-white">
               {previewPhoto ? (
                 <img
@@ -190,17 +190,17 @@ export default function ProfileSettingsModal({ isOpen, onClose }: ProfileSetting
 
         {/* Student Discount Highlight Banner (for Commuters) */}
         {!isDriver && (
-          <div className="p-3.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl shadow-sm flex items-center justify-between">
-            <div className="space-y-0.5">
+          <div className="p-3.5 bg-gradient-to-r from-blue-500 to-indigo-600 text-white rounded-2xl shadow-sm flex flex-col sm:flex-row sm:items-center justify-between gap-2.5">
+            <div className="space-y-0.5 min-w-0">
               <div className="flex items-center gap-1.5 text-xs font-black tracking-wide uppercase">
-                <Sparkles className="w-4 h-4 text-amber-300" />
+                <Sparkles className="w-4 h-4 text-amber-300 shrink-0" />
                 <span>20% Statutory Discount</span>
               </div>
-              <p className="text-[11px] text-blue-100">
+              <p className="text-[11px] text-blue-100 leading-relaxed">
                 Mandatory discount under RA 10642 (Student) / RA 9994 (Senior) / RA 9442 (PWD).
               </p>
             </div>
-            <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-white text-blue-700 shadow-xs">
+            <span className="text-[11px] font-black px-2.5 py-1 rounded-xl bg-white text-blue-700 shadow-xs self-start sm:self-center shrink-0">
               {commuter.discountCategory === 'STUDENT'
                 ? 'Student Active'
                 : commuter.discountCategory === 'SENIOR'

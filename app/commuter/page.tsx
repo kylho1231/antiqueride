@@ -31,8 +31,7 @@ const AntiqueMap = dynamic(() => import('@/components/map/AntiqueMap'), {
   ssr: false,
   loading: () => (
     <div
-      style={{ height: '480px', minHeight: '480px', width: '100%' }}
-      className="rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-semibold animate-pulse border border-slate-200"
+      className="h-[360px] sm:h-[480px] w-full rounded-2xl bg-slate-50 flex items-center justify-center text-slate-400 text-xs font-semibold animate-pulse border border-slate-200"
     >
       Loading OpenStreetMap GIS for San Jose de Buenavista...
     </div>
@@ -68,18 +67,19 @@ export default function CommuterPage() {
 
   return (
     <AuthGuard allowedRoles={['COMMUTER']}>
-      <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
+      <div className="max-w-7xl mx-auto px-3 sm:px-6 lg:px-8 py-4 sm:py-6 space-y-4 sm:space-y-6">
         {/* Top Greeting & Profile Header */}
-        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4 bg-white p-5 rounded-3xl border border-slate-200 shadow-xs">
-          <div className="flex items-center gap-3.5">
+        <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3.5 bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-xs">
+          <div className="flex items-center gap-3">
             {/* User Photo Avatar with clickable settings */}
             <button
               type="button"
               onClick={() => setShowProfileModal(true)}
-              className="relative group cursor-pointer"
+              className="relative group cursor-pointer shrink-0"
               title="Click to update your photo and details"
+              aria-label="Update profile photo and settings"
             >
-              <div className="w-14 h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-xl overflow-hidden border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-blue-500 transition-all">
+              <div className="w-12 h-12 sm:w-14 sm:h-14 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-bold text-lg sm:text-xl overflow-hidden border-2 border-white shadow-sm group-hover:ring-2 group-hover:ring-blue-500 transition-all">
                 {commuter.avatarUrl || currentUser?.avatarUrl ? (
                   <img
                     src={commuter.avatarUrl || currentUser?.avatarUrl}
@@ -95,41 +95,41 @@ export default function CommuterPage() {
               </div>
             </button>
 
-            <div>
-              <div className="flex flex-wrap items-center gap-2">
-                <h1 className="font-extrabold text-lg text-slate-900">
+            <div className="min-w-0">
+              <div className="flex flex-wrap items-center gap-1.5 sm:gap-2">
+                <h1 className="font-extrabold text-base sm:text-lg text-slate-900 truncate">
                   Maayong adlaw, {commuter.fullName}!
                 </h1>
 
                 {/* Highlighted Student Discount Pill */}
                 {isStudent ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200 shrink-0">
                     <Sparkles className="w-3 h-3 text-blue-600" />
                     <span>Verified Student (20% Discount)</span>
                   </span>
                 ) : commuter.discountCategory === 'SENIOR' || commuter.discountCategory === 'PWD' ? (
-                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200">
+                  <span className="inline-flex items-center gap-1 text-[11px] font-black px-2.5 py-0.5 rounded-full bg-blue-100 text-blue-900 border border-blue-200 shrink-0">
                     <ShieldCheck className="w-3 h-3 text-blue-600" />
                     <span>Verified {commuter.discountCategory} (20% Discount)</span>
                   </span>
                 ) : (
                   <button
                     onClick={() => setShowProfileModal(true)}
-                    className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 cursor-pointer transition-colors"
+                    className="inline-flex items-center gap-1 text-[10px] font-bold px-2 py-0.5 rounded-full bg-amber-50 text-amber-800 border border-amber-200 hover:bg-amber-100 cursor-pointer transition-colors shrink-0"
                   >
                     <span>Upload Student/Gov ID for 20% Discount</span>
                   </button>
                 )}
               </div>
 
-              <p className="text-xs text-slate-500 mt-0.5">
+              <p className="text-xs text-slate-500 mt-0.5 truncate">
                 Operating Zone: <span className="font-semibold text-slate-800">San Jose de Buenavista, Antique</span>
               </p>
             </div>
           </div>
 
           {/* Quick Action Controls */}
-          <div className="flex items-center gap-2.5">
+          <div className="flex items-center gap-2 sm:gap-2.5 self-start sm:self-auto">
             <div className="flex items-center gap-2 px-3 py-1.5 rounded-2xl bg-blue-50 border border-blue-200 text-xs font-bold text-blue-900">
               <span className="w-2 h-2 rounded-full bg-blue-600 animate-pulse"></span>
               <span>{onlineDriversCount} Tricycles Available</span>
@@ -137,8 +137,9 @@ export default function CommuterPage() {
 
             <button
               onClick={() => setShowProfileModal(true)}
-              className="p-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
+              className="p-2 sm:px-3 sm:py-2 bg-slate-100 hover:bg-slate-200 text-slate-700 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors min-h-[38px]"
               title="Account Settings & Photo"
+              aria-label="Account Settings"
             >
               <Settings className="w-4 h-4 text-blue-600" />
               <span className="hidden sm:inline">Settings</span>
@@ -147,21 +148,21 @@ export default function CommuterPage() {
         </div>
 
         {/* Main Grid: Interactive Map + Booking / Active Ride Flow */}
-        <div className="grid grid-cols-1 lg:grid-cols-12 gap-6">
+        <div className="grid grid-cols-1 lg:grid-cols-12 gap-4 sm:gap-6">
           {/* Left Column: Interactive Map & Terminals (7 cols) */}
           <div className="lg:col-span-7 space-y-4">
-            <div className="bg-white p-4 rounded-3xl border border-slate-200 shadow-sm space-y-3">
-              <div className="flex items-center justify-between">
-                <div className="flex items-center gap-2">
-                  <Compass className="w-4 h-4 text-blue-600" />
-                  <span className="font-extrabold text-sm text-slate-900">
+            <div className="bg-white p-3.5 sm:p-4 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-3">
+              <div className="flex items-center justify-between gap-2 flex-wrap sm:flex-nowrap">
+                <div className="flex items-center gap-2 min-w-0">
+                  <Compass className="w-4 h-4 text-blue-600 shrink-0" />
+                  <span className="font-extrabold text-sm text-slate-900 truncate">
                     San Jose de Buenavista Live Transit Map
                   </span>
                 </div>
-                <div className="flex gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold">
+                <div className="flex gap-1 bg-slate-100 p-1 rounded-xl text-xs font-bold shrink-0">
                   <button
                     onClick={() => setActiveTab('MAP')}
-                    className={`px-3 py-1 rounded-lg cursor-pointer transition-all ${
+                    className={`px-3 py-1.5 min-h-[36px] rounded-lg cursor-pointer transition-all ${
                       activeTab === 'MAP' ? 'bg-white shadow-2xs text-blue-700' : 'text-slate-500'
                     }`}
                   >
@@ -169,7 +170,7 @@ export default function CommuterPage() {
                   </button>
                   <button
                     onClick={() => setActiveTab('TERMINALS')}
-                    className={`px-3 py-1 rounded-lg cursor-pointer transition-all ${
+                    className={`px-3 py-1.5 min-h-[36px] rounded-lg cursor-pointer transition-all ${
                       activeTab === 'TERMINALS' ? 'bg-white shadow-2xs text-blue-700' : 'text-slate-500'
                     }`}
                   >
@@ -178,25 +179,25 @@ export default function CommuterPage() {
                 </div>
               </div>
 
-              {/* Leaflet Map with Explicit Inline 480px Height */}
-              <div style={{ height: '480px', minHeight: '480px', width: '100%' }}>
+              {/* Leaflet Map with Responsive Container Height */}
+              <div className="w-full h-[360px] sm:h-[480px]">
                 <AntiqueMap
                   center={DEFAULT_MAP_CENTER}
                   terminals={terminals}
                   drivers={drivers}
                   pickupCoords={selectedPickup.coords}
                   destinationCoords={selectedDestination?.coords || null}
-                  className="rounded-2xl border border-slate-200 overflow-hidden shadow-xs"
+                  className="rounded-2xl border border-slate-200 overflow-hidden shadow-xs h-full w-full"
                 />
               </div>
 
               {/* Map Footer Helper */}
               <div className="p-3 bg-slate-50 border border-slate-200 rounded-2xl flex flex-col sm:flex-row sm:items-center justify-between text-xs text-slate-600 gap-2">
-                <div className="flex items-center gap-2">
+                <div className="flex items-center gap-2 min-w-0">
                   <MapPin className="w-4 h-4 text-blue-600 shrink-0" />
                   <span className="truncate">Click any terminal pin on the map to set destination.</span>
                 </div>
-                <div className="flex items-center gap-3 text-[11px] text-slate-500">
+                <div className="flex items-center gap-3 text-[11px] text-slate-500 shrink-0">
                   <span className="flex items-center gap-1 font-semibold text-slate-700">
                     <span className="w-2.5 h-2.5 rounded-full bg-blue-600 inline-block"></span>
                     <span>TODA Station</span>
@@ -210,7 +211,7 @@ export default function CommuterPage() {
             </div>
 
             {/* Verified Terminals Grid */}
-            <div className="bg-white p-5 rounded-3xl border border-slate-200 shadow-sm space-y-3">
+            <div className="bg-white p-4 sm:p-5 rounded-2xl sm:rounded-3xl border border-slate-200 shadow-sm space-y-3">
               <h3 className="font-extrabold text-sm text-slate-900 flex items-center justify-between">
                 <span>Verified TODA Tricycle Stations in San Jose</span>
                 <span className="text-xs text-blue-700 font-semibold">Authorized Terminals</span>
@@ -223,7 +224,7 @@ export default function CommuterPage() {
                       key={t.id}
                       type="button"
                       onClick={() => handleSelectTerminal(t)}
-                      className="p-3 rounded-2xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 text-left cursor-pointer transition-all flex flex-col justify-between"
+                      className="p-3 rounded-2xl border border-slate-200 hover:border-blue-300 hover:bg-blue-50/50 text-left cursor-pointer transition-all flex flex-col justify-between min-h-[44px]"
                     >
                       <div>
                         <div className="flex items-center justify-between">

@@ -244,12 +244,13 @@ export default function Navbar() {
 
                 {/* Notifications Dropdown Panel */}
                 {showNotifications && (
-                  <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2">
+                  <div className="fixed inset-x-3 top-16 sm:inset-auto sm:right-0 sm:top-auto sm:mt-2 sm:w-96 bg-white rounded-2xl shadow-2xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2">
                     <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
                       <span className="font-bold text-sm text-slate-900">Live Activity & Alerts</span>
                       <button
                         onClick={() => setShowNotifications(false)}
-                        className="text-slate-400 hover:text-slate-600 cursor-pointer"
+                        className="p-1 text-slate-400 hover:text-slate-600 rounded-lg cursor-pointer"
+                        aria-label="Close notifications"
                       >
                         <X className="w-4 h-4" />
                       </button>
@@ -263,7 +264,7 @@ export default function Navbar() {
                       ) : (
                         notifications.map((n) => (
                           <div key={n.id} className="p-3 hover:bg-slate-50 transition-colors flex items-start gap-2.5">
-                            <div className="mt-0.5">
+                            <div className="mt-0.5 shrink-0">
                               {n.type === 'success' ? (
                                 <CheckCircle2 className="w-4 h-4 text-blue-600" />
                               ) : n.type === 'warning' ? (
@@ -273,15 +274,16 @@ export default function Navbar() {
                               )}
                             </div>
                             <div className="flex-1 min-w-0">
-                              <div className="flex items-center justify-between">
-                                <h5 className="font-bold text-xs text-slate-800">{n.title}</h5>
-                                <span className="text-[10px] text-slate-400">{n.timestamp}</span>
+                              <div className="flex items-center justify-between gap-1">
+                                <h5 className="font-bold text-xs text-slate-800 truncate">{n.title}</h5>
+                                <span className="text-[10px] text-slate-400 shrink-0">{n.timestamp}</span>
                               </div>
-                              <p className="text-[11px] text-slate-600 mt-0.5">{n.message}</p>
+                              <p className="text-[11px] text-slate-600 mt-0.5 break-words">{n.message}</p>
                             </div>
                             <button
                               onClick={() => clearNotification(n.id)}
-                              className="text-slate-300 hover:text-slate-500 cursor-pointer"
+                              className="p-1 text-slate-300 hover:text-slate-500 cursor-pointer shrink-0"
+                              aria-label="Dismiss notification"
                             >
                               <X className="w-3.5 h-3.5" />
                             </button>
