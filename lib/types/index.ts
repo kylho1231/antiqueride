@@ -5,6 +5,7 @@ export interface AuthUser {
   email: string;
   phone?: string;
   fullName: string;
+  legalName?: string;
   role: Role;
   avatarUrl?: string;
   driverId?: string;
@@ -99,11 +100,13 @@ export interface CommuterProfile {
   id: string;
   userId: string;
   fullName: string;
+  legalName?: string;
+  avatarUrl?: string;
   email: string;
   phone: string;
   isPhoneVerified: boolean;
   verificationStatus: VerificationStatus;
-  idDocumentType?: 'STUDENT_ID' | 'GOVERNMENT_ID' | 'VOTERS_ID';
+  idDocumentType?: 'STUDENT_ID' | 'GOVERNMENT_ID' | 'VOTERS_ID' | 'PHILSYS_ID' | 'SENIOR_ID' | 'PWD_ID' | 'DRIVERS_LICENSE';
   idDocumentUrl?: string;
   discountCategory: 'NONE' | 'STUDENT' | 'SENIOR' | 'PWD';
   emergencyContactName?: string;
@@ -115,8 +118,12 @@ export interface DriverProfile {
   id: string;
   userId: string;
   fullName: string;
+  legalName?: string;
+  avatarUrl?: string;
   phone: string;
   email: string;
+  governmentIdType?: string;
+  governmentIdUrl?: string;
   licenseNumber: string;
   licenseClassification: string;
   licenseExpiry: string;

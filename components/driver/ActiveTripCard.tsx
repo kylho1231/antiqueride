@@ -57,16 +57,16 @@ export default function ActiveTripCard() {
       {/* Header */}
       <div className="flex items-center justify-between pb-3 border-b border-slate-100">
         <div>
-          <span className="text-[10px] uppercase font-bold tracking-wider text-emerald-800 bg-emerald-100 px-2.5 py-0.5 rounded-full">
+          <span className="text-[10px] uppercase font-bold tracking-wider text-blue-800 bg-blue-100 px-2.5 py-0.5 rounded-full">
             Active Assignment • Unit #{activeDriver.bodyNumber}
           </span>
-          <h4 className="font-extrabold text-sm text-[#102A43] mt-1">
+          <h4 className="font-extrabold text-sm text-slate-900 mt-1">
             Trip to {activeRide.destinationName}
           </h4>
         </div>
         <div className="text-right">
           <span className="text-[10px] text-slate-400">Total Fare</span>
-          <div className="text-base font-black text-emerald-800">
+          <div className="text-base font-black text-blue-600">
             {formatCurrency(activeRide.fareAmount)}
           </div>
         </div>
@@ -122,12 +122,12 @@ export default function ActiveTripCard() {
       )}
 
       {activeRide.status === 'ARRIVED' && (
-        <div className="p-4 bg-emerald-50 border border-emerald-200 rounded-2xl space-y-3">
-          <div className="flex items-center gap-2 text-xs font-bold text-emerald-950">
-            <KeyRound className="w-4 h-4 text-emerald-700" />
+        <div className="p-4 bg-blue-50 border border-blue-200 rounded-2xl space-y-3">
+          <div className="flex items-center gap-2 text-xs font-bold text-slate-900">
+            <KeyRound className="w-4 h-4 text-blue-600" />
             <span>Verify Passenger Pickup PIN</span>
           </div>
-          <p className="text-[11px] text-emerald-800">
+          <p className="text-[11px] text-slate-600">
             Ask passenger for the 4-digit code shown on their AntiqueRide app to verify passenger match.
           </p>
 
@@ -138,11 +138,11 @@ export default function ActiveTripCard() {
               value={enteredPin}
               onChange={(e) => setEnteredPin(e.target.value)}
               placeholder="e.g. 4821"
-              className="w-32 text-center text-lg font-mono font-bold tracking-widest bg-white border border-emerald-300 rounded-xl px-3 py-2 text-slate-800 focus:outline-emerald-600"
+              className="w-32 text-center text-lg font-mono font-bold tracking-widest bg-white border border-blue-300 rounded-xl px-3 py-2 text-slate-800 focus:outline-blue-600"
             />
             <button
               type="submit"
-              className="flex-1 py-2 px-4 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-xs"
+              className="flex-1 py-2 px-4 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold cursor-pointer transition-colors shadow-xs"
             >
               Verify & Start Trip
             </button>
@@ -159,17 +159,17 @@ export default function ActiveTripCard() {
 
       {(activeRide.status === 'PASSENGER_VERIFIED' || activeRide.status === 'TRIP_STARTED') && (
         <div className="space-y-3">
-          <div className="p-3 bg-emerald-100/70 border border-emerald-300 rounded-2xl text-xs text-emerald-950 flex items-center gap-2">
-            <CheckCircle2 className="w-4 h-4 text-emerald-700 shrink-0" />
+          <div className="p-3 bg-blue-50 border border-blue-200 rounded-2xl text-xs text-blue-900 flex items-center gap-2">
+            <CheckCircle2 className="w-4 h-4 text-blue-600 shrink-0" />
             <span>Passenger Verified. Driving to {activeRide.destinationName}...</span>
           </div>
 
           <button
             type="button"
             onClick={() => completeTrip(activeRide.id)}
-            className="w-full py-4 bg-[#102A43] hover:bg-slate-900 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all active:scale-[0.99]"
+            className="w-full py-4 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl text-xs font-black flex items-center justify-center gap-2 cursor-pointer shadow-lg transition-all active:scale-[0.99]"
           >
-            <CheckCircle2 className="w-4 h-4 text-[#F5B301]" />
+            <CheckCircle2 className="w-4 h-4 text-white" />
             <span>Complete Trip & Collect Cash ({formatCurrency(activeRide.fareAmount)})</span>
           </button>
         </div>

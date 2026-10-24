@@ -108,8 +108,8 @@ export default function AntiqueMap({
         terminals.forEach((t) => {
           const isPhase2 = t.status === 'FIELD_VERIFICATION_PENDING';
           const iconHtml = `
-            <div style="background-color: ${isPhase2 ? '#64748B' : '#087F5B'}; color: white; padding: 4px 8px; border-radius: 9999px; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.25); white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer;">
-              <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#F5B301;"></span>
+            <div style="background-color: ${isPhase2 ? '#64748B' : '#2563EB'}; color: white; padding: 4px 8px; border-radius: 9999px; font-size: 11px; font-weight: bold; border: 2px solid white; box-shadow: 0 4px 6px -1px rgba(0,0,0,0.25); white-space: nowrap; display: flex; align-items: center; gap: 4px; cursor: pointer;">
+              <span style="display:inline-block; width:6px; height:6px; border-radius:50%; background:#93C5FD;"></span>
               ${t.todaName}
             </div>
           `;
@@ -125,15 +125,15 @@ export default function AntiqueMap({
 
           const popupContent = `
             <div style="font-family: system-ui, sans-serif; padding: 2px; max-width: 220px;">
-              <div style="font-size: 10px; color: #087F5B; font-weight: bold; text-transform: uppercase;">
+              <div style="font-size: 10px; color: #2563EB; font-weight: bold; text-transform: uppercase;">
                 ${t.municipality} • ${t.queueMode === 'PILA' ? 'Queue Pila Mode' : 'On-Demand Dispatch'}
               </div>
-              <h4 style="margin: 3px 0; font-size: 14px; font-weight: 700; color: #102A43;">${t.name}</h4>
+              <h4 style="margin: 3px 0; font-size: 14px; font-weight: 700; color: #0F172A;">${t.name}</h4>
               <p style="margin: 0 0 6px 0; font-size: 11px; color: #64748B;">${t.barangay}</p>
               <div style="font-size: 11px; background: #F1F5F9; padding: 4px 6px; border-radius: 4px;">
                 <strong>Capacity:</strong> ${t.currentQueueCount} / ${t.capacity} tricycles
               </div>
-              ${isPhase2 ? '<div style="margin-top:4px; font-size:10px; color:#D92D20; font-weight:bold;">Phase 2 candidate (Field verification pending)</div>' : ''}
+              ${isPhase2 ? '<div style="margin-top:4px; font-size:10px; color:#DC2626; font-weight:bold;">Phase 2 candidate (Field verification pending)</div>' : ''}
             </div>
           `;
 
@@ -151,17 +151,17 @@ export default function AntiqueMap({
           if (!d.isOnline || !d.currentCoordinates) return;
           const stale = isGpsStale(d.lastGpsUpdate);
 
-          let badgeColor = '#087F5B'; // available
+          let badgeColor = '#2563EB'; // available (blue)
           if (stale) badgeColor = '#64748B'; // stale
-          else if (d.availability === 'ON_TRIP') badgeColor = '#F5B301'; // on trip
-          else if (d.availability === 'RESERVED' || d.availability === 'ARRIVING') badgeColor = '#3B82F6';
+          else if (d.availability === 'ON_TRIP') badgeColor = '#F59E0B'; // on trip
+          else if (d.availability === 'RESERVED' || d.availability === 'ARRIVING') badgeColor = '#0284C7';
 
           const driverHtml = `
             <div style="position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer;">
               <div style="background-color: ${badgeColor}; color: white; border: 2px solid white; border-radius: 50%; width: 34px; height: 34px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 10px rgba(0,0,0,0.3); font-size: 16px;">
                 🛺
               </div>
-              <div style="background-color: #102A43; color: #F5B301; font-size: 9px; font-weight: bold; padding: 1px 4px; border-radius: 4px; margin-top: -6px; border: 1px solid white; white-space: nowrap;">
+              <div style="background-color: #0F172A; color: #93C5FD; font-size: 9px; font-weight: bold; padding: 1px 4px; border-radius: 4px; margin-top: -6px; border: 1px solid white; white-space: nowrap;">
                 ${d.bodyNumber}
               </div>
             </div>
@@ -180,10 +180,10 @@ export default function AntiqueMap({
 
           marker.bindPopup(`
             <div style="font-family: system-ui, sans-serif; padding: 2px;">
-              <div style="font-weight:bold; color: #102A43; font-size: 13px;">${d.fullName}</div>
-              <div style="font-size: 11px; color: #087F5B; font-weight:600;">Unit: ${d.bodyNumber} (${d.todaName})</div>
+              <div style="font-weight:bold; color: #0F172A; font-size: 13px;">${d.fullName}</div>
+              <div style="font-size: 11px; color: #2563EB; font-weight:600;">Unit: ${d.bodyNumber} (${d.todaName})</div>
               <div style="font-size: 11px; color: #64748B;">Plate: ${d.vehiclePlate} • Rating: ⭐ ${d.rating}</div>
-              <div style="margin-top: 4px; font-size: 10px; color: ${stale ? '#D92D20' : '#10B981'}; font-weight:bold;">
+              <div style="margin-top: 4px; font-size: 10px; color: ${stale ? '#DC2626' : '#2563EB'}; font-weight:bold;">
                 ${stale ? '⚠️ Stale GPS (>45s inactive)' : '● Active Live GPS Telemetry'}
               </div>
             </div>
@@ -196,7 +196,7 @@ export default function AntiqueMap({
       // Pickup Pin
       if (pickupCoords) {
         const pickupHtml = `
-          <div style="background-color: #087F5B; color: white; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); width: 28px; height: 28px; border: 2px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
+          <div style="background-color: #2563EB; color: white; border-radius: 50% 50% 50% 0; transform: rotate(-45deg); width: 28px; height: 28px; border: 2px solid white; box-shadow: 0 4px 8px rgba(0,0,0,0.3); display: flex; align-items: center; justify-content: center;">
             <div style="transform: rotate(45deg); font-size: 10px; font-weight: bold;">P</div>
           </div>
         `;
@@ -236,9 +236,9 @@ export default function AntiqueMap({
           [destinationCoords.lat, destinationCoords.lng],
         ];
         L.polyline(latLngs as any, {
-          color: '#087F5B',
+          color: '#2563EB',
           weight: 4,
-          opacity: 0.8,
+          opacity: 0.85,
           dashArray: '8, 8',
         }).addTo(routeLayer);
 
@@ -273,8 +273,8 @@ export default function AntiqueMap({
       {/* Top Floating GIS Telemetry Badge */}
       <div className="absolute top-3 left-3 z-20 flex flex-wrap items-center gap-2 pointer-events-none">
         <div className="bg-white/95 backdrop-blur-md px-3 py-1.5 rounded-xl shadow-md border border-slate-200 flex items-center gap-2 pointer-events-auto">
-          <span className="w-2.5 h-2.5 rounded-full bg-emerald-500 animate-pulse"></span>
-          <span className="text-[11px] font-black text-[#102A43] tracking-wide">
+          <span className="w-2.5 h-2.5 rounded-full bg-blue-600 animate-pulse"></span>
+          <span className="text-[11px] font-black text-slate-900 tracking-wide">
             LIVE GIS MAP
           </span>
           <span className="text-[10px] font-mono text-slate-500 hidden sm:inline">
@@ -282,8 +282,8 @@ export default function AntiqueMap({
           </span>
         </div>
 
-        <div className="bg-[#102A43]/90 text-white px-2.5 py-1.5 rounded-xl shadow-md text-[10px] font-bold flex items-center gap-1.5 pointer-events-auto hidden sm:flex">
-          <Radio className="w-3 h-3 text-[#F5B301]" />
+        <div className="bg-blue-600/90 text-white px-2.5 py-1.5 rounded-xl shadow-md text-[10px] font-bold flex items-center gap-1.5 pointer-events-auto hidden sm:flex">
+          <Radio className="w-3 h-3 text-blue-200" />
           <span>{onlineDriversCount} Tricycles Active</span>
         </div>
       </div>
@@ -295,7 +295,7 @@ export default function AntiqueMap({
         className="absolute top-3 right-3 z-20 bg-white/95 hover:bg-white text-slate-800 text-xs font-bold px-3 py-1.5 rounded-xl shadow-md border border-slate-200 cursor-pointer flex items-center gap-1.5 transition-all hover:scale-105 active:scale-95"
         title="Re-center on San Jose Plaza & Municipal Hall"
       >
-        <Navigation2 className="w-3.5 h-3.5 text-emerald-700" />
+        <Navigation2 className="w-3.5 h-3.5 text-blue-600" />
         <span>Center Plaza</span>
       </button>
 

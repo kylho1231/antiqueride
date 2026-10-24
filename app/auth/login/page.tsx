@@ -135,10 +135,11 @@ function LoginForm() {
       <div className="bg-white rounded-3xl p-6 sm:p-8 border border-slate-200 shadow-xl space-y-5">
         {/* Header */}
         <div className="text-center space-y-2">
-          <div className="w-12 h-12 rounded-2xl bg-[#087F5B] text-white flex items-center justify-center font-black text-2xl mx-auto shadow-md">
-            <span className="text-[#F5B301]">A</span>R
+          <div className="w-12 h-12 rounded-2xl bg-blue-600 text-white flex items-center justify-center font-black text-2xl mx-auto shadow-md">
+            <span>A</span>
+            <span className="text-blue-200">R</span>
           </div>
-          <h1 className="text-xl font-extrabold text-[#102A43]">Sign in to AntiqueRide</h1>
+          <h1 className="text-xl font-extrabold text-slate-900">Sign in to AntiqueRide</h1>
           <p className="text-xs text-slate-500">
             Please log in with your authorized account role
           </p>
@@ -150,7 +151,7 @@ function LoginForm() {
             type="button"
             onClick={() => setTargetRole('COMMUTER')}
             className={`flex-1 py-2 text-xs font-bold rounded-xl cursor-pointer transition-all ${
-              targetRole === 'COMMUTER' ? 'bg-[#087F5B] text-white shadow-xs' : 'text-slate-600'
+              targetRole === 'COMMUTER' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600'
             }`}
           >
             Commuter
@@ -159,7 +160,7 @@ function LoginForm() {
             type="button"
             onClick={() => setTargetRole('DRIVER')}
             className={`flex-1 py-2 text-xs font-bold rounded-xl cursor-pointer transition-all ${
-              targetRole === 'DRIVER' ? 'bg-[#102A43] text-white shadow-xs' : 'text-slate-600'
+              targetRole === 'DRIVER' ? 'bg-blue-600 text-white shadow-xs' : 'text-slate-600'
             }`}
           >
             Driver
@@ -168,7 +169,7 @@ function LoginForm() {
             type="button"
             onClick={() => setTargetRole('SUPER_ADMIN')}
             className={`flex-1 py-2 text-xs font-bold rounded-xl cursor-pointer transition-all ${
-              targetRole === 'SUPER_ADMIN' ? 'bg-amber-600 text-white shadow-xs' : 'text-slate-600'
+              targetRole === 'SUPER_ADMIN' ? 'bg-blue-900 text-white shadow-xs' : 'text-slate-600'
             }`}
           >
             Super Admin
@@ -186,10 +187,10 @@ function LoginForm() {
             disabled={isLoading}
             className={`w-full py-2.5 px-3 rounded-xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer transition-all shadow-xs text-white ${
               targetRole === 'COMMUTER'
-                ? 'bg-[#087F5B] hover:bg-emerald-700'
+                ? 'bg-blue-600 hover:bg-blue-700'
                 : targetRole === 'DRIVER'
-                ? 'bg-[#102A43] hover:bg-slate-900'
-                : 'bg-amber-600 hover:bg-amber-700'
+                ? 'bg-blue-800 hover:bg-blue-900'
+                : 'bg-slate-800 hover:bg-slate-900'
             }`}
           >
             <CheckCircle className="w-3.5 h-3.5" />
@@ -217,7 +218,7 @@ function LoginForm() {
             onClick={() => setAuthMethod('PHONE_OTP')}
             className={`flex-1 pb-2 font-bold cursor-pointer transition-colors ${
               authMethod === 'PHONE_OTP'
-                ? 'border-b-2 border-emerald-600 text-emerald-800'
+                ? 'border-b-2 border-blue-600 text-blue-700'
                 : 'text-slate-400'
             }`}
           >
@@ -228,7 +229,7 @@ function LoginForm() {
             onClick={() => setAuthMethod('EMAIL')}
             className={`flex-1 pb-2 font-bold cursor-pointer transition-colors ${
               authMethod === 'EMAIL'
-                ? 'border-b-2 border-emerald-600 text-emerald-800'
+                ? 'border-b-2 border-blue-600 text-blue-700'
                 : 'text-slate-400'
             }`}
           >
@@ -253,7 +254,7 @@ function LoginForm() {
                 {!otpSent && (
                   <button
                     type="submit"
-                    className="px-4 py-2.5 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl font-bold cursor-pointer transition-colors"
+                    className="px-4 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold cursor-pointer transition-colors"
                   >
                     Send OTP
                   </button>
@@ -266,7 +267,7 @@ function LoginForm() {
                 <div>
                   <div className="flex justify-between items-center mb-1">
                     <label className="font-bold text-slate-700">Enter 6-Digit OTP</label>
-                    <span className="text-[10px] text-emerald-700 font-semibold">Sent to {phoneNumber}</span>
+                    <span className="text-[10px] text-blue-700 font-semibold">Sent to {phoneNumber}</span>
                   </div>
                   <input
                     type="text"
@@ -282,7 +283,7 @@ function LoginForm() {
                 <button
                   type="submit"
                   disabled={isLoading}
-                  className="w-full py-3 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-colors shadow-sm"
+                  className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-colors shadow-sm"
                 >
                   {isLoading ? 'Verifying...' : `Enter ${targetRole} Portal`}
                 </button>
@@ -316,7 +317,7 @@ function LoginForm() {
             <button
               type="submit"
               disabled={isLoading}
-              className="w-full py-3 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-colors shadow-sm"
+              className="w-full py-3 bg-blue-600 hover:bg-blue-700 text-white rounded-xl font-bold text-xs cursor-pointer transition-colors shadow-sm"
             >
               {isLoading ? 'Signing In...' : `Sign In as ${targetRole}`}
             </button>
@@ -325,7 +326,7 @@ function LoginForm() {
 
         <div className="text-center text-[11px] text-slate-500 pt-2 border-t border-slate-100">
           Need an account?{' '}
-          <Link href="/auth/register" className="font-bold text-emerald-800 hover:underline">
+          <Link href="/auth/register" className="font-bold text-blue-600 hover:underline">
             Register new account
           </Link>
         </div>

@@ -7,77 +7,106 @@ import { useAppState } from '@/lib/store/app-state';
 import {
   ShieldAlert,
   Bell,
-  Users,
-  Car,
-  ShieldCheck,
   CheckCircle2,
   X,
   LogOut,
   LogIn,
   UserPlus,
+  Settings,
+  Car,
   User,
 } from 'lucide-react';
 import SafetyModal from '@/components/safety/SafetyModal';
+import ProfileSettingsModal from '@/components/profile/ProfileSettingsModal';
 
 export default function Navbar() {
   const pathname = usePathname();
   const router = useRouter();
-  const { currentUser, logout, drivers, notifications, clearNotification } = useAppState();
+  const { currentUser, logout, notifications, clearNotification } = useAppState();
   const [showSafetyModal, setShowSafetyModal] = useState(false);
   const [showNotifications, setShowNotifications] = useState(false);
-
-  const onlineDriversCount = drivers.filter((d) => d.isOnline).length;
+  const [showProfileModal, setShowProfileModal] = useState(false);
 
   const handleLogout = () => {
     logout();
     router.push('/auth/login');
   };
 
+  const portalHome = currentUser
+    ? currentUser.role === 'COMMUTER'
+      ? '/commuter'
+      : currentUser.role === 'DRIVER'
+      ? '/driver'
+      : '/admin'
+    : '/';
+
   return (
     <>
       <header className="sticky top-0 z-40 bg-white/95 backdrop-blur-md border-b border-slate-200 shadow-xs">
         <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
           <div className="flex items-center justify-between h-16">
-            {/* Logo and Tagline */}
+            {/* Logo and Tagline (Strictly routes to authorized portal) */}
             <div className="flex items-center gap-3">
-              <Link href="/" className="flex items-center gap-2.5 group cursor-pointer">
-                <div className="w-10 h-10 rounded-xl bg-[#087F5B] flex items-center justify-center text-white font-black text-xl shadow-sm border border-emerald-700/20 group-hover:scale-105 transition-transform">
-                  <span className="text-[#F5B301]">A</span>R
+              <Link href={portalHome} className="flex items-center gap-2.5 group cursor-pointer">
+                <div className="w-10 h-10 rounded-xl bg-blue-600 flex items-center justify-center text-white font-black text-xl shadow-xs group-hover:bg-blue-700 transition-colors">
+                  <span className="text-white">A</span>
+                  <span className="text-blue-200">R</span>
                 </div>
                 <div>
                   <div className="flex items-center gap-1.5">
-                    <span className="font-extrabold text-lg tracking-tight text-[#102A43]">AntiqueRide</span>
-                    <span className="text-[10px] uppercase font-bold tracking-wider px-1.5 py-0.5 rounded-full bg-emerald-100 text-emerald-800 border border-emerald-200">
+                    <span className="font-extrabold text-lg tracking-tight text-slate-900">AntiqueRide</span>
+                    <span className="text-[10px] uppercase font-bold tracking-wider px-2 py-0.5 rounded-full bg-blue-50 text-blue-700 border border-blue-200">
                       San Jose
                     </span>
                   </div>
-                  <p className="text-[11px] text-slate-500 font-medium hidden sm:block">Your Ride. Your Antique.</p>
+                  <p className="text-[11px] text-slate-500 font-medium hidden sm:block">
+                    Your Ride. Your Antique.
+                  </p>
                 </div>
               </Link>
             </div>
 
-            {/* Authenticated Account Profile vs Sign In CTA (NO public role-switcher) */}
+            {/* Authenticated Account Profile vs Sign In CTA (NO cross-role switcher) */}
             <div className="flex items-center gap-2 sm:gap-3">
               {currentUser ? (
-                /* Authenticated User Banner */
+                /* Authenticated User Banner with Photo Avatar */
                 <div className="flex items-center gap-2 sm:gap-3">
-                  <div className="flex items-center gap-2 px-3 py-1.5 bg-slate-100 rounded-2xl border border-slate-200 text-xs">
-                    <div className="w-6 h-6 rounded-full bg-[#102A43] text-white flex items-center justify-center font-bold text-[10px]">
-                      {currentUser.role === 'DRIVER' ? '🛺' : currentUser.role === 'SUPER_ADMIN' ? '⚡' : '👤'}
+                  <button
+                    type="button"
+                    onClick={() => setShowProfileModal(true)}
+                    className="flex items-center gap-2 px-3 py-1.5 bg-slate-50 hover:bg-blue-50/70 rounded-2xl border border-slate-200 hover:border-blue-300 text-xs cursor-pointer transition-colors text-left"
+                    title="Open Account Profile & Photo Settings"
+                  >
+                    {/* User Avatar Photo */}
+                    <div className="w-7 h-7 rounded-full bg-blue-600 text-white flex items-center justify-center font-bold text-xs overflow-hidden border border-white shadow-2xs">
+                      {currentUser.avatarUrl ? (
+                        <img
+                          src={currentUser.avatarUrl}
+                          alt={currentUser.fullName}
+                          className="w-full h-full object-cover"
+                        />
+                      ) : currentUser.role === 'DRIVER' ? (
+                        <Car className="w-3.5 h-3.5" />
+                      ) : (
+                        <User className="w-3.5 h-3.5" />
+                      )}
                     </div>
-                    <div className="hidden sm:block text-left">
+
+                    <div className="hidden sm:block">
                       <span className="font-bold text-slate-900 block leading-tight truncate max-w-[120px]">
                         {currentUser.fullName}
                       </span>
-                      <span className="text-[10px] font-semibold text-emerald-800">
+                      <span className="text-[10px] font-semibold text-blue-700">
                         {currentUser.role === 'COMMUTER'
-                          ? 'Commuter Account'
+                          ? 'Commuter Portal'
                           : currentUser.role === 'DRIVER'
-                          ? `Unit #${currentUser.bodyNumber || '042'}`
+                          ? `Unit #${currentUser.bodyNumber || 'SJB-042'}`
                           : 'Super Admin'}
                       </span>
                     </div>
-                  </div>
+
+                    <Settings className="w-3.5 h-3.5 text-slate-400 hover:text-blue-600 ml-1 hidden sm:block" />
+                  </button>
 
                   {/* Sign Out Button */}
                   <button
@@ -96,13 +125,13 @@ export default function Navbar() {
                     href="/auth/login"
                     className="px-3.5 py-2 bg-slate-100 hover:bg-slate-200 text-slate-800 rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer transition-colors"
                   >
-                    <LogIn className="w-3.5 h-3.5" />
+                    <LogIn className="w-3.5 h-3.5 text-blue-600" />
                     <span>Sign In</span>
                   </Link>
 
                   <Link
                     href="/auth/register"
-                    className="px-3.5 py-2 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
+                    className="px-3.5 py-2 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-1.5 cursor-pointer shadow-xs transition-colors"
                   >
                     <UserPlus className="w-3.5 h-3.5" />
                     <span>Register</span>
@@ -129,7 +158,7 @@ export default function Navbar() {
                 >
                   <Bell className="w-5 h-5" />
                   {notifications.length > 0 && (
-                    <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-emerald-600 text-[10px] font-bold text-white flex items-center justify-center">
+                    <span className="absolute top-1 right-1 w-4 h-4 rounded-full bg-blue-600 text-[10px] font-bold text-white flex items-center justify-center">
                       {notifications.length}
                     </span>
                   )}
@@ -139,7 +168,7 @@ export default function Navbar() {
                 {showNotifications && (
                   <div className="absolute right-0 mt-2 w-80 sm:w-96 bg-white rounded-2xl shadow-xl border border-slate-200 py-2 z-50 animate-in fade-in slide-in-from-top-2">
                     <div className="px-4 py-2 border-b border-slate-100 flex items-center justify-between">
-                      <span className="font-bold text-sm text-[#102A43]">Live Activity & Alerts</span>
+                      <span className="font-bold text-sm text-slate-900">Live Activity & Alerts</span>
                       <button
                         onClick={() => setShowNotifications(false)}
                         className="text-slate-400 hover:text-slate-600 cursor-pointer"
@@ -158,7 +187,7 @@ export default function Navbar() {
                           <div key={n.id} className="p-3 hover:bg-slate-50 transition-colors flex items-start gap-2.5">
                             <div className="mt-0.5">
                               {n.type === 'success' ? (
-                                <CheckCircle2 className="w-4 h-4 text-emerald-600" />
+                                <CheckCircle2 className="w-4 h-4 text-blue-600" />
                               ) : n.type === 'warning' ? (
                                 <ShieldAlert className="w-4 h-4 text-amber-600" />
                               ) : (
@@ -189,6 +218,12 @@ export default function Navbar() {
           </div>
         </div>
       </header>
+
+      {/* Profile & Photo Settings Modal */}
+      <ProfileSettingsModal
+        isOpen={showProfileModal}
+        onClose={() => setShowProfileModal(false)}
+      />
 
       {/* Safety Modal Component */}
       <SafetyModal isOpen={showSafetyModal} onClose={() => setShowSafetyModal(false)} />

@@ -60,7 +60,7 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
           <div className="space-y-2 pt-2">
             <Link
               href={`/auth/login?redirect=${encodeURIComponent(pathname)}`}
-              className="w-full py-3.5 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
+              className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all active:scale-[0.99]"
             >
               <span>Sign In to Your Account</span>
               <ArrowRight className="w-4 h-4" />
@@ -127,7 +127,7 @@ export default function AuthGuard({ children, allowedRoles }: AuthGuardProps) {
           <div className="space-y-2 pt-2">
             <Link
               href={targetHome}
-              className="w-full py-3.5 bg-[#087F5B] hover:bg-emerald-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all"
+              className="w-full py-3.5 bg-blue-600 hover:bg-blue-700 text-white rounded-2xl font-bold text-xs flex items-center justify-center gap-2 cursor-pointer shadow-md transition-all"
             >
               <span>Return to My Authorized Portal ({userRoleLabel})</span>
               <ArrowRight className="w-4 h-4" />

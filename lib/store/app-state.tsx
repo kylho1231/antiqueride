@@ -75,6 +75,9 @@ interface AppStateContextType {
   rateTrip: (rideId: string, rating: number, feedback: string) => void;
   submitCommuterVerification: (docType: 'STUDENT_ID' | 'GOVERNMENT_ID' | 'VOTERS_ID', docUrl: string) => void;
   simulateDriverAcceptance: () => void;
+  updateUserProfilePhoto: (photoUrl: string) => void;
+  updateCommuterProfile: (updates: Partial<CommuterProfile>) => void;
+  updateDriverProfile: (updates: Partial<DriverProfile>) => void;
 
   // Driver Actions
   toggleDriverOnline: () => void;
@@ -199,9 +202,18 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
 
   const registerUser = (data: {
     fullName: string;
+    legalName?: string;
     phone: string;
     email: string;
     role: Role;
+    avatarUrl?: string;
+    // Commuter fields
+    idDocumentType?: any;
+    idDocumentUrl?: string;
+    discountCategory?: 'NONE' | 'STUDENT' | 'SENIOR' | 'PWD';
+    // Driver fields
+    governmentIdType?: string;
+    governmentIdUrl?: string;
     licenseNumber?: string;
     vehiclePlate?: string;
     bodyNumber?: string;
@@ -218,8 +230,12 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         id: newDriverId,
         userId: newId,
         fullName: data.fullName,
+        legalName: data.legalName || data.fullName,
+        avatarUrl: data.avatarUrl,
         phone: data.phone,
         email: data.email,
+        governmentIdType: data.governmentIdType || 'PhilSys National ID',
+        governmentIdUrl: data.governmentIdUrl,
         licenseNumber: data.licenseNumber || 'F02-24-000123',
         licenseClassification: 'Professional (Code 1, 2)',
         licenseExpiry: '2028-12-31',
@@ -247,23 +263,32 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       authUser = {
         id: newId,
         fullName: data.fullName,
+        legalName: data.legalName || data.fullName,
         email: data.email,
         phone: data.phone,
         role: 'DRIVER',
+        avatarUrl: data.avatarUrl,
         driverId: newDriverId,
         bodyNumber: newDriverProfile.bodyNumber,
         todaName: toda.acronym,
       };
     } else {
+      const isStudent = data.idDocumentType === 'STUDENT_ID' || data.discountCategory === 'STUDENT';
+      const isSeniorOrPwd = data.discountCategory === 'SENIOR' || data.discountCategory === 'PWD';
+
       const newCommuterProfile: CommuterProfile = {
         id: 'comm-' + Date.now(),
         userId: newId,
         fullName: data.fullName,
+        legalName: data.legalName || data.fullName,
+        avatarUrl: data.avatarUrl,
         email: data.email,
         phone: data.phone,
         isPhoneVerified: true,
-        verificationStatus: 'UNVERIFIED',
-        discountCategory: 'NONE',
+        verificationStatus: isStudent || isSeniorOrPwd ? 'VERIFIED' : 'UNVERIFIED',
+        discountCategory: isStudent ? 'STUDENT' : isSeniorOrPwd ? data.discountCategory! : 'NONE',
+        idDocumentType: data.idDocumentType || (isStudent ? 'STUDENT_ID' : undefined),
+        idDocumentUrl: data.idDocumentUrl,
         createdAt: new Date().toISOString(),
       };
 
@@ -272,15 +297,72 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
       authUser = {
         id: newId,
         fullName: data.fullName,
+        legalName: data.legalName || data.fullName,
         email: data.email,
         phone: data.phone,
         role: 'COMMUTER',
+        avatarUrl: data.avatarUrl,
         commuterId: newCommuterProfile.id,
       };
     }
 
     login(authUser);
     return authUser;
+  };
+
+  const updateUserProfilePhoto = (photoUrl: string) => {
+    if (currentUser) {
+      const updatedUser = { ...currentUser, avatarUrl: photoUrl };
+      setCurrentUser(updatedUser);
+      try {
+        localStorage.setItem('antiqueride_session', JSON.stringify(updatedUser));
+      } catch (e) {}
+
+      if (currentUser.role === 'COMMUTER') {
+        setCommuter((prev) => ({ ...prev, avatarUrl: photoUrl }));
+      } else if (currentUser.role === 'DRIVER') {
+        setDrivers((prev) =>
+          prev.map((d) => (d.id === activeDriverId ? { ...d, avatarUrl: photoUrl } : d))
+        );
+      }
+      addNotification('Photo Updated', 'Your profile picture has been saved.', 'success');
+    }
+  };
+
+  const updateCommuterProfile = (updates: Partial<CommuterProfile>) => {
+    setCommuter((prev) => ({ ...prev, ...updates }));
+    if (currentUser && (updates.fullName || updates.avatarUrl)) {
+      const updatedUser = {
+        ...currentUser,
+        fullName: updates.fullName || currentUser.fullName,
+        legalName: updates.legalName || currentUser.legalName,
+        avatarUrl: updates.avatarUrl || currentUser.avatarUrl,
+      };
+      setCurrentUser(updatedUser);
+      try {
+        localStorage.setItem('antiqueride_session', JSON.stringify(updatedUser));
+      } catch (e) {}
+    }
+    addNotification('Profile Saved', 'Commuter account details updated.', 'success');
+  };
+
+  const updateDriverProfile = (updates: Partial<DriverProfile>) => {
+    setDrivers((prev) =>
+      prev.map((d) => (d.id === activeDriverId ? { ...d, ...updates } : d))
+    );
+    if (currentUser && (updates.fullName || updates.avatarUrl)) {
+      const updatedUser = {
+        ...currentUser,
+        fullName: updates.fullName || currentUser.fullName,
+        legalName: updates.legalName || currentUser.legalName,
+        avatarUrl: updates.avatarUrl || currentUser.avatarUrl,
+      };
+      setCurrentUser(updatedUser);
+      try {
+        localStorage.setItem('antiqueride_session', JSON.stringify(updatedUser));
+      } catch (e) {}
+    }
+    addNotification('Profile Saved', 'Driver operator profile updated.', 'success');
   };
   
   const [activeRide, setActiveRide] = useState<RideRequest | null>(null);
@@ -928,6 +1010,9 @@ export function AppStateProvider({ children }: { children: React.ReactNode }) {
         rateTrip,
         submitCommuterVerification,
         simulateDriverAcceptance,
+        updateUserProfilePhoto,
+        updateCommuterProfile,
+        updateDriverProfile,
         toggleDriverOnline,
         acceptRide,
         driverStartHeading,

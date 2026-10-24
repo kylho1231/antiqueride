@@ -2,23 +2,23 @@
 @import "leaflet/dist/leaflet.css";
 
 :root {
-  --primary: #087F5B;
-  --primary-hover: #06694a;
-  --dark: #102A43;
-  --accent: #F5B301;
-  --background: #F7F9FC;
+  --primary: #2563EB;
+  --primary-hover: #1D4ED8;
+  --dark: #0F172A;
+  --accent: #3B82F6;
+  --background: #F8FAFC;
   --surface: #FFFFFF;
-  --error: #D92D20;
+  --error: #DC2626;
 }
 
 @theme {
-  --color-brand-primary: #087F5B;
-  --color-brand-primary-hover: #06694a;
-  --color-brand-dark: #102A43;
-  --color-brand-accent: #F5B301;
-  --color-brand-bg: #F7F9FC;
+  --color-brand-primary: #2563EB;
+  --color-brand-primary-hover: #1D4ED8;
+  --color-brand-dark: #0F172A;
+  --color-brand-accent: #3B82F6;
+  --color-brand-bg: #F8FAFC;
   --color-brand-surface: #FFFFFF;
-  --color-brand-error: #D92D20;
+  --color-brand-error: #DC2626;
 }
 
 body {
@@ -57,7 +57,7 @@ body {
 
 /* Accessible focus ring */
 button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible {
-  outline: 2px solid #087F5B;
+  outline: 2px solid #2563EB;
   outline-offset: 2px;
 }
 

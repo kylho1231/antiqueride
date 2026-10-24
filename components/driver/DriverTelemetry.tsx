@@ -57,7 +57,7 @@ export default function DriverTelemetry() {
           className={`px-4 py-2.5 rounded-2xl text-xs font-black flex items-center gap-2 cursor-pointer transition-all shadow-xs ${
             activeDriver.isOnline
               ? 'bg-red-50 hover:bg-red-100 text-red-700 border border-red-200'
-              : 'bg-[#087F5B] hover:bg-emerald-700 text-white'
+              : 'bg-blue-600 hover:bg-blue-700 text-white'
           }`}
         >
           <Power className="w-4 h-4" />

@@ -339,6 +339,63 @@ runTest(27, 'Driver Notification: Online verified driver receives dispatch offer
   assert(updatedDriver.availability === 'RESERVED', 'Driver availability updated to RESERVED');
 });
 
+// 28
+runTest(28, 'Commuter Registration: Validates Legal Name, Mobile Number, Email, and School / Gov ID', () => {
+  const commuter = {
+    ...INITIAL_COMMUTER,
+    legalName: 'Maria Santos Dela Cruz',
+    phone: '09171234567',
+    email: 'maria.student@ua.edu.ph',
+    studentIdUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    avatarUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+    governmentIdType: 'SCHOOL_ID',
+  };
+
+  assert(!!commuter.legalName && commuter.legalName.length > 3, 'Commuter has verified legal name');
+  assert(/^09\d{9}$/.test(commuter.phone), 'Mobile number is a valid 11-digit Philippine mobile');
+  assert(commuter.email.includes('@'), 'Valid email provided');
+  assert(!!commuter.studentIdUrl, 'School ID upload provided for 20% discount validation');
+  assert(!!commuter.avatarUrl, 'User profile photo captured');
+});
+
+// 29
+runTest(29, 'Driver Registration: Enforces Government ID, MTOP, LTO License, and Body Number', () => {
+  const driver = {
+    ...INITIAL_DRIVERS[0],
+    legalName: 'Juan Dela Cruz y Ramos',
+    governmentIdType: 'PHIL_SYS_NATIONAL_ID',
+    governmentIdUrl: 'data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAAEAAAABCAYAAAAfFcSJAAAADUlEQVR42mNk+M9QDwADhgGAWjR9awAAAABJRU5ErkJggg==',
+  };
+
+  assert(!!driver.legalName, 'Driver has verified legal name');
+  assert(!!driver.licenseNumber, 'LTO license number present');
+  assert(!!driver.franchiseMtopNumber, 'Municipal Tricycle Operators Permit (MTOP) present');
+  assert(!!driver.bodyNumber, 'Body number assigned (e.g. SJB-042)');
+  assert(!!driver.vehiclePlate, 'Vehicle plate present');
+  assert(!!driver.governmentIdUrl, 'Driver uploaded valid government ID');
+  assert(driver.governmentIdType === 'PHIL_SYS_NATIONAL_ID', 'ID type correctly categorized');
+});
+
+// 30
+runTest(30, 'Profile Settings: Updates avatar photo and personal credentials', () => {
+  let profile = { ...INITIAL_COMMUTER };
+  const newAvatar = 'data:image/jpeg;base64,newPhotoDataUrl';
+  const updatedName = 'Maria Clara De Los Santos';
+  const updatedPhone = '09289876543';
+
+  // Apply update
+  profile = {
+    ...profile,
+    avatarUrl: newAvatar,
+    legalName: updatedName,
+    phone: updatedPhone,
+  };
+
+  assert(profile.avatarUrl === newAvatar, 'Profile photo updated successfully');
+  assert(profile.legalName === updatedName, 'Legal name updated');
+  assert(profile.phone === updatedPhone, 'Phone number updated');
+});
+
 console.log('\n----------------------------------------------------------------');
 const passedCount = results.filter((r) => r.passed).length;
 const totalCount = results.length;

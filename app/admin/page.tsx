@@ -51,22 +51,22 @@ export default function AdminPage() {
     <AuthGuard allowedRoles={['SUPER_ADMIN']}>
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-6 space-y-6">
       {/* Admin Top Header */}
-      <div className="bg-[#102A43] text-white p-6 rounded-3xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+      <div className="bg-gradient-to-r from-blue-900 via-blue-800 to-indigo-900 text-white p-6 rounded-3xl shadow-lg flex flex-col sm:flex-row sm:items-center justify-between gap-4">
         <div>
           <div className="flex items-center gap-2">
-            <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse"></span>
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#F5B301]">
+            <span className="w-2.5 h-2.5 rounded-full bg-blue-400 animate-pulse"></span>
+            <span className="text-xs font-extrabold uppercase tracking-widest text-blue-200">
               Platform Operations & Governance
             </span>
           </div>
           <h1 className="text-2xl font-black mt-1">AntiqueRide Super Admin Workspace</h1>
-          <p className="text-xs text-slate-300 mt-0.5">
+          <p className="text-xs text-blue-100 mt-0.5">
             San Jose de Buenavista Municipal Tricycle Dispatch & Regulatory Monitor
           </p>
         </div>
 
-        <div className="flex items-center gap-2 bg-slate-800/80 px-4 py-2 rounded-2xl border border-slate-700 text-xs">
-          <ShieldCheck className="w-4 h-4 text-emerald-400" />
+        <div className="flex items-center gap-2 bg-blue-950/60 px-4 py-2 rounded-2xl border border-blue-700/50 text-xs">
+          <ShieldCheck className="w-4 h-4 text-blue-400" />
           <span className="font-mono">Super Admin: admin@antiqueride.ph</span>
         </div>
       </div>
@@ -122,14 +122,14 @@ export default function AdminPage() {
           onClick={() => setActiveTab('DRIVERS')}
           className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
             activeTab === 'DRIVERS'
-              ? 'bg-[#102A43] text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
           }`}
         >
           <Car className="w-4 h-4" />
           <span>Driver Applications</span>
           {pendingDrivers > 0 && (
-            <span className="w-4 h-4 rounded-full bg-amber-400 text-slate-900 text-[10px] font-black flex items-center justify-center">
+            <span className="w-4 h-4 rounded-full bg-blue-100 text-blue-900 text-[10px] font-black flex items-center justify-center">
               {pendingDrivers}
             </span>
           )}
@@ -139,11 +139,11 @@ export default function AdminPage() {
           onClick={() => setActiveTab('LIVE_MAP')}
           className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
             activeTab === 'LIVE_MAP'
-              ? 'bg-[#102A43] text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
           }`}
         >
-          <Compass className="w-4 h-4 text-emerald-500" />
+          <Compass className="w-4 h-4 text-blue-400" />
           <span>Live Dispatch Map</span>
         </button>
 
@@ -151,7 +151,7 @@ export default function AdminPage() {
           onClick={() => setActiveTab('TERMINALS')}
           className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
             activeTab === 'TERMINALS'
-              ? 'bg-[#102A43] text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
           }`}
         >
@@ -163,7 +163,7 @@ export default function AdminPage() {
           onClick={() => setActiveTab('FARES')}
           className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
             activeTab === 'FARES'
-              ? 'bg-[#102A43] text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
           }`}
         >
@@ -175,7 +175,7 @@ export default function AdminPage() {
           onClick={() => setActiveTab('INCIDENTS')}
           className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
             activeTab === 'INCIDENTS'
-              ? 'bg-[#102A43] text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
           }`}
         >
@@ -192,7 +192,7 @@ export default function AdminPage() {
           onClick={() => setActiveTab('AUDIT')}
           className={`px-4 py-2.5 rounded-2xl text-xs font-bold whitespace-nowrap cursor-pointer transition-colors flex items-center gap-2 ${
             activeTab === 'AUDIT'
-              ? 'bg-[#102A43] text-white shadow-xs'
+              ? 'bg-blue-600 text-white shadow-xs'
               : 'bg-white hover:bg-slate-100 text-slate-700 border border-slate-200'
           }`}
         >
@@ -208,14 +208,14 @@ export default function AdminPage() {
         <div className="bg-white rounded-3xl p-6 shadow-sm border border-slate-200 space-y-4">
           <div className="flex items-center justify-between">
             <div>
-              <h3 className="text-base font-extrabold text-[#102A43]">
+              <h3 className="text-base font-extrabold text-slate-900">
                 Live Dispatch & Driver Telemetry Monitor
               </h3>
               <p className="text-xs text-slate-500">
                 Real-time tracking of authenticated tricycles across San Jose de Buenavista municipal grid
               </p>
             </div>
-            <span className="text-xs font-bold px-3 py-1 bg-emerald-100 text-emerald-900 rounded-full">
+            <span className="text-xs font-bold px-3 py-1 bg-blue-100 text-blue-900 rounded-full">
               {onlineDrivers} GPS Feeds Active
             </span>
           </div>

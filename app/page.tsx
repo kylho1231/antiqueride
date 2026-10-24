@@ -26,22 +26,22 @@ export default function HomePage() {
     <div className="space-y-16 py-6 sm:py-10">
       {/* Hero Section */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-[#102A43] via-[#0D3830] to-[#087F5B] text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
+        <div className="relative overflow-hidden rounded-3xl bg-gradient-to-br from-blue-900 via-blue-800 to-indigo-900 text-white p-8 sm:p-12 lg:p-16 shadow-2xl">
           {/* Subtle geometric pattern overlay */}
-          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(245,179,1,0.15),transparent_50%)] pointer-events-none" />
+          <div className="absolute inset-0 bg-[radial-gradient(circle_at_top_right,rgba(59,130,246,0.25),transparent_50%)] pointer-events-none" />
 
           <div className="relative z-10 max-w-3xl space-y-6">
-            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-emerald-500/20 border border-emerald-400/30 text-emerald-200 text-xs font-bold backdrop-blur-xs">
-              <span className="w-2 h-2 rounded-full bg-[#F5B301] animate-pulse"></span>
+            <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded-full bg-blue-500/20 border border-blue-400/30 text-blue-200 text-xs font-bold backdrop-blur-xs">
+              <span className="w-2 h-2 rounded-full bg-blue-400 animate-pulse"></span>
               <span>San Jose de Buenavista Pilot Active • {onlineCount} Drivers Online</span>
             </div>
 
             <h1 className="text-3xl sm:text-5xl lg:text-6xl font-black tracking-tight leading-[1.1]">
               Your Ride. <br />
-              <span className="text-[#F5B301]">Your Antique.</span>
+              <span className="text-blue-300">Your Antique.</span>
             </h1>
 
-            <p className="text-base sm:text-lg text-slate-200 font-medium leading-relaxed max-w-2xl">
+            <p className="text-base sm:text-lg text-blue-100 font-medium leading-relaxed max-w-2xl">
               The first province-wide smart transportation technology platform for Antique, Philippines. 
               Connecting daily commuters with verified local TODA tricycle drivers through real-time booking, 
               audited municipal fare matrices, and authenticated safety controls.
@@ -54,15 +54,15 @@ export default function HomePage() {
                 className="group p-5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-emerald-500 text-white flex items-center justify-center font-bold mb-3 shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-blue-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
                     <Users className="w-5 h-5" />
                   </div>
                   <h3 className="font-extrabold text-base text-white">Commuter App</h3>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-xs text-blue-200 mt-1">
                     Book tricycles, calculate official fares, and track your ride live.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-[#F5B301] group-hover:translate-x-1 transition-transform">
+                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
                   <span>Open Commuter</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
@@ -73,15 +73,15 @@ export default function HomePage() {
                 className="group p-5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-[#F5B301] text-[#102A43] flex items-center justify-center font-bold mb-3 shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-blue-500 text-white flex items-center justify-center font-bold mb-3 shadow-md">
                     <Car className="w-5 h-5" />
                   </div>
                   <h3 className="font-extrabold text-base text-white">Driver Portal</h3>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-xs text-blue-200 mt-1">
                     Shift controls, TODA terminal queue position, and incoming ride requests.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-[#F5B301] group-hover:translate-x-1 transition-transform">
+                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
                   <span>Open Driver Portal</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
@@ -92,15 +92,15 @@ export default function HomePage() {
                 className="group p-5 rounded-2xl bg-white/10 hover:bg-white/20 backdrop-blur-md border border-white/20 transition-all hover:scale-[1.02] cursor-pointer flex flex-col justify-between"
               >
                 <div>
-                  <div className="w-10 h-10 rounded-xl bg-amber-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
+                  <div className="w-10 h-10 rounded-xl bg-indigo-600 text-white flex items-center justify-center font-bold mb-3 shadow-md">
                     <ShieldCheck className="w-5 h-5" />
                   </div>
                   <h3 className="font-extrabold text-base text-white">Super Admin</h3>
-                  <p className="text-xs text-slate-300 mt-1">
+                  <p className="text-xs text-blue-200 mt-1">
                     Verify drivers, configure fare ordinances, and manage terminals.
                   </p>
                 </div>
-                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-[#F5B301] group-hover:translate-x-1 transition-transform">
+                <div className="mt-4 flex items-center gap-1.5 text-xs font-bold text-blue-300 group-hover:translate-x-1 transition-transform">
                   <span>Open Admin Desk</span>
                   <ArrowRight className="w-3.5 h-3.5" />
                 </div>
@@ -114,10 +114,10 @@ export default function HomePage() {
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="grid grid-cols-1 lg:grid-cols-3 gap-8 items-center">
           <div className="space-y-4 lg:col-span-1">
-            <span className="text-xs font-extrabold uppercase tracking-widest text-[#087F5B]">
+            <span className="text-xs font-extrabold uppercase tracking-widest text-blue-600">
               Geographic Deployment
             </span>
-            <h2 className="text-2xl sm:text-3xl font-black text-[#102A43] tracking-tight">
+            <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
               Grounded in Antique's Actual Transport Realities
             </h2>
             <p className="text-sm text-slate-600 leading-relaxed">
@@ -128,19 +128,19 @@ export default function HomePage() {
 
           <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 lg:col-span-2">
             {/* Phase 1 Area */}
-            <div className="p-6 bg-white rounded-3xl border-2 border-emerald-500/40 shadow-sm space-y-3 relative overflow-hidden">
+            <div className="p-6 bg-white rounded-3xl border-2 border-blue-500/40 shadow-sm space-y-3 relative overflow-hidden">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-emerald-100 text-emerald-800">
+                <span className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-blue-100 text-blue-800">
                   Phase 1 • Active Pilot
                 </span>
                 <span className="text-xs font-mono font-bold text-slate-400">10.7445° N</span>
               </div>
-              <h3 className="text-xl font-extrabold text-[#102A43]">San Jose de Buenavista</h3>
+              <h3 className="text-xl font-extrabold text-slate-900">San Jose de Buenavista</h3>
               <p className="text-xs text-slate-600">
                 Capital of Antique. Active dispatch coverage across Dalipe, San Pedro, Mojon, Poblacion, and Funda.
               </p>
-              <div className="pt-2 border-t border-slate-100 flex items-center gap-2 text-xs font-semibold text-emerald-700">
-                <CheckCircle className="w-4 h-4" />
+              <div className="pt-2 border-t border-slate-100 flex items-center gap-2 text-xs font-semibold text-blue-700">
+                <CheckCircle className="w-4 h-4 text-blue-600" />
                 <span>5 Verified Terminal Outposts</span>
               </div>
             </div>
@@ -148,16 +148,16 @@ export default function HomePage() {
             {/* Phase 2 Area */}
             <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3 relative">
               <div className="flex items-center justify-between">
-                <span className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-amber-100 text-amber-800">
+                <span className="text-xs font-extrabold px-2.5 py-1 rounded-full bg-slate-100 text-slate-700">
                   Phase 2 Expansion
                 </span>
                 <span className="text-xs font-mono font-bold text-slate-400">Roadmap</span>
               </div>
-              <h3 className="text-xl font-extrabold text-[#102A43]">Sibalom & Hamtic</h3>
+              <h3 className="text-xl font-extrabold text-slate-900">Sibalom & Hamtic</h3>
               <p className="text-xs text-slate-600">
                 Subject to inter-municipal route coordination, Sangguniang Bayan approvals, and terminal queue integration.
               </p>
-              <div className="pt-2 border-t border-slate-100 flex items-center gap-2 text-xs font-semibold text-amber-700">
+              <div className="pt-2 border-t border-slate-100 flex items-center gap-2 text-xs font-semibold text-slate-500">
                 <span>Field verification and TODA dialogues underway</span>
               </div>
             </div>
@@ -168,10 +168,10 @@ export default function HomePage() {
       {/* Core Platform Pillars */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
         <div className="text-center max-w-2xl mx-auto space-y-3 mb-10">
-          <span className="text-xs font-extrabold uppercase tracking-widest text-[#087F5B]">
+          <span className="text-xs font-extrabold uppercase tracking-widest text-blue-600">
             Engineered for Integrity
           </span>
-          <h2 className="text-2xl sm:text-3xl font-black text-[#102A43] tracking-tight">
+          <h2 className="text-2xl sm:text-3xl font-black text-slate-900 tracking-tight">
             Built Different from Generic Ride Apps
           </h2>
           <p className="text-sm text-slate-600">
@@ -182,10 +182,10 @@ export default function HomePage() {
         <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
           {/* Pillar 1 */}
           <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-emerald-100 text-emerald-700 flex items-center justify-center font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <Scale className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-base text-[#102A43]">Audited Municipal Fare Matrix</h3>
+            <h3 className="font-extrabold text-base text-slate-900">Audited Municipal Fare Matrix</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               No hidden surge pricing. Built directly on San Jose de Buenavista Municipal Ordinance No. 2023-014. 
               Automatically applies statutory 20% discounts for Students (RA 10642), Seniors (RA 9994), and PWDs (RA 9442).
@@ -197,7 +197,7 @@ export default function HomePage() {
             <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <MapPin className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-base text-[#102A43]">TODA Terminal Queue (Pila) Mode</h3>
+            <h3 className="font-extrabold text-base text-slate-900">TODA Terminal Queue (Pila) Mode</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               Respects existing TODA queue discipline. Drivers take passenger dispatches in order of their terminal arrival 
               or participate in authorized on-demand booking without bypassing association rules.
@@ -206,10 +206,10 @@ export default function HomePage() {
 
           {/* Pillar 3 */}
           <div className="p-6 bg-white rounded-3xl border border-slate-200 shadow-sm space-y-3">
-            <div className="w-12 h-12 rounded-2xl bg-amber-100 text-amber-700 flex items-center justify-center font-bold">
+            <div className="w-12 h-12 rounded-2xl bg-blue-100 text-blue-700 flex items-center justify-center font-bold">
               <KeyRound className="w-6 h-6" />
             </div>
-            <h3 className="font-extrabold text-base text-[#102A43]">4-Digit Pickup PIN & Safety Desk</h3>
+            <h3 className="font-extrabold text-base text-slate-900">4-Digit Pickup PIN & Safety Desk</h3>
             <p className="text-xs text-slate-600 leading-relaxed">
               Eliminates prank bookings and wrong passenger pickups. Commuters give a one-time 4-digit code to their 
               driver before boarding. Direct emergency linking to San Jose Police, PDRRMO 911, and TMPSO.
@@ -220,57 +220,57 @@ export default function HomePage() {
 
       {/* Official Fare Ordinance Snapshot */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-        <div className="p-8 bg-slate-900 text-white rounded-3xl shadow-xl space-y-6">
+        <div className="p-8 bg-blue-950 text-white rounded-3xl shadow-xl space-y-6">
           <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
             <div>
-              <span className="text-xs font-bold uppercase tracking-wider text-[#F5B301]">
+              <span className="text-xs font-bold uppercase tracking-wider text-blue-300">
                 San Jose de Buenavista Public Tariff
               </span>
               <h3 className="text-xl sm:text-2xl font-black mt-1">
                 Official Tricycle Passenger & Special Fare Table
               </h3>
-              <p className="text-xs text-slate-400 mt-1">
+              <p className="text-xs text-blue-200 mt-1">
                 Ref: {farePolicy.sourceOrdinance} • {farePolicy.approvalReference}
               </p>
             </div>
             <Link
               href="/commuter"
-              className="px-5 py-2.5 bg-[#087F5B] hover:bg-emerald-600 text-white rounded-xl text-xs font-bold flex items-center gap-2 w-fit cursor-pointer transition-colors"
+              className="px-5 py-2.5 bg-blue-600 hover:bg-blue-700 text-white rounded-xl text-xs font-bold flex items-center gap-2 w-fit cursor-pointer transition-colors shadow-md"
             >
               <span>Test Booking Calculator</span>
               <ArrowRight className="w-3.5 h-3.5" />
             </Link>
           </div>
 
-          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-slate-800 text-xs">
-            <div className="p-4 bg-slate-800/60 rounded-2xl">
-              <span className="text-[10px] text-slate-400 block font-bold uppercase">Base Regular Fare</span>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-4 pt-4 border-t border-blue-900 text-xs">
+            <div className="p-4 bg-blue-900/60 rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase">Base Regular Fare</span>
               <span className="text-2xl font-black text-white mt-1 block">
                 {formatCurrency(farePolicy.baseFareRegular)}
               </span>
-              <span className="text-[11px] text-slate-400">First {farePolicy.baseKmRegular} km / passenger</span>
+              <span className="text-[11px] text-blue-300">First {farePolicy.baseKmRegular} km / passenger</span>
             </div>
 
-            <div className="p-4 bg-slate-800/60 rounded-2xl">
-              <span className="text-[10px] text-slate-400 block font-bold uppercase">Succeeding Rate</span>
+            <div className="p-4 bg-blue-900/60 rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase">Succeeding Rate</span>
               <span className="text-2xl font-black text-white mt-1 block">
                 {formatCurrency(farePolicy.succeedingPerKmRegular)}
               </span>
-              <span className="text-[11px] text-slate-400">Per succeeding kilometer</span>
+              <span className="text-[11px] text-blue-300">Per succeeding kilometer</span>
             </div>
 
-            <div className="p-4 bg-slate-800/60 rounded-2xl">
-              <span className="text-[10px] text-slate-400 block font-bold uppercase">Special Trip (Pakyaw)</span>
-              <span className="text-2xl font-black text-[#F5B301] mt-1 block">
+            <div className="p-4 bg-blue-900/60 rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase">Special Trip (Pakyaw)</span>
+              <span className="text-2xl font-black text-blue-300 mt-1 block">
                 {formatCurrency(farePolicy.specialTripBaseFare)}
               </span>
-              <span className="text-[11px] text-slate-400">Exclusive private charter</span>
+              <span className="text-[11px] text-blue-300">Exclusive private charter</span>
             </div>
 
-            <div className="p-4 bg-slate-800/60 rounded-2xl">
-              <span className="text-[10px] text-slate-400 block font-bold uppercase">Mandatory Discount</span>
-              <span className="text-2xl font-black text-emerald-400 mt-1 block">20% OFF</span>
-              <span className="text-[11px] text-slate-400">Students, Seniors, PWDs</span>
+            <div className="p-4 bg-blue-900/60 rounded-2xl">
+              <span className="text-[10px] text-blue-200 block font-bold uppercase">Mandatory Discount</span>
+              <span className="text-2xl font-black text-blue-400 mt-1 block">20% OFF</span>
+              <span className="text-[11px] text-blue-300">Students, Seniors, PWDs</span>
             </div>
           </div>
         </div>
