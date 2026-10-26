@@ -184,8 +184,13 @@ export default function AntiqueMap({
 
           const driverHtml = `
             <div style="position: relative; display: flex; flex-direction: column; align-items: center; cursor: pointer;">
-              <div style="background-color: ${badgeColor}; color: white; border: 2.5px solid white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.35); font-size: 16px;">
-                🛺
+              <div style="background-color: ${badgeColor}; color: white; border: 2.5px solid white; border-radius: 50%; width: 36px; height: 36px; display: flex; align-items: center; justify-content: center; box-shadow: 0 4px 12px rgba(0,0,0,0.35);">
+                <svg width="20" height="20" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.2" stroke-linecap="round" stroke-linejoin="round">
+                  <path d="M19 17h2c.6 0 1-.4 1-1v-3c0-.9-.7-1.7-1.5-1.9C18.7 10.6 16 10 16 10s-1.3-1.4-2.2-2.3c-.5-.4-1.1-.7-1.8-.7H5c-.6 0-1.1.4-1.4.9l-1.4 2.9A3.7 3.7 0 0 0 2 12v4c0 .6.4 1 1 1h2"/>
+                  <circle cx="7" cy="17" r="2"/>
+                  <path d="M9 17h6"/>
+                  <circle cx="17" cy="17" r="2"/>
+                </svg>
               </div>
               <div style="background-color: #102A43; color: #F5B301; font-size: 9px; font-weight: 800; padding: 1.5px 5px; border-radius: 5px; margin-top: -6px; border: 1.5px solid white; white-space: nowrap; box-shadow: 0 2px 4px rgba(0,0,0,0.2);">
                 ${d.bodyNumber}
@@ -208,7 +213,7 @@ export default function AntiqueMap({
             <div style="font-family: system-ui, sans-serif; padding: 4px;">
               <div style="font-weight:bold; color: #102A43; font-size: 13px;">${d.fullName}</div>
               <div style="font-size: 11px; color: #087F5B; font-weight:700;">Unit: ${d.bodyNumber} (${d.todaName})</div>
-              <div style="font-size: 11px; color: #64748B;">Plate: ${d.vehiclePlate} • Rating: ⭐ ${d.rating}</div>
+              <div style="font-size: 11px; color: #64748B;">Plate: ${d.vehiclePlate} • Rating: <span style="color:#F5B301;">★</span> ${d.rating}</div>
               <div style="margin-top: 4px; font-size: 10px; color: ${stale ? '#DC2626' : '#087F5B'}; font-weight:bold;">
                 ${stale ? '⚠️ Stale GPS (>45s inactive)' : `● Live Hardware GPS (±${d.gpsAccuracyMeters || 3.8}m)`}
               </div>
@@ -260,7 +265,11 @@ export default function AntiqueMap({
         liveMarker.bindPopup(`
           <div style="font-family: system-ui, sans-serif; padding: 4px; text-align: center;">
             <div style="font-size: 11px; font-weight: 800; color: #102A43; display: flex; items-center; justify-content: center; gap: 4px;">
-              <span>📍 Your Live Location</span>
+              <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="#2563EB" stroke-width="2.5" stroke-linecap="round" stroke-linejoin="round" style="display:inline-block; vertical-align:middle; margin-right:4px;">
+                <path d="M20 10c0 6-8 12-8 12s-8-6-8-12a8 8 0 0 1 16 0Z"/>
+                <circle cx="12" cy="10" r="3"/>
+              </svg>
+              <span>Your Live Location</span>
             </div>
             <div style="font-size: 10px; color: #2563EB; font-weight: bold; margin-top: 2px;">
               GPS Accuracy: ±${accuracyRadius}m

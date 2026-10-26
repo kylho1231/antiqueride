@@ -14,6 +14,7 @@ import {
   Sparkles,
   ShieldCheck,
   CheckCircle2,
+  Car,
 } from 'lucide-react';
 
 interface TricycleSceneProps {
@@ -344,8 +345,8 @@ export default function TricycleScene({
       {/* WebGL Fallback if device does not support WebGL */}
       {!hasWebGl && (
         <div className="absolute inset-0 flex flex-col items-center justify-center p-6 text-center bg-gradient-to-b from-emerald-50 to-slate-100 dark:from-slate-900 dark:to-slate-950 z-20">
-          <div className="w-20 h-20 rounded-3xl bg-emerald-600 text-white flex items-center justify-center font-black text-3xl shadow-xl mb-4">
-            🛺
+          <div className="w-20 h-20 rounded-3xl bg-emerald-600 text-white flex items-center justify-center shadow-xl mb-4">
+            <Car className="w-10 h-10 text-white" />
           </div>
           <h3 className="text-base font-extrabold text-slate-900 dark:text-white">
             Philippine Tricycle — San Jose Model

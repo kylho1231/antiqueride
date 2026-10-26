@@ -551,6 +551,25 @@ runTest(43, 'Real-time Driver Telemetry: Driver tracks hardware GPS and broadcas
   assert(storeFile.includes('SYNC_DRIVER_GPS'), 'Store broadcasts live driver GPS across tabs');
 });
 
+// 44
+runTest(44, 'UI/UX Pro Max & Frontend Engineering: Zero emoji icons, cursor-pointer on clickables, and visible focus rings', () => {
+  const css = fs.readFileSync(path.join(process.cwd(), 'app/globals.css'), 'utf8');
+  assert(css.includes('cursor: pointer'), 'Global cursor pointer configured on all interactive elements');
+  assert(css.includes('outline-offset'), 'Visible keyboard focus rings defined');
+
+  // Verify no emojis used as icons in key views
+  const mapFile = fs.readFileSync(path.join(process.cwd(), 'components/map/AntiqueMap.tsx'), 'utf8');
+  const rideFile = fs.readFileSync(path.join(process.cwd(), 'components/commuter/ActiveRideCard.tsx'), 'utf8');
+  const driverFile = fs.readFileSync(path.join(process.cwd(), 'components/driver/DriverTelemetry.tsx'), 'utf8');
+  const sceneFile = fs.readFileSync(path.join(process.cwd(), 'components/3d/TricycleScene.tsx'), 'utf8');
+
+  const emojiRegex = /[🛺⚡🚨🎉⭐📍💡📌🔥]/;
+  assert(!emojiRegex.test(mapFile), 'AntiqueMap uses pure SVG icons with zero emoji markers');
+  assert(!emojiRegex.test(rideFile), 'ActiveRideCard uses SVG icons with zero emojis');
+  assert(!emojiRegex.test(driverFile), 'DriverTelemetry uses SVG icons with zero emojis');
+  assert(!emojiRegex.test(sceneFile), 'TricycleScene uses SVG icons with zero emojis');
+});
+
 console.log('\n----------------------------------------------------------------');
 const passedCount = results.filter((r) => r.passed).length;
 const totalCount = results.length;

@@ -16,6 +16,7 @@ import {
   Car,
   User,
   Sparkles,
+  Zap,
 } from 'lucide-react';
 import RatingModal from '@/components/commuter/RatingModal';
 
@@ -63,7 +64,7 @@ export default function ActiveRideCard() {
       case 'TRIP_STARTED':
         return { label: 'Trip in Progress', bg: 'bg-emerald-600 text-white border-emerald-700' };
       case 'TRIP_COMPLETED':
-        return { label: 'Trip Completed 🎉', bg: 'bg-[#102A43] text-white border-slate-900' };
+        return { label: 'Trip Completed', bg: 'bg-[#102A43] text-white border-slate-900' };
       default:
         return { label: activeRide.status, bg: 'bg-slate-100 text-slate-800 border-slate-200' };
     }
@@ -177,7 +178,8 @@ export default function ActiveRideCard() {
                 onClick={simulateDriverAcceptance}
                 className="w-full sm:w-auto py-2.5 px-4 bg-emerald-600 hover:bg-emerald-500 text-white rounded-xl text-xs font-bold flex items-center justify-center gap-1.5 cursor-pointer shadow-md transition-transform active:scale-95"
               >
-                <span>⚡ Simulate Driver Accept (Pilot Test)</span>
+                <Zap className="w-3.5 h-3.5 text-amber-300 shrink-0" />
+                <span>Simulate Driver Accept (Pilot Test)</span>
               </button>
             </div>
           </div>
@@ -206,7 +208,9 @@ export default function ActiveRideCard() {
         {activeRide.status === 'TRIP_COMPLETED' && (
           <div className="pt-3 border-t border-slate-100 dark:border-slate-800 space-y-3">
             <div className="p-3.5 bg-emerald-50 dark:bg-emerald-950/40 border border-emerald-200 dark:border-emerald-800 rounded-2xl text-center space-y-1">
-              <span className="text-xl">🎉</span>
+              <div className="w-10 h-10 rounded-2xl bg-emerald-100 dark:bg-emerald-900/60 text-emerald-700 dark:text-emerald-300 flex items-center justify-center mx-auto mb-1">
+                <CheckCircle className="w-5 h-5" />
+              </div>
               <p className="text-xs font-black text-emerald-900 dark:text-emerald-300">
                 You have arrived safely at your destination!
               </p>

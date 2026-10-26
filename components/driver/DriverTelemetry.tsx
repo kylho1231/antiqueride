@@ -13,6 +13,7 @@ import {
   Navigation,
   CheckCircle2,
   AlertTriangle,
+  Play,
 } from 'lucide-react';
 import { Coordinates } from '@/lib/types';
 import { resolveLocationName } from '@/lib/hooks/useDeviceLocation';
@@ -252,24 +253,26 @@ export default function DriverTelemetry() {
               setGpsMode('HARDWARE');
               setIsSimulatingMovement(false);
             }}
-            className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1.5 ${
               gpsMode === 'HARDWARE'
                 ? 'bg-white dark:bg-slate-900 text-emerald-700 shadow-2xs'
                 : 'text-slate-500'
             }`}
           >
-            🛰️ Real GPS
+            <Radio className="w-3 h-3 text-emerald-600" />
+            <span>Real GPS</span>
           </button>
           <button
             type="button"
             onClick={() => setGpsMode('SIMULATOR')}
-            className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all ${
+            className={`px-2.5 py-1 rounded-lg cursor-pointer transition-all flex items-center gap-1.5 ${
               gpsMode === 'SIMULATOR'
                 ? 'bg-white dark:bg-slate-900 text-blue-700 shadow-2xs'
                 : 'text-slate-500'
             }`}
           >
-            ▶ Patrol Sim
+            <Play className="w-3 h-3 text-blue-600" />
+            <span>Patrol Sim</span>
           </button>
         </div>
 

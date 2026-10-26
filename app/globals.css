@@ -214,6 +214,11 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
   outline-offset: 2px;
 }
 
+/* Ensure cursor-pointer on all clickable/interactive elements per UI/UX Pro Max */
+button, [role="button"], a, select, input[type="submit"], input[type="button"], input[type="reset"] {
+  cursor: pointer;
+}
+
 /* Accessibility: prefers-reduced-motion */
 @media (prefers-reduced-motion: reduce) {
   *, *::before, *::after {

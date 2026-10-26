@@ -23,6 +23,7 @@ import {
   Settings,
   Camera,
   User,
+  Zap,
 } from 'lucide-react';
 import { formatCurrency } from '@/lib/utils';
 
@@ -136,7 +137,7 @@ export default function DriverPage() {
           <div className="p-4 bg-amber-500 text-slate-950 rounded-2xl sm:rounded-3xl font-bold text-xs flex flex-col sm:flex-row sm:items-center justify-between gap-3 shadow-lg border border-amber-600 animate-pulse">
             <div className="flex items-center gap-3 min-w-0">
               <div className="w-10 h-10 rounded-2xl bg-slate-900 text-amber-400 flex items-center justify-center font-bold text-lg shrink-0">
-                ⚡
+                <Zap className="w-5 h-5 text-amber-400" />
               </div>
               <div className="min-w-0">
                 <span className="text-[10px] uppercase tracking-wider font-black text-slate-900 block truncate">
